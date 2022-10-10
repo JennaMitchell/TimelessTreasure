@@ -1,0 +1,80 @@
+@import "../../../utilities/variables";
+
+.mainContainer {
+  width: max(1000px, 1000px);
+  height: max(600px, 600px);
+  margin: 0px auto;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-template-rows: 1fr 1fr;
+  gap: 0px;
+  background-color: $lightWhite;
+  margin-bottom: 40px;
+}
+.reviewContainer {
+  display: grid;
+  width: max(100%, 100%);
+  height: max(300px, 300px);
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+}
+.reviewTextContainer {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 10px;
+  grid-template-rows: max-content max-content max-content;
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+}
+.reviewPhoto {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  object-fit: cover;
+}
+.reviewText {
+  padding: 0px;
+  margin: 0px;
+  font-size: 1.2rem;
+  text-align: center;
+  text-align: center;
+  width: max(40ch, 40ch);
+  font-family: $fontFamily;
+}
+.reviewName {
+  padding: 0px;
+  margin: 0px;
+  font-size: 1.2rem;
+  text-align: center;
+  text-align: center;
+  width: max(40ch, 40ch);
+  font-family: $fontFamily;
+}
+.reviewDescripition {
+  padding: 0px;
+  margin: 0px;
+  font-size: 1rem;
+  text-align: center;
+  text-align: center;
+  width: max(40ch, 40ch);
+  font-family: $fontFamily;
+}
+.starsContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-items: center;
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+}
+.starIcon {
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  color: gold;
+}

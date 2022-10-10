@@ -1,0 +1,66 @@
+@import "../../../../utilities/variables";
+
+.mainContainer {
+  width: max(335px, 335px);
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 20px 10px 20px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.requirementsTitle {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  font-size: toRem(22);
+  font-family: $fontFamily;
+  color: $main600;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 5px;
+}
+.requirementsContainer {
+  width: max(100%, 100%);
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.incorrectIcon,
+.correctIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+  padding: 0px;
+  margin: 0px;
+}
+.incorrectIcon {
+  color: $warningMain;
+}
+.correctIcon {
+  color: $success;
+}
+.requirementText {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  font-size: toRem(14);
+  font-family: $fontFamily;
+  color: $black;
+  padding: 0px;
+  margin: 0px;
+}

@@ -1,0 +1,59 @@
+@import "../../utilities/variables";
+.pageNotFoundTopContainer {
+  width: max(100vw, 100vw);
+  min-height: calc(100vh - 410px);
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.titleText {
+  padding: 0px;
+  margin: 0px;
+  font-size: 3.2rem;
+  font-family: $fontFamily;
+}
+.text {
+  font-size: 1.6rem;
+  font-family: $fontFamily;
+  padding: 0px;
+  margin: 0px;
+}
+.errorImageContainer {
+  width: max(400px, 400px);
+  height: max(400px, 400px);
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: $white;
+  box-shadow: 0px 0px 10px black;
+  border-radius: 5px;
+}
+.errorImage {
+  width: max(380px, 380px);
+  height: max(380px, 380px);
+  object-fit: cover;
+}
+.homeButton {
+  width: max(160px, 160px);
+  height: max(60px, 60px);
+  background-color: $main600;
+  font-size: 1.2rem;
+  border: 0px;
+  border-radius: 10px;
+  line-height: 1.2rem;
+  padding: 0px;
+  color: $white;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s;
+  text-decoration: none;
+}
+.homeButton:hover {
+  background-color: $main200;
+  color: $black;
+}

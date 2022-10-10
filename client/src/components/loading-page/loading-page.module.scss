@@ -1,0 +1,80 @@
+@import "../../utilities/variables";
+.blurBackdrop {
+  width: max(100vw, 100vw);
+  height: max(100vh, 100vh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  z-index: $popupBackdropZIndex;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.85);
+}
+.loadingContainer {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  gap: 20px;
+  z-index: $popupZIndex;
+}
+
+.loadingLogo {
+  width: max(110px, 110px);
+  height: max(100px, 100px);
+  transition: all 1.5s;
+  z-index: $popupZIndex;
+  object-fit: contain;
+}
+
+.activeLogo {
+  opacity: 1;
+  transition: all 1.5s;
+}
+.inactiveLogo {
+  opacity: 0;
+}
+.loadingText {
+  padding: 0px;
+  margin: 0px;
+  font-size: 2.2rem;
+  font-family: $fontFamily;
+  color: $white;
+}
+.loadingDots {
+  width: max(60px, 60px);
+  height: max-content;
+  min-height: 50px;
+  max-height: max-content;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+.dot {
+  font-size: 1.6rem;
+  padding: 0px;
+  margin: 0px;
+  opacity: 0;
+  color: $white;
+  transition: all 1s;
+}
+.activeLoadingDot {
+  opacity: 1;
+}
+.titleText {
+  color: $white;
+  font-size: 3.2rem;
+  padding: 0px;
+  margin: 0px;
+  font-family: $fontFamily;
+}

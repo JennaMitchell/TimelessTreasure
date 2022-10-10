@@ -1,0 +1,170 @@
+@import "../../../utilities/variables";
+
+.loginDialog {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 11;
+  position: fixed;
+
+  width: max(100vw, 100vw);
+  height: max(100vh, 100vh);
+  display: grid;
+  place-items: center;
+}
+
+.loginDialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+.loginForm {
+  width: max(400px, 400px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  background-color: white;
+  position: relative;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 12;
+
+  gap: 20px;
+  padding: 20px;
+}
+.loginTitle {
+  margin: 0px;
+  padding: 0px;
+  font-size: 3.2rem;
+  font-family: $fontFamily;
+  color: $main600;
+  margin-bottom: 20px;
+}
+.inputContainer {
+  width: max-content;
+  min-width: max-content;
+  max-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  position: relative;
+}
+.inputLabel {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  transition: all 1s;
+}
+
+.loginInput {
+  height: max(40px, 40px);
+  width: max(320px, 320px);
+  padding-left: 10px;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+.emailLogin:focus,
+.password:focus {
+  border: 0px;
+}
+.activeInputLabel {
+  top: 0px;
+  left: 5px;
+  padding: 0px 5px;
+  background-color: $white;
+  font-size: 12px;
+}
+
+.forgotPassword {
+  position: absolute;
+  bottom: -30px;
+  right: 5px;
+  transition: all 0.5s;
+  font-size: 0.67rem;
+}
+.forgotPassword:hover {
+  color: $main600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.actionButton {
+  background-color: $main700;
+  color: $white;
+  border: 0px;
+  font-size: 1.2rem;
+  width: max(100px, 100px);
+  height: max(50px, 50px);
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+.signupButton {
+  background-color: transparent;
+  color: $black;
+  border: 0px;
+  font-size: 0.8rem;
+  width: max(60px, 60px);
+  height: max(30px, 30px);
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+
+.textDecor {
+  width: max(200px, 200px);
+  height: max(30px, 30px);
+  object-fit: contain;
+  padding-right: 2.5px;
+  position: absolute;
+  top: 95px;
+}
+.closingContainer {
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: $main700;
+  color: $white;
+  border-radius: 50%;
+  transition: all 1s;
+}
+
+.closingContainer:hover,
+.actionButton:hover {
+  background-color: $main100;
+  color: $black;
+}
+.closingIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+}
+.signupButton {
+  width: max(100px, 100px);
+  padding: 0px;
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  transition: all 0s;
+}
+.signupButton:hover {
+  text-decoration: underline;
+  color: $main600;
+}
+.orText {
+  font-size: 0.67rem;
+  padding: 0px;
+  margin: 0px;
+  font-family: $fontFamily;
+  position: absolute;
+  bottom: 38px;
+}

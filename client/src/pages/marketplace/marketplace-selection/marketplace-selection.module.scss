@@ -1,0 +1,53 @@
+@import "../../../utilities/variables";
+.markplaceSelection {
+  width: max(800px, 800px);
+  height: max(100%, 100%);
+  display: grid;
+  grid-template-columns: max-content max-content max-content;
+  grid-auto-rows: max-content;
+}
+.itemContainer {
+  width: max(200px, 200px);
+  height: max(250px, 250px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s;
+}
+.itemContainer:hover {
+  background-color: $main200;
+}
+
+.itemImage {
+  width: max(150px, 150px);
+  height: max(150px, 150px);
+  padding: 10px;
+  border-radius: 5px;
+
+  object-fit: contain;
+}
+.itemTitle {
+  width: max(140px, 140px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  font-size: toRem(14);
+  font-family: $fontFamily;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  color: $main1000;
+}
+.itemPrice {
+  width: max(45ch, 45ch);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  font-size: toRem(12);
+  font-family: $fontFamily;
+  text-align: center;
+  color: $main600;
+  margin: 0px;
+  padding: 0px;
+}

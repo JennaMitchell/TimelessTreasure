@@ -1,0 +1,40 @@
+$black: #000;
+$white: #fff;
+$lightWhite: #f8f9fa;
+$grey: #dee2e6;
+
+$fontColor: #000;
+
+$main100: #ffedd8;
+$main200: #f3d5b5;
+$main300: #e7bc91;
+$main400: #d4a276;
+$main500: #bc8a5f;
+$main600: #a47148;
+$main700: #8b5e34;
+$main800: #6f4518;
+$main900: #603808;
+$main1000: #583101;
+
+$navbarColor: #9f4819;
+$linkHighlightColor: blue;
+$fontFamily: "Zen Antique", serif;
+
+$warningLight: #fa7b7b;
+$warningMain: red;
+$warningDark: #860000;
+
+$sucessLight: #7ef87e;
+$success: green;
+$successDark: #003b00;
+
+/// Z - Indexs
+
+$popupZIndex: 12;
+$popupBackdropZIndex: 11;
+$menuDropDownZIndex: 3;
+
+@function toRem($value) {
+  $remValue: calc($value / 16) + rem;
+  @return $remValue;
+}

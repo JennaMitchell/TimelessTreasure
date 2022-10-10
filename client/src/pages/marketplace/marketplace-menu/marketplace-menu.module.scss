@@ -1,0 +1,255 @@
+@import "../../../utilities/variables";
+.collectionMenu {
+  width: max(300px, 300px);
+  background-color: transparent;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  gap: 15px;
+}
+.contentBlock {
+  width: max(100%, 100%);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  display: grid;
+  grid-template-rows: max-content;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.inputLabel {
+  position: absolute;
+  top: 52%;
+  left: 30px;
+  transform: translateY(-50%);
+  font-size: toRem(14);
+  transition: all 0.25s;
+  background-color: $white;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.movedInputLabel {
+  top: 0px;
+  left: 15px;
+  font-size: toRem(10);
+}
+.blockDropdownButton {
+  width: max(100%, 100%);
+  height: max(40px, 40px);
+  text-align: left;
+  font-size: 1.2rem;
+  font-family: $fontFamily;
+  color: $main1000;
+  margin: 0px;
+  padding: 5px 0px 5px 0px;
+  background-color: transparent;
+  border: 0px;
+  border-bottom: 1px solid $main800;
+  position: relative;
+  transition: all 0.5s;
+}
+.blockDropdownButton:hover {
+  color: $main300;
+  border-bottom: 1px solid $main300;
+}
+.buttonDownIcon {
+  width: max(25px, 25px);
+  height: max(25px, 25px);
+  color: inherit;
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  background-color: transparent;
+  top: 12px;
+  right: 10px;
+  transition: all 0.5s;
+}
+
+.searchBarContainer {
+  width: max(95%, 95%);
+  height: max(40px, 40px);
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  gap: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  position: relative;
+}
+.searchBarContainerActive {
+  border: 1px solid blue;
+}
+.searchbarIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+  color: $black;
+}
+.searchBarInput {
+  outline: 0px;
+  border: 0px;
+  border-radius: 5px;
+  font-size: toRem(14);
+  background-color: transparent;
+  height: max-content;
+  width: max(200px, 200px);
+  overflow-x: hidden;
+}
+.tagBlock {
+  width: max(100%, 100%);
+  height: max(200px, 200px);
+  margin-top: 10px;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.tagContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  background-color: $main800;
+  padding: 5px 5px;
+  border-radius: 4px;
+  transition: all 0.5s;
+  color: $white;
+}
+.tagContainer:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.tagTitles {
+  width: max-content;
+  padding: 0px;
+  margin: 0px;
+  height: max-content;
+  font-size: 16px;
+  color: inherit;
+}
+.removeTagIcon {
+  width: max(16px, 16px);
+  height: max(16px, 16px);
+  color: inherit;
+}
+.categoryBlock {
+  width: max(100%, 100%);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.categoryButton {
+  background-color: $white;
+  font-size: toRem(14);
+  padding: 10px 0px;
+  width: max(100%, 100%);
+  border: none;
+  text-align: left;
+  font-family: $fontFamily;
+  color: $main1000;
+  border-bottom: 1px solid $main1000;
+  transition: all 0.5s;
+}
+.categoryButton:hover {
+  border-bottom: 1px solid $main400;
+  color: $main400;
+}
+.recentlyViewedItemContainer {
+  width: max(100%, 100%);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: center;
+  transition: all 1s;
+}
+.recentlyViewedItemContainer:hover {
+  background-color: $main300;
+}
+.recentlyViewedProductPhoto {
+  object-fit: cover;
+  width: max(60px, 60px);
+  height: max(60px, 60px);
+
+  background-color: $white;
+
+  border-bottom: 5px;
+}
+.priceTitleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-items: flex-start;
+  width: max(200px, 200px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  gap: 10px;
+  position: relative;
+}
+.productTitles {
+  padding: 0px;
+  margin: 0px;
+  font-size: 16px;
+  font-family: $fontFamily;
+  color: $main800;
+}
+.productPrice {
+  padding: 0px;
+  margin: 0px;
+  font-size: 12px;
+  font-family: $fontFamily;
+  color: $main800;
+}
+.priceRangesSectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: max(100%, 100%);
+  box-sizing: border-box;
+  height: max(220px, 220px);
+  overflow-y: scroll;
+  border: 1px solid $main1000;
+  border-radius: 5px;
+  padding: 10px 0px 10px 10px;
+}
+.priceRangeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: max(80%, 80%);
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+}
+.priceRangeCheckbox {
+  width: max(15px, 15px);
+  height: max(15px, 15px);
+}
+.priceRangeText {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  font-size: toRem(16);
+  padding: 0px;
+  margin: 0px;
+  font-family: $fontFamily;
+  color: $main1000;
+}

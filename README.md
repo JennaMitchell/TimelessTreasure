@@ -1,2 +1,2 @@
-# TimelessTreasure
-Antiques e-com site
+# Timeless-Treasures
+Antiques ecommerce site 

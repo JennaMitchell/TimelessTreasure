@@ -1,0 +1,49 @@
+@import "../../../../utilities/variables";
+
+.mainContainer {
+  width: max(800px, 800px);
+  height: max(400px, 400px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100%;
+  padding: 40px;
+  background-color: $white;
+  box-shadow: 0 10px 20px black;
+  position: absolute;
+  top: 50px;
+  left: -400px;
+  gap: 10px;
+  z-index: $menuDropDownZIndex;
+}
+.options {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  display: grid;
+  grid-template-rows: repeat(6, calc(400px / 7));
+  grid-template-columns: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.productButton {
+  width: max(90%, 90%);
+  height: max(100%, 100%);
+  background-color: inherit;
+  text-align: left;
+  font-size: 1.2rem;
+  border: none;
+  border-bottom: 1px solid grey;
+  transition: all 1s;
+  font-family: $fontFamily;
+}
+.productButton:hover {
+  color: orange;
+  border-color: orange;
+}
+.imageContainer {
+  width: max(50%, 50%);
+  height: max(100%, 100%);
+  object-fit: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}

@@ -1,0 +1,118 @@
+@import "../../../utilities/variables";
+
+.mainContainer {
+  width: max(1000px, 1000px);
+  height: max(400px, 400px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  gap: 40px;
+  margin: 0px auto;
+}
+
+.decorPhotoContainer {
+  width: max(350px, 350px);
+  height: max(350px, 350px);
+  position: relative;
+  border: 10px solid $main600;
+  border-radius: 20px;
+}
+.titleDecoration {
+  width: max(200px, 200px);
+  height: max(40px, 40px);
+  object-fit: contain;
+  justify-self: center;
+  padding-right: 0px;
+}
+.decorPhoto {
+  width: max(350px, 350px);
+  height: max(350px, 350px);
+  display: inline-block;
+  border-radius: 15px;
+  z-index: 2;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}
+.infoContainer {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: 40px;
+}
+.infoStep {
+  display: flex;
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.stepIcon {
+  width: max(80px, 80px);
+  height: max(80px, 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  text-align: center;
+}
+.decorPhoto {
+  width: max(350px, 350px);
+  height: max(350px, 350px);
+  display: inline-block;
+  border-radius: 15px;
+  z-index: 2;
+  position: absolute;
+  top: 25px;
+  left: 25px;
+}
+.stepIconText {
+  width: max-content;
+  height: max-content;
+  font-family: $fontFamily;
+  font-size: 2.8rem;
+  line-height: 2.8rem;
+  color: $white;
+  padding: 0px;
+  margin: 0px;
+  padding-bottom: 5px;
+}
+.stepIconOne {
+  background-color: $main400;
+}
+.stepIconTwo {
+  background-color: $main600;
+}
+.stepIconThree {
+  background-color: $main800;
+}
+.stepTextContainer {
+  width: max(65ch, 65ch);
+  height: max(80%, 80%);
+  display: grid;
+  align-content: center;
+  justify-content: flex-start;
+  grid-template-rows: max-content max-content;
+  row-gap: 10px;
+  font-family: $fontFamily;
+  padding-bottom: 5px;
+}
+.stepText {
+  font-family: $fontFamily;
+  font-size: 1.6rem;
+  text-align: left;
+  margin: 0px;
+  padding: 0px;
+}
+.stepsubText {
+  font-family: $fontFamily;
+  font-size: 1rem;
+  text-align: left;
+  margin: 0px;
+  padding: 0px;
+}

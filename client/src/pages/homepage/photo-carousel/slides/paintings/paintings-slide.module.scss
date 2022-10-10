@@ -1,0 +1,97 @@
+@import "../../../../../utilities/variables";
+.mainContainer {
+  width: max(100%, 100%);
+  height: max(800px, 800px);
+  background-image: url("../../../../../images/homepage/photo-carousel/antique-painting.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+.backdropFilter {
+  background-color: rgba(0, 0, 0, 0.7);
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.slideInTextContainer {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  transition: all 1s;
+  padding: 0px 100px;
+}
+
+.slideInTitleText {
+  font-size: 4.8rem;
+  transition: all 1s;
+  color: $white;
+  transform: translateX(100vh);
+  font-family: $fontFamily;
+  padding: 0px;
+  margin: 0px;
+}
+
+.slideInTitleTextActive {
+  transform: translateX(0%);
+  transition: all 1s;
+}
+.subtitleText {
+  font-size: 1.6rem;
+  width: max(65ch, 65ch);
+  text-align: center;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 2;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 1s;
+  margin: 0px;
+  padding: 0px;
+}
+.subtitleTextActive {
+  transform: translateX(0px);
+  transition: all 1s;
+  opacity: 1;
+}
+.loginButton {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  padding: 10px 40px;
+  border-radius: 30px;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  font-size: 1.6rem;
+  z-index: 2;
+  opacity: 0;
+  transition: all 1s;
+}
+.loginButton:hover {
+  color: $main600;
+  border-color: $main600;
+}
+.loginButtonActive {
+  opacity: 1;
+  transition: all 1s;
+}

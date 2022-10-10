@@ -1,0 +1,94 @@
+@import "../../../utilities/variables";
+
+.mainContainer {
+  margin: 0px auto;
+  width: max(1000px, 1000px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  grid-template-rows: max-content max-content;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.subCategoryButton {
+  width: max(450px, 450px);
+  height: max(325px, 325px);
+  display: grid;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all 1s;
+  position: relative;
+  align-content: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  gap: 7.5px;
+}
+
+.buttonImage {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  transition: all 1s;
+}
+.activeButtonHover {
+  transform: scale(120%);
+}
+
+.categoryTitle {
+  font-size: 1.6rem;
+  color: $white;
+  font-family: $fontFamily;
+  z-index: 2;
+  max-width: max-content;
+  width: max-content;
+  min-width: max-content;
+  min-height: max-content;
+  height: max-content;
+  max-height: max-content;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 20px;
+  transition: all 0.5s;
+}
+
+.categorySubText {
+  font-size: 1rem;
+  color: $white;
+  font-family: $fontFamily;
+  z-index: 2;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 20px;
+  width: max(45ch, 45ch);
+}
+.activeText {
+  color: $main300;
+}
+.blurBackground {
+  position: absolute;
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.actionButton {
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 15px;
+  height: max(30px, 30px);
+  width: max(100px, 100px);
+  color: $white;
+  z-index: 2;
+  text-align: center;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+.activeActionButton {
+  border: 1px solid $main300;
+  color: $main300;
+}

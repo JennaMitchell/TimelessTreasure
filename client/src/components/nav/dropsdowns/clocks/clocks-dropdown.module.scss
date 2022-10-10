@@ -1,0 +1,66 @@
+@import "../../../../utilities/variables";
+
+.mainContainer {
+  width: max(800px, 800px);
+  height: max(400px, 400px);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 100%;
+  padding: 40px;
+  background-color: $white;
+  box-shadow: 0 10px 20px black;
+  position: absolute;
+  top: 50px;
+  left: -400px;
+  gap: 10px;
+  z-index: $menuDropDownZIndex;
+}
+.options {
+  width: max(100%, 100%);
+  height: max(90%, 90%);
+  display: grid;
+  grid-template-rows: max-content repeat(5, calc(400px / 7));
+  grid-template-columns: 100%;
+  align-items: center;
+  justify-items: center;
+}
+.productButton {
+  width: max(90%, 90%);
+  height: max(100%, 100%);
+  background-color: inherit;
+  text-align: left;
+  font-size: 1.2rem;
+  border: none;
+  border-bottom: 1px solid grey;
+  transition: all 1s;
+  font-family: $fontFamily;
+}
+.productButton:hover {
+  color: orange;
+  border-color: orange;
+}
+.imageContainer {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  object-fit: cover;
+  position: relative;
+  top: 0px;
+  right: 0px;
+}
+.optionsTitle {
+  color: $black;
+  font-size: 1.4rem;
+  line-height: 1.2rem;
+  width: max(90%, 90%);
+  height: max(100%, 100%);
+  padding: 0px;
+  margin: 0px;
+  display: inline-block;
+  text-align: center;
+  display: grid;
+  justify-content: flex-start;
+  padding-left: 10px;
+  align-items: center;
+  font-family: $fontFamily;
+  margin-bottom: 10px;
+}

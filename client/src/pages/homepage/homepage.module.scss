@@ -1,0 +1,41 @@
+@import "../../utilities/variables";
+
+.homepageMainContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+}
+
+.sectionTitleContainer {
+  width: max(200px, 200px);
+  height: max(100px, 100px);
+  position: relative;
+  margin: 0px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.sectionTitle {
+  font-size: 2.2rem;
+  color: $main600;
+  width: max-content;
+  max-height: max-content;
+  text-align: center;
+
+  margin: 0px;
+  justify-self: center;
+  font-family: $fontFamily;
+}
+.decorPhoto {
+  width: max(250px, 250px);
+  height: max(80px, 80px);
+  object-fit: contain;
+  justify-self: center;
+  padding-right: 5px;
+}

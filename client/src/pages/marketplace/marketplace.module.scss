@@ -1,0 +1,43 @@
+@import "../../utilities/variables";
+
+.collectionTopContainer {
+  width: max(1000px, 1000px);
+  min-height: calc(100vh - 410px);
+  height: max-content;
+  max-height: max-content;
+  display: grid;
+  position: relative;
+  grid-template-columns: max-content max-content;
+
+  margin: 10px auto;
+  gap: 20px;
+}
+
+.titleBanner {
+  height: max(175px, 175px);
+  width: max(100vw, 100vw);
+  text-align: center;
+
+  background-image: url("../../images/homepage/photo-carousel/antique-tablewear.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 1;
+}
+
+.mainTitle {
+  padding: 0px;
+  margin: 0px;
+  height: max(100%, 100%);
+  width: max(100%, 100%);
+  font-size: 3.6rem;
+  font-family: $fontFamily;
+  color: $white;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: grid;
+}
