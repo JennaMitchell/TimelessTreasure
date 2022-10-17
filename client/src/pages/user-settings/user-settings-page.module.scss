@@ -1,0 +1,63 @@
+@import "../../utilities/variables";
+.userInfoTopContainer {
+  width: max(100%, 100%);
+  min-height: max-content;
+  height: max-content;
+  max-height: max-content;
+  background-color: $white;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.banner {
+  width: max(100%, 100%);
+  height: max(175px, 175px);
+  background-image: url("../../images/homepage/photo-carousel/antique-tablewear.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: $white;
+  display: grid;
+  place-items: center;
+  font-size: toRem(68);
+  font-family: $fontFamily;
+}
+.userInfoContentContainer {
+  width: max(1000px, 1000px);
+  min-height: calc(100vh - 585px);
+  height: max-content;
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: flex-start;
+  gap: 0px;
+  padding: 10px 0px;
+}
+.sectionTitle {
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  padding: 0px;
+  margin: 0px;
+  font-size: toRem(48);
+  color: $main800;
+  font-family: $fontFamily;
+  margin-top: 50px;
+}
+.sectionImage {
+  width: max(300px, 300px);
+  height: max(50px, 50px);
+  object-fit: contain;
+  display: inline-block;
+  margin-bottom: 50px;
+}
+.orderGridContainer {
+  width: max(100%, 100%);
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  gap: 20px;
+  padding: 20px 0px;
+}

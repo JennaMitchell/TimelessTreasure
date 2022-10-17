@@ -1,9 +1,9 @@
 @import "../../../utilities/variables";
 
 .topContainer {
-  width: 100vw;
-  max-width: 100vw;
-  min-width: 100vw;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
   height: max-content;
   max-height: max-content;
   min-height: max-content;
@@ -34,6 +34,10 @@
   top: 50%;
   right: 80px;
   transform: translate(50%, -100%);
+}
+.arrowIcon {
+  width: max(25px, 25px);
+  height: max(25px, 25px);
 }
 .arrowButton:hover {
   background-color: $white;

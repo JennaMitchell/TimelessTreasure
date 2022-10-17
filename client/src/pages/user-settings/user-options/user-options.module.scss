@@ -1,0 +1,72 @@
+@import "../../../utilities/variables";
+
+.optionsContainer {
+  width: max(700px, 700px);
+  height: max(400px, 400px);
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: 325px 325px;
+  margin-bottom: 20px;
+  align-self: center;
+  gap: 50px;
+}
+.optionsMenu {
+  width: max(300px, 300px);
+  height: max(100%, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 2px solid $grey;
+  justify-content: flex-start;
+  padding-right: 20px;
+  border-radius: 1px;
+}
+.sectionTitle {
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  padding: 0px;
+  margin: 0px;
+  font-size: toRem(36);
+  color: $main800;
+  font-family: $fontFamily;
+}
+.sectionImage {
+  width: max(300px, 300px);
+  height: max(50px, 50px);
+  object-fit: contain;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.optionsButton {
+  width: max(90%, 90%);
+  height: max(40px, 40px);
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  color: $main1000;
+  border: none;
+  border-bottom: 1px solid $main1000;
+  background-color: $white;
+  text-align: left;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  transition: all 1s;
+}
+.optionsButton:hover {
+  border-bottom: 1px solid $main400;
+  color: $main400;
+}
+.optionsInfoContainer {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+.activeButton {
+  border-bottom: 1px solid $main400;
+  color: $main400;
+}

@@ -2,57 +2,87 @@ import classes from "./login-popup.module.scss";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import decor from "../../../images/homepage/decor/decor.png";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { mainStoreSliceActions } from "../../../store/store";
 import {
-  LogoutHandler,
-  AutoLogout,
-  LoginHandler,
-} from "../../../utilities/login-signup-hooks/login-signup-hooks";
+  loginCall,
+  logoutHandler,
+} from "../../../utilities/login-signup-hooks/api-calls";
 import {
   loginPasswordValidator,
   emailValidator,
 } from "../../../utilities/validation-hooks/validation-hooks";
 
+import Spinner from "../../spinner/spinner";
+import { userStoreSliceActions } from "../../../store/user-store";
+
+interface LogicObject {
+  [key: string]: {
+    labelMoveout: boolean;
+    inputData: "";
+  };
+}
 const LoginPopup = () => {
   const loginPopupActive = useAppSelector(
     (state) => state.mainStore.loginPopupActive
   );
   const dispatch = useAppDispatch();
+  const [initialRender, setInitialRender] = useState(false);
+  const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
+    emailLoginInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+    passwordLoginInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+  });
+  const [signingInActive, setSigningInActive] = useState(false);
 
-  const [emailLabelMoveout, setEmailLabelMoveout] = useState(false);
-  const [passwordLabelMoveout, setPasswordLabelMoveout] = useState(false);
-
-  const [emailInputData, setEmailInputData] = useState("");
-  const [passwordInputData, setPasswordInputData] = useState("");
+  const apiCallDropdownActive = useAppSelector(
+    (state) => state.mainStore.apiCallDropdownActive
+  );
+  const apiCallMessageType = useAppSelector(
+    (state) => state.mainStore.apiCallMessageType
+  );
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const expiryDate = localStorage.getItem("expiryDate");
-    if (!token || !expiryDate) {
-      return;
-      // if we don't ahve a token the user isn't logged in and or the expiry date is null
+    if (!initialRender && loginPopupActive) {
+      setInitialRender(true);
     }
-    if (new Date(expiryDate) <= new Date()) {
-      //
-      LogoutHandler();
-      return;
-    }
-    const userId = localStorage.getItem("userId") || "";
-    const remainingMilliseconds =
-      new Date(expiryDate).getTime() - new Date().getTime();
-    dispatch(mainStoreSliceActions.setUserAuthenticated(true));
-    dispatch(mainStoreSliceActions.setUserToken(token));
-    dispatch(mainStoreSliceActions.setUserId(userId));
+  }, [loginPopupActive]);
 
-    AutoLogout(remainingMilliseconds);
-  }, [dispatch]);
+  const [
+    passwordRequirementsDropdownActive,
+    setPasswordRequirementsDropdownActive,
+  ] = useState(false);
 
   const signupButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLoginPopupActive(false));
     dispatch(mainStoreSliceActions.setSignupPopupActive(true));
+    if (apiCallDropdownActive) {
+      dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
+      setTimeout(() => {
+        dispatch(mainStoreSliceActions.setAPICallMessage(""));
+        dispatch(mainStoreSliceActions.setAPICallMessageType(""));
+        dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
+      }, 1000);
+    }
   };
 
+  const closingIconHandler = () => {
+    dispatch(mainStoreSliceActions.setLockViewPort(false));
+    dispatch(mainStoreSliceActions.setLoginPopupActive(false));
+    if (apiCallDropdownActive) {
+      dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
+      setTimeout(() => {
+        dispatch(mainStoreSliceActions.setAPICallMessage(""));
+        dispatch(mainStoreSliceActions.setAPICallMessageType(""));
+        dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
+      }, 1000);
+    }
+  };
   const dialogBackdropClickHandler = (e: React.MouseEvent) => {
     const targetElement = e.target as HTMLElement;
     if (targetElement.id === "dialogContainer") {
@@ -60,66 +90,135 @@ const LoginPopup = () => {
       dispatch(mainStoreSliceActions.setLoginPopupActive(false));
     }
   };
+  const inputCopyObjectHandler = () =>
+    JSON.parse(JSON.stringify(inputLogicObject));
 
-  const emailInputChangeHandler = (e: React.ChangeEvent) => {
-    if (!emailLabelMoveout) {
-      setEmailLabelMoveout(true);
-    }
+  const inputChangeHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLInputElement;
-    setEmailInputData(targetElement.value);
-  };
+    const copyOfInputObject = inputCopyObjectHandler();
 
-  const passwordInputChangeHandler = (e: React.ChangeEvent) => {
-    if (!passwordLabelMoveout && passwordInputData.length === 0) {
-      setPasswordLabelMoveout(true);
+    if (!copyOfInputObject[targetElement.id].labelMoveout) {
+      copyOfInputObject[targetElement.id].labelMoveout = true;
     }
+    copyOfInputObject[targetElement.id].inputData = targetElement.value;
+    setInputLogicObject(copyOfInputObject);
+  };
+  const inputFocusHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLInputElement;
-
-    setPasswordInputData(targetElement.value);
-  };
-
-  const passwordInputFocusHandler = () => {
-    if (passwordInputData.length === 0) {
-      setPasswordLabelMoveout(!passwordLabelMoveout);
+    const copyOfInputObject = inputCopyObjectHandler();
+    if (copyOfInputObject[targetElement.id].inputData.length === 0) {
+      copyOfInputObject[targetElement.id].labelMoveout =
+        !copyOfInputObject[targetElement.id].labelMoveout;
+      setInputLogicObject(copyOfInputObject);
+    }
+    if (
+      targetElement.id === "passwordSignupInput" ||
+      targetElement.id === "confirmationPasswordSignupInput"
+    ) {
+      if (!passwordRequirementsDropdownActive) {
+        setPasswordRequirementsDropdownActive(true);
+      }
     }
   };
-  const emailInputFocusHandler = () => {
-    if (emailInputData.length === 0) {
-      setEmailLabelMoveout(!emailLabelMoveout);
+  const inputBlurHandler = (e: React.ChangeEvent) => {
+    const targetElement = e.target as HTMLInputElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+    if (copyOfInputObject[targetElement.id].inputData.length === 0) {
+      copyOfInputObject[targetElement.id].labelMoveout =
+        !copyOfInputObject[targetElement.id].labelMoveout;
+      setInputLogicObject(copyOfInputObject);
     }
   };
 
-  const emailInputBlurHandler = () => {
-    if (emailInputData.length === 0) {
-      setEmailLabelMoveout(false);
-    }
-  };
-  const emailLabelClickHandler = () => {
-    document.getElementById("emailLoginInput")?.focus();
-    setEmailLabelMoveout(!emailLabelMoveout);
-  };
-
-  const passwordInputBlurHandler = () => {
-    if (passwordInputData.length === 0) {
-      setPasswordLabelMoveout(false);
-    }
-  };
-  const passwordLabelClickHandler = () => {
-    document.getElementById("passwordLoginInput")?.focus();
-    setPasswordLabelMoveout(!emailLabelMoveout);
+  const inputLabelClickHandler = (e: React.MouseEvent) => {
+    const targetElement = e.target as HTMLLabelElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+    document.getElementById(`${targetElement.htmlFor}`)?.focus();
+    copyOfInputObject[targetElement.htmlFor].labelMoveout =
+      !copyOfInputObject[targetElement.htmlFor].labelMoveout;
+    setInputLogicObject(copyOfInputObject);
   };
 
-  const signInButtonHandler = () => {
-    const validEmail = emailValidator(emailInputData);
-    const validPasswordCheck = loginPasswordValidator(passwordInputData);
-    if (!validEmail || !validPasswordCheck) {
+  const signInButtonHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const validEmail = !emailValidator(
+      inputLogicObject.emailLoginInput.inputData
+    );
+
+    const validPasswordObject = loginPasswordValidator(
+      inputLogicObject.passwordLoginInput.inputData
+    );
+
+    const validPassword = !Object.values(validPasswordObject).includes(true);
+
+    if (!validEmail || !validPassword) {
       dispatch(
-        mainStoreSliceActions.setDropdownMessage("Invalid Login Or Password")
+        mainStoreSliceActions.setAPICallMessage("Invalid Login or Password")
       );
-      dispatch(mainStoreSliceActions.setDropdownMessageType("Error"));
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      setSigningInActive(false);
+      return;
+    } else {
+      setSigningInActive(true);
     }
 
-    LoginHandler(emailInputData, passwordInputData);
+    setTimeout(() => {
+      const validEmail = emailValidator(
+        inputLogicObject.emailLoginInput.inputData
+      );
+      const validPasswordCheck = loginPasswordValidator(
+        inputLogicObject.passwordLoginInput.inputData
+      );
+      if (!validEmail || !validPasswordCheck) {
+        dispatch(
+          mainStoreSliceActions.setAPICallMessage("Invalid Login Or Password")
+        );
+        dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      }
+
+      loginCall(dispatch, {
+        email: inputLogicObject.emailLoginInput.inputData,
+        password: inputLogicObject.passwordLoginInput.inputData,
+      })
+        .then((data) => {
+          return data?.json();
+        })
+        .then((jsonData) => {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+            }
+          } else {
+            const remainingMilliseconds = 60 * 60 * 1000;
+            const expiryDate = new Date(
+              new Date().getTime() + remainingMilliseconds
+            );
+
+            setTimeout(() => {
+              logoutHandler();
+            }, remainingMilliseconds);
+            dispatch(
+              userStoreSliceActions.setAutoLogoutTime(expiryDate.toString())
+            );
+            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+            dispatch(userStoreSliceActions.setUsername(jsonData.username));
+            dispatch(userStoreSliceActions.setUserEmail(jsonData.email));
+            dispatch(userStoreSliceActions.setUserLoggedIn(true));
+            dispatch(userStoreSliceActions.setUserToken(jsonData.token));
+            dispatch(userStoreSliceActions.setUserId(jsonData.userId));
+            localStorage.setItem("token", jsonData.token);
+            localStorage.setItem("userId", jsonData.userId);
+            localStorage.setItem("expiryDate", expiryDate.toISOString());
+
+            closingIconHandler();
+          }
+          setSigningInActive(false);
+        });
+    }, 2000);
   };
 
   return (
@@ -131,52 +230,73 @@ const LoginPopup = () => {
           onClick={dialogBackdropClickHandler}
         >
           <form className={classes.loginForm}>
-            <div className={classes.closingContainer}>
+            <div
+              className={classes.closingContainer}
+              onClick={closingIconHandler}
+            >
               <XMarkIcon className={classes.closingIcon} />
             </div>
             <h6 className={classes.loginTitle}>Login</h6>
             <img src={decor} alt="text-decor" className={classes.textDecor} />
             <div className={classes.inputContainer}>
-              <p
+              <label
                 className={`${classes.inputLabel} ${
-                  emailLabelMoveout && classes.activeInputLabel
-                }`}
-                onClick={emailLabelClickHandler}
+                  inputLogicObject.emailLoginInput.labelMoveout &&
+                  classes.activeInputLabel
+                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
+                onClick={inputLabelClickHandler}
+                htmlFor="emailLoginInput"
               >
                 Email
-              </p>
+              </label>
               <input
-                className={classes.loginInput}
+                className={`${classes.loginInput} ${
+                  apiCallMessageType === "ERROR" && classes.inputError
+                }`}
                 id="emailLoginInput"
-                onChange={emailInputChangeHandler}
-                onBlur={emailInputBlurHandler}
-                onFocus={emailInputFocusHandler}
+                onChange={inputChangeHandler}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
               />
             </div>
             <div className={classes.inputContainer}>
-              <p
+              <label
                 className={`${classes.inputLabel} ${
-                  passwordLabelMoveout && classes.activeInputLabel
-                }`}
-                onClick={passwordLabelClickHandler}
+                  inputLogicObject.passwordLoginInput.labelMoveout &&
+                  classes.activeInputLabel
+                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
+                onClick={inputLabelClickHandler}
+                htmlFor="passwordLoginInput"
               >
                 Password
-              </p>
+              </label>
               <input
-                className={classes.loginInput}
+                className={`${classes.loginInput} ${
+                  apiCallMessageType === "ERROR" && classes.inputError
+                }`}
                 id="passwordLoginInput"
-                onChange={passwordInputChangeHandler}
-                onBlur={passwordInputBlurHandler}
-                onFocus={passwordInputFocusHandler}
+                onChange={inputChangeHandler}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
+                type="password"
               />
               <p className={classes.forgotPassword}> Forgot your password? </p>
             </div>
 
             <button
-              className={classes.actionButton}
+              className={classes.signinButton}
               onClick={signInButtonHandler}
+              id="loginSignInButton"
             >
-              Signin
+              {initialRender &&
+                (signingInActive ? (
+                  <Spinner
+                    parentButtonId={"loginSignInButton"}
+                    initialRender={initialRender}
+                  />
+                ) : (
+                  "Sign In"
+                ))}
             </button>
             <p className={classes.orText}>- - or - -</p>
             <button

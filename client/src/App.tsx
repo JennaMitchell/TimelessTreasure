@@ -7,11 +7,16 @@ import LoginPopup from "./components/popups/login/login-popup";
 import SignupPopup from "./components/popups/signup/signup-popup";
 import Marketplace from "./pages/marketplace/marketplace";
 import PageNotFound from "./components/page-not-found/page-not-found";
-// import LoadingPage from "./components/loading-page/loading-page";
+import ApiCallDropdown from "./components/api-call-dropdown/api-call-dropdown";
+import LoadingPage from "./components/loading-page/loading-page";
 import Cart from "./pages/cart/cart";
+import UserSettingsPage from "./pages/user-settings/user-settings-page";
 
 function App() {
   const lockViewport = useAppSelector((state) => state.mainStore.lockViewport);
+  const loadingPageActive = useAppSelector(
+    (state) => state.mainStore.authenticationLoading
+  );
   if (lockViewport) {
     document.body.classList.add("lockscreen");
   } else {
@@ -22,8 +27,10 @@ function App() {
 
   return (
     <div className="App">
+      {loadingPageActive && <LoadingPage />}
       <LoginPopup />
       <SignupPopup />
+      <ApiCallDropdown />
       <Routes>
         <Route path="/" element={<Navigate replace to="/home" />} />
         <Route
@@ -31,6 +38,7 @@ function App() {
           element={
             <>
               <Nav />
+
               <Homepage />
               <Footer />
             </>
@@ -52,6 +60,16 @@ function App() {
             <>
               <Nav />
               <Cart />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/user-settings"
+          element={
+            <>
+              <Nav />
+              <UserSettingsPage />
               <Footer />
             </>
           }

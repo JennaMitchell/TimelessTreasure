@@ -3,12 +3,17 @@
   height: max-content;
   max-height: max-content;
   min-height: max-content;
-  width: max(100vw, 100vw);
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
   display: grid;
   grid-template-rows: 60px max-content 40px;
+  grid-template-columns: 1000px;
   justify-content: center;
   align-items: center;
   gap: 0px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .navBar {

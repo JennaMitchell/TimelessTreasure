@@ -1,0 +1,68 @@
+@import "../../utilities/variables";
+.messageContainer {
+  min-width: max-content;
+  width: max-content;
+  max-width: 600px;
+  min-height: 60px;
+  height: max-content;
+  max-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  z-index: $apiCallMessageZIndex;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  gap: 10px;
+  transition: transform 1s;
+}
+.moveDropDown {
+  transform: translate(-50%, 0%) !important;
+}
+.moveDropUp {
+  transform: translate(-50%, -100%) !important;
+}
+.messageTextContainer {
+  display: flex;
+  min-height: max-content;
+  height: max-content;
+  max-height: max-content;
+  min-width: max-content;
+  max-width: max-content;
+  width: max-content;
+  gap: 10px;
+}
+.message {
+  font-family: $fontFamily;
+  font-size: toRem(16);
+  padding: 0px;
+  margin: 0px;
+  color: inherit;
+}
+.errorMessageContainer {
+  border: $warningDark 2px solid;
+  background-color: $warningLight;
+  color: $warningMain;
+}
+.successMessageContainer {
+  border: $successDark 2px solid;
+  background-color: $sucessLight;
+  color: $successMain;
+}
+
+.closingIcon {
+  color: inherit;
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  box-sizing: border-box;
+  padding: 2.5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.closingIcon:hover {
+  background-color: white;
+  color: black;
+}

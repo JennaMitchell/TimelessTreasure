@@ -1,0 +1,9 @@
+.loadingCircle {
+  width: max(5px, 5px);
+  height: max(5px, 5px);
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.5s;
+}

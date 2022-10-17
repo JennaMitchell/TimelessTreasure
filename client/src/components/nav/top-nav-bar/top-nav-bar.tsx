@@ -6,6 +6,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import { NavLink } from "react-router-dom";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
 const TopNavBar = () => {
   const availableCurrency = ["USD", "CAN", "EUR"];
   const [searchValue, setSearchValue] = useState("Search");
@@ -28,7 +29,8 @@ const TopNavBar = () => {
   const searchContainerClickHandler = () => {
     document.getElementById("searchContainerId")?.focus();
   };
-
+  const userLoggedIn = useAppSelector((state) => state.userStore.userLoggedIn);
+  const username = useAppSelector((state) => state.userStore.username);
   const renderReadyCurrencyOptions = availableCurrency.map((currency) => {
     return (
       <option className={classes.currencyOption} key={`${currency}`}>
@@ -44,9 +46,18 @@ const TopNavBar = () => {
         <h2 className={classes.title}>Timeless Treasures</h2>
       </div>
       <div className={classes.actionBar}>
-        <button className={classes.loginButton} onClick={loginHandler}>
-          Login/Signup
-        </button>
+        {!userLoggedIn && (
+          <button className={classes.loginButton} onClick={loginHandler}>
+            Login/Signup
+          </button>
+        )}
+        {userLoggedIn && (
+          <NavLink className={classes.userButton} to="/user-settings">
+            <UserCircleIcon className={classes.userIcon} />
+            <p className={classes.username}>{username}</p>
+          </NavLink>
+        )}
+
         <div
           className={classes.searchContainer}
           onClick={searchContainerClickHandler}

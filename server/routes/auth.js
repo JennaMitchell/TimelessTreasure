@@ -1,41 +1,54 @@
 const express = require("express");
 const { body } = require("express-validator");
 
-const User = require("../models/user");
 const authController = require("../controllers/auth");
-const isAuth = require("../middleware/is-auth");
-
 const router = express.Router();
-
+const UserSchema = require("../models/user-schema");
 router.put(
   "/signup",
   [
     body("email")
       .isEmail()
-      .withMessage("Please enter a valid email.")
       .custom((value, { req }) => {
-        return User.findOne({ email: value }).then((userDoc) => {
-          if (userDoc) {
-            return Promise.reject("E-Mail address already exists!");
+        return UserSchema.findOne({ email: value }).then((foundEmail) => {
+          if (foundEmail) {
+            return Promise.reject("E-mail address already in use!");
           }
         });
       })
       .normalizeEmail(),
-    body("password").trim().isLength({ min: 5 }),
-    body("name").trim().not().isEmpty(),
+    body("password").trim().isLength({ min: 8 }),
+    body("username")
+      .trim()
+      .not()
+      .isEmpty()
+      .custom((value, { req }) => {
+        return UserSchema.findOne({ username: value }).then((foundUsername) => {
+          if (foundUsername) {
+            return Promise.reject("Username in use!");
+          }
+        });
+      }),
   ],
   authController.signup
 );
 
-router.post("/login", authController.login);
-
-router.get("/status", isAuth, authController.getUserStatus);
-
-router.patch(
-  "/status",
-  isAuth,
-  [body("status").trim().not().isEmpty()],
-  authController.updateUserStatus
+router.post(
+  "/login",
+  [
+    body("email")
+      .isEmail()
+      .custom((value, { req }) => {
+        return UserSchema.findOne({ email: value }).then((foundEmail) => {
+          if (!foundEmail) {
+            return Promise.reject("No email found!");
+          }
+        });
+      })
+      .normalizeEmail(),
+    body("password").trim().isLength({ min: 8 }),
+  ],
+  authController.login
 );
 
 module.exports = router;

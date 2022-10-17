@@ -2,40 +2,91 @@ import classes from "./signup-popup.module.scss";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import decor from "../../../images/homepage/decor/decor.png";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { mainStoreSliceActions } from "../../../store/store";
 import {
   emailValidator,
   signupPasswordValidator,
 } from "../../../utilities/validation-hooks/validation-hooks";
-import { SignupHandler } from "../../../utilities/login-signup-hooks/login-signup-hooks";
+import Spinner from "../../spinner/spinner";
+
 import SignupRequirements from "./signup-requirements/signup-requirements";
+import { signupCall } from "../../../utilities/login-signup-hooks/api-calls.js";
+
+interface LogicObject {
+  [key: string]: {
+    labelMoveout: boolean;
+    inputData: "";
+  };
+}
+
 const SignupPopup = () => {
   const signupPopupActive = useAppSelector(
     (state) => state.mainStore.signupPopupActive
   );
   const dispatch = useAppDispatch();
+  const [signupLoading, setSignupLoading] = useState(false);
+  const [initialRender, setInitialRender] = useState(false);
+  useEffect(() => {
+    if (!initialRender && signupPopupActive) {
+      setInitialRender(true);
+    }
+  }, [signupPopupActive]);
+
+  const apiCallDropdownActive = useAppSelector(
+    (state) => state.mainStore.apiCallDropdownActive
+  );
+  const closingIconHandler = () => {
+    dispatch(mainStoreSliceActions.setLockViewPort(false));
+    dispatch(mainStoreSliceActions.setSignupPopupActive(false));
+    if (apiCallDropdownActive) {
+      dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
+      setTimeout(() => {
+        dispatch(mainStoreSliceActions.setAPICallMessage(""));
+        dispatch(mainStoreSliceActions.setAPICallMessageType(""));
+        dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
+      }, 1000);
+    }
+  };
+
+  const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
+    emailSignupInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+    passwordSignupInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+    confirmationPasswordSignupInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+    usernameSignupInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+  });
 
   const [
     passwordRequirementsDropdownActive,
     setPasswordRequirementsDropdownActive,
   ] = useState(false);
-
-  const [emailLabelMoveout, setEmailLabelMoveout] = useState(false);
-  const [passwordLabelMoveout, setPasswordLabelMoveout] = useState(false);
-  const [
-    confirmationPasswordLabelMoveout,
-    setConfirmationPasswordLabelMoveout,
-  ] = useState(false);
-
-  const [emailInputData, setEmailInputData] = useState("");
-  const [passwordInputData, setPasswordInputData] = useState("");
-  const [confirmationPasswordInputData, setConfirmationPasswordInputData] =
-    useState("");
+  const apiCallMessageType = useAppSelector(
+    (state) => state.mainStore.apiCallMessageType
+  );
 
   const signinButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLoginPopupActive(true));
     dispatch(mainStoreSliceActions.setSignupPopupActive(false));
+    if (apiCallDropdownActive) {
+      dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
+      setTimeout(() => {
+        dispatch(mainStoreSliceActions.setAPICallMessage(""));
+        dispatch(mainStoreSliceActions.setAPICallMessageType(""));
+        dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
+      }, 1000);
+    }
   };
 
   const dialogBackdropClickHandler = (e: React.MouseEvent) => {
@@ -45,121 +96,108 @@ const SignupPopup = () => {
       dispatch(mainStoreSliceActions.setLoginPopupActive(false));
     }
   };
+  const inputCopyObjectHandler = () =>
+    JSON.parse(JSON.stringify(inputLogicObject));
 
-  const emailInputChangeHandler = (e: React.ChangeEvent) => {
-    if (!emailLabelMoveout) {
-      setEmailLabelMoveout(true);
-    }
+  const inputChangeHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLInputElement;
-    setEmailInputData(targetElement.value);
-  };
+    const copyOfInputObject = inputCopyObjectHandler();
 
-  const passwordInputChangeHandler = (e: React.ChangeEvent) => {
-    if (!passwordLabelMoveout && passwordInputData.length === 0) {
-      setPasswordLabelMoveout(true);
+    if (!copyOfInputObject[targetElement.id].labelMoveout) {
+      copyOfInputObject[targetElement.id].labelMoveout = true;
     }
+    copyOfInputObject[targetElement.id].inputData = targetElement.value;
+    setInputLogicObject(copyOfInputObject);
+  };
+  const inputFocusHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLInputElement;
-
-    setPasswordInputData(targetElement.value);
-  };
-  const confirmationPasswordInputChangeHandler = (e: React.ChangeEvent) => {
-    if (
-      !confirmationPasswordLabelMoveout &&
-      confirmationPasswordInputData.length === 0
-    ) {
-      setConfirmationPasswordLabelMoveout(true);
-    }
-    const targetElement = e.target as HTMLInputElement;
-
-    setConfirmationPasswordInputData(targetElement.value);
-  };
-
-  const emailInputFocusHandler = () => {
-    if (emailInputData.length === 0) {
-      setEmailLabelMoveout(!emailLabelMoveout);
-    }
-  };
-  const passwordInputFocusHandler = () => {
-    if (passwordInputData.length === 0) {
-      setPasswordLabelMoveout(!passwordLabelMoveout);
-    }
-    if (!passwordRequirementsDropdownActive) {
-      setPasswordRequirementsDropdownActive(true);
-    }
-  };
-  const confirmationPasswordInputFocusHandler = () => {
-    if (confirmationPasswordInputData.length === 0) {
-      setConfirmationPasswordLabelMoveout(!confirmationPasswordLabelMoveout);
-    }
-    if (!passwordRequirementsDropdownActive) {
-      setPasswordRequirementsDropdownActive(true);
-    }
-  };
-
-  const emailInputBlurHandler = () => {
-    if (emailInputData.length === 0) {
-      setEmailLabelMoveout(false);
-    }
-  };
-  const emailLabelClickHandler = () => {
-    document.getElementById("emailLoginInput")?.focus();
-    setEmailLabelMoveout(!emailLabelMoveout);
-  };
-
-  const passwordInputBlurHandler = () => {
-    if (passwordInputData.length === 0) {
-      setPasswordLabelMoveout(false);
+    const copyOfInputObject = inputCopyObjectHandler();
+    if (copyOfInputObject[targetElement.id].inputData.length === 0) {
+      copyOfInputObject[targetElement.id].labelMoveout =
+        !copyOfInputObject[targetElement.id].labelMoveout;
+      setInputLogicObject(copyOfInputObject);
     }
     if (
-      passwordInputData.length === 0 &&
-      confirmationPasswordInputData.length === 0
+      targetElement.id === "passwordSignupInput" ||
+      targetElement.id === "confirmationPasswordSignupInput"
     ) {
-      setPasswordRequirementsDropdownActive(false);
+      if (!passwordRequirementsDropdownActive) {
+        setPasswordRequirementsDropdownActive(true);
+      }
     }
   };
-  const passwordLabelClickHandler = () => {
-    document.getElementById("passwordLoginInput")?.focus();
-    setPasswordLabelMoveout(!emailLabelMoveout);
-  };
-
-  const confirmationPasswordInputBlurHandler = () => {
-    if (confirmationPasswordInputData.length === 0) {
-      setConfirmationPasswordLabelMoveout(false);
-    }
-    if (
-      passwordInputData.length === 0 &&
-      confirmationPasswordInputData.length === 0
-    ) {
-      setPasswordRequirementsDropdownActive(false);
+  const inputBlurHandler = (e: React.ChangeEvent) => {
+    const targetElement = e.target as HTMLInputElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+    if (copyOfInputObject[targetElement.id].inputData.length === 0) {
+      copyOfInputObject[targetElement.id].labelMoveout =
+        !copyOfInputObject[targetElement.id].labelMoveout;
+      setInputLogicObject(copyOfInputObject);
     }
   };
-  const confirmationPasswordLabelClickHandler = () => {
-    document.getElementById("confirmationPasswordLoginInput")?.focus();
-    setConfirmationPasswordLabelMoveout(!confirmationPasswordLabelMoveout);
+
+  const inputLabelClickHandler = (e: React.MouseEvent) => {
+    const targetElement = e.target as HTMLLabelElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+    document.getElementById(`${targetElement.htmlFor}`)?.focus();
+    copyOfInputObject[targetElement.htmlFor].labelMoveout =
+      !copyOfInputObject[targetElement.htmlFor].labelMoveout;
+    setInputLogicObject(copyOfInputObject);
   };
 
-  // const passwordValidation = () => {
-  //   signupPasswordValidator(passwordInputData, confirmationPasswordInputData);
-  //   return
-  // };
+  const signupButtonHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
 
-  const signupButtonHandler = () => {
-    const validEmail = emailValidator(emailInputData);
-    const validPasswordObject = signupPasswordValidator(
-      passwordInputData,
-      confirmationPasswordInputData
+    const validEmail = !emailValidator(
+      inputLogicObject.emailSignupInput.inputData
     );
 
-    const validPassword = !Object.values(validPasswordObject).includes(false);
+    const validPasswordObject = signupPasswordValidator(
+      inputLogicObject.passwordSignupInput.inputData,
+      inputLogicObject.confirmationPasswordSignupInput.inputData
+    );
+
+    const validPassword = !Object.values(validPasswordObject).includes(true);
 
     if (!validEmail || !validPassword) {
       dispatch(
-        mainStoreSliceActions.setDropdownMessage("Invalid Login Or Password")
+        mainStoreSliceActions.setAPICallMessage("Invalid Login or Password")
       );
-      dispatch(mainStoreSliceActions.setDropdownMessageType("Error"));
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      setSignupLoading(false);
       return;
+    } else {
+      setSignupLoading(true);
     }
-    SignupHandler(emailInputData, passwordInputData);
+
+    setTimeout(() => {
+      // sign up function
+      let promiseData: any = "";
+      signupCall(dispatch, {
+        email: inputLogicObject.emailSignupInput.inputData,
+        password: inputLogicObject.passwordSignupInput.inputData,
+        username: inputLogicObject.usernameSignupInput.inputData,
+        isSeller: false,
+      })
+        .then((data) => {
+          promiseData = data?.json();
+          return promiseData;
+        })
+        .then((jsonData) => {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+            }
+          } else {
+            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          }
+          setSignupLoading(false);
+        });
+    }, 2000);
   };
 
   return (
@@ -171,7 +209,10 @@ const SignupPopup = () => {
           onClick={dialogBackdropClickHandler}
         >
           <form className={classes.loginForm}>
-            <div className={classes.closingContainer}>
+            <div
+              className={classes.closingContainer}
+              onClick={closingIconHandler}
+            >
               <XMarkIcon className={classes.closingIcon} />
             </div>
             <h6 className={classes.loginTitle}>Signup</h6>
@@ -179,68 +220,124 @@ const SignupPopup = () => {
             <img src={decor} alt="text-decor" className={classes.textDecor} />
             {passwordRequirementsDropdownActive && (
               <SignupRequirements
-                password={passwordInputData}
-                confirmationPassword={confirmationPasswordInputData}
+                password={inputLogicObject.passwordSignupInput.inputData}
+                confirmationPassword={
+                  inputLogicObject.confirmationPasswordSignupInput.inputData
+                }
               />
             )}
             <div className={classes.inputContainer}>
-              <p
+              <label
                 className={`${classes.inputLabel} ${
-                  emailLabelMoveout && classes.activeInputLabel
-                }`}
-                onClick={emailLabelClickHandler}
+                  inputLogicObject.usernameSignupInput.labelMoveout &&
+                  classes.activeInputLabel
+                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
+                onClick={inputLabelClickHandler}
+                id="usernameSignupLabel"
+                htmlFor="usernameSignupInput"
               >
-                Email
-              </p>
+                Username
+              </label>
               <input
-                className={classes.loginInput}
-                id="emailLoginInput"
-                onChange={emailInputChangeHandler}
-                onBlur={emailInputBlurHandler}
-                onFocus={emailInputFocusHandler}
+                className={`${classes.signupInput} ${
+                  apiCallMessageType === "ERROR" && classes.inputError
+                }`}
+                id="usernameSignupInput"
+                onChange={inputChangeHandler}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
+                maxLength={12}
+                type="text"
               />
             </div>
             <div className={classes.inputContainer}>
-              <p
+              <label
                 className={`${classes.inputLabel} ${
-                  passwordLabelMoveout && classes.activeInputLabel
+                  inputLogicObject.emailSignupInput.labelMoveout &&
+                  classes.activeInputLabel
+                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
+                onClick={inputLabelClickHandler}
+                id="emailSignupLabel"
+                htmlFor="emailSignupInput"
+              >
+                Email
+              </label>
+              <input
+                className={`${classes.signupInput} ${
+                  apiCallMessageType === "ERROR" && classes.inputError
                 }`}
-                onClick={passwordLabelClickHandler}
+                id="emailSignupInput"
+                onChange={inputChangeHandler}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
+                type="text"
+              />
+            </div>
+            <div className={classes.inputContainer}>
+              <label
+                className={`${classes.inputLabel} ${
+                  inputLogicObject.passwordSignupInput.labelMoveout &&
+                  classes.activeInputLabel
+                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
+                onClick={inputLabelClickHandler}
+                id="passwordSignupLabel"
+                htmlFor="passwordSignupInput"
               >
                 Password
-              </p>
+              </label>
               <input
-                className={classes.loginInput}
-                id="passwordLoginInput"
-                onChange={passwordInputChangeHandler}
-                onBlur={passwordInputBlurHandler}
-                onFocus={passwordInputFocusHandler}
+                className={`${classes.signupInput} ${
+                  apiCallMessageType === "ERROR" && classes.inputError
+                } `}
+                id="passwordSignupInput"
+                onChange={inputChangeHandler}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
                 type="password"
               />
             </div>
             <div className={classes.inputContainer}>
-              <p
+              <label
                 className={`${classes.inputLabel} ${
-                  confirmationPasswordLabelMoveout && classes.activeInputLabel
-                }`}
-                onClick={confirmationPasswordLabelClickHandler}
+                  inputLogicObject.confirmationPasswordSignupInput
+                    .labelMoveout && classes.activeInputLabel
+                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
+                onClick={inputLabelClickHandler}
+                id="confirmationPasswordSignupLabel"
+                htmlFor="confirmationPasswordSignupInput"
               >
                 Confirm Password
-              </p>
+              </label>
               <input
-                className={classes.loginInput}
-                id="confirmationPasswordLoginInput"
-                onChange={confirmationPasswordInputChangeHandler}
-                onBlur={confirmationPasswordInputBlurHandler}
-                onFocus={confirmationPasswordInputFocusHandler}
+                className={`${classes.signupInput} ${
+                  apiCallMessageType === "ERROR" && classes.inputError
+                }`}
+                id="confirmationPasswordSignupInput"
+                onChange={inputChangeHandler}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
                 type="password"
               />
             </div>
 
-            <button className={classes.actionButton}>Signup</button>
-            <p className={classes.orText}>- - or - -</p>
             <button
               className={classes.signupButton}
+              onClick={signupButtonHandler}
+              id="signupPopupButton"
+            >
+              {initialRender &&
+                (signupLoading ? (
+                  <Spinner
+                    parentButtonId={"signupPopupButton"}
+                    initialRender={initialRender}
+                  />
+                ) : (
+                  "Sign Up"
+                ))}
+            </button>
+            <p className={classes.orText}>- - or - -</p>
+            <button
+              className={classes.signinButton}
               onClick={signinButtonHandler}
             >
               Signin

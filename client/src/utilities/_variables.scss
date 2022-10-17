@@ -2,6 +2,7 @@ $black: #000;
 $white: #fff;
 $lightWhite: #f8f9fa;
 $grey: #dee2e6;
+$darkgrey: #979898;
 
 $fontColor: #000;
 
@@ -20,16 +21,17 @@ $navbarColor: #9f4819;
 $linkHighlightColor: blue;
 $fontFamily: "Zen Antique", serif;
 
-$warningLight: #fa7b7b;
+$warningLight: #fbc2c2;
 $warningMain: red;
 $warningDark: #860000;
 
-$sucessLight: #7ef87e;
-$success: green;
+$sucessLight: #b7fab7;
+$successMain: green;
 $successDark: #003b00;
 
 /// Z - Indexs
-
+$loadingZIndex: 13;
+$apiCallMessageZIndex: 14;
 $popupZIndex: 12;
 $popupBackdropZIndex: 11;
 $menuDropDownZIndex: 3;

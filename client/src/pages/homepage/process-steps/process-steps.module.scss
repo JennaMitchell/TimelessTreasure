@@ -2,7 +2,9 @@
 
 .mainContainer {
   width: max(1000px, 1000px);
-  height: max(400px, 400px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: center;

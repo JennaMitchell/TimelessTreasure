@@ -1,22 +1,22 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
-// PayloadAction
-// import { quizStoreSlice } from "./quiz-store-slice";
-// import { sheetGeneratorStoreSlice } from "./sheet-generator-slice";
+import { userStoreSlice } from "./user-store";
+
 const initialState = {
   activePage: "Home",
   loginPopupActive: false,
   signupPopupActive: false,
   lockViewport: false,
   userAuthenticated: false,
-  userToken: "",
-  userId: "",
+
   authenticationLoading: false,
-  dropdownMessage: "",
-  dropdownMessageType: "",
+  apiCallMessage: "",
+  apiCallMessageType: "",
+  apiCallDropDownMove: false,
+  apiCallDropdownActive: false,
 };
 
 const mainStoreSlice = createSlice({
-  name: "Timless Treasures Main Store",
+  name: "Timeless Treasures Main Store",
   initialState: initialState,
   reducers: {
     setActivePage(state, { payload }) {
@@ -34,26 +34,27 @@ const mainStoreSlice = createSlice({
     setUserAuthenticated(state, { payload }) {
       state.userAuthenticated = payload;
     },
-    setUserToken(state, { payload }) {
-      state.userToken = payload;
-    },
-    setUserId(state, { payload }) {
-      state.userId = payload;
-    },
     setAuthenticationLoading(state, { payload }) {
       state.authenticationLoading = payload;
     },
-    setDropdownMessageType(state, { payload }) {
-      state.dropdownMessageType = payload;
+    setAPICallMessageType(state, { payload }) {
+      state.apiCallMessageType = payload;
     },
-    setDropdownMessage(state, { payload }) {
-      state.dropdownMessage = payload;
+    setAPICallMessage(state, { payload }) {
+      state.apiCallMessage = payload;
+    },
+    setApiCallDropDownMove(state, { payload }) {
+      state.apiCallDropDownMove = payload;
+    },
+    setApiCallDropdownActive(state, { payload }) {
+      state.apiCallDropdownActive = payload;
     },
   },
 });
 const store = configureStore({
   reducer: {
     mainStore: mainStoreSlice.reducer,
+    userStore: userStoreSlice.reducer,
   },
 });
 

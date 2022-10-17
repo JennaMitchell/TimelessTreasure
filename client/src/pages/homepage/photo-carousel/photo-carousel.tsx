@@ -34,13 +34,13 @@ const PhotoCarousel = () => {
         className={`${classes.arrowButton} ${classes.leftArrowButton}`}
         onClick={leftButtonHandler}
       >
-        <ArrowLeftIcon />
+        <ArrowLeftIcon className={classes.arrowIcon} />
       </button>
       <button
         className={`${classes.arrowButton} ${classes.rightArrowButton}`}
         onClick={rightButtonHandler}
       >
-        <ArrowRightIcon />
+        <ArrowRightIcon className={classes.arrowIcon} />
       </button>
       {activeSlideNumber === 0 && <CeramicsSlide />}
       {activeSlideNumber === 1 && <ClocksSlide />}

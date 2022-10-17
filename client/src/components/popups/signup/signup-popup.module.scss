@@ -2,7 +2,7 @@
 
 .loginDialog {
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 11;
+  z-index: $popupZIndex;
   position: fixed;
 
   width: max(100vw, 100vw);
@@ -13,7 +13,7 @@
 
 .loginDialog::backdrop {
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 10;
+  z-index: $popupBackdropZIndex;
 }
 .loginForm {
   width: max(400px, 400px);
@@ -62,10 +62,10 @@
   left: 10px;
   transform: translateY(-50%);
   font-size: 1rem;
-  transition: all 1s;
+  transition: all 0.5s;
 }
 
-.loginInput {
+.signupInput {
   height: max(40px, 40px);
   width: max(320px, 320px);
   padding-left: 10px;
@@ -96,26 +96,6 @@
   text-decoration: underline;
   cursor: pointer;
 }
-.actionButton {
-  background-color: $main700;
-  color: $white;
-  border: 0px;
-  font-size: 1.2rem;
-  width: max(100px, 100px);
-  height: max(50px, 50px);
-  border-radius: 10px;
-  transition: all 0.5s;
-}
-.signupButton {
-  background-color: transparent;
-  color: $black;
-  border: 0px;
-  font-size: 0.8rem;
-  width: max(60px, 60px);
-  height: max(30px, 30px);
-  border-radius: 10px;
-  transition: all 0.5s;
-}
 
 .textDecor {
   width: max(200px, 200px);
@@ -140,7 +120,7 @@
 }
 
 .closingContainer:hover,
-.actionButton:hover {
+.signupButton:hover {
   background-color: $main100;
   color: $black;
 }
@@ -149,14 +129,30 @@
   height: max(20px, 20px);
 }
 .signupButton {
+  background-color: $main700;
+  color: $white;
+  border: 0px;
+  font-size: 1.2rem;
   width: max(100px, 100px);
-  padding: 0px;
-  height: max-content;
-  max-height: max-content;
-  min-height: max-content;
-  transition: all 0s;
+  height: max(50px, 50px);
+  border-radius: 10px;
+  transition: all 0.5s;
+  z-index: 15;
+  position: relative;
 }
-.signupButton:hover {
+
+.signinButton {
+  background-color: transparent;
+  color: $black;
+  border: 0px;
+  font-size: 0.8rem;
+  width: max(60px, 60px);
+  height: max(30px, 30px);
+  border-radius: 10px;
+  transition: all 0.5s;
+  z-index: 15;
+}
+.signinButton:hover {
   text-decoration: underline;
   color: $main600;
 }
@@ -166,5 +162,12 @@
   margin: 0px;
   font-family: $fontFamily;
   position: absolute;
-  bottom: 38px;
+  bottom: 48px;
+}
+.inputError {
+  border: 1px solid $warningMain;
+  color: $warningMain;
+}
+.errorText {
+  color: $warningMain;
 }

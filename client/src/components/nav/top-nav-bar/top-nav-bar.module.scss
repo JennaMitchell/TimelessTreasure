@@ -50,21 +50,54 @@
   justify-content: space-evenly;
   font-size: 2.2rem;
 }
-.loginButton {
+.loginButton,
+.userButton {
   min-width: max-content;
   width: max-content;
   max-width: max-content;
   height: max(100%, 100%);
   transition: all 1s;
-  padding: 10px;
+  padding: 0px 10px;
   background-color: inherit;
   box-shadow: none;
   border: none;
   border-radius: 10px;
   font-family: $fontFamily;
+  text-decoration: none;
+  color: $black;
+  font-size: toRem(12);
+  line-height: toRem(12);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.loginButton:hover {
-  background-color: $main100;
+
+.userButton {
+  gap: 10px;
+  border: 1px solid $darkgrey;
+  border-radius: 15px;
+  padding: 0px 10px;
+  justify-content: space-between;
+}
+.userIcon {
+  width: max(25px, 25px);
+  height: max(25px, 25px);
+}
+.username {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  font-size: toRem(12);
+  font-family: $fontFamily;
+  color: inherit;
+  text-align: left;
+}
+
+.loginButton:hover,
+.userButton:hover {
+  background-color: $main800;
+  color: $white;
 }
 .searchContainer {
   min-width: 200px;

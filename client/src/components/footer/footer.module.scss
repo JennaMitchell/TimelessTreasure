@@ -1,12 +1,13 @@
 @import "../../utilities/variables";
 .mainContainer {
-  width: max(100vw, 100vw);
+  width: max(100%, 100%);
   height: max(300px, 300px);
   display: grid;
   align-content: center;
   justify-items: center;
   background-color: $navbarColor;
   color: $white;
+  box-sizing: border-box;
 }
 .contentContainer {
   width: max(1000px, 1000px);

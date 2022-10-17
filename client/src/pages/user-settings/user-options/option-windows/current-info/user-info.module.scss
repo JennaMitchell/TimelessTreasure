@@ -1,0 +1,50 @@
+@import "../../../../../utilities/variables";
+.userInfoContainer {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max(100%, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.sectionTitle {
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  padding: 0px;
+  margin: 0px;
+  font-size: toRem(36);
+  color: $main800;
+  font-family: $fontFamily;
+}
+.sectionImage {
+  width: max(300px, 300px);
+  height: max(50px, 50px);
+  object-fit: contain;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.infoContainer {
+  width: max(100%, 100%);
+  height: max(40px, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.infoTitle {
+  font-family: $fontFamily;
+  font-size: toRem(16);
+  margin: 0px;
+  padding: 0px;
+  color: $main1000;
+  font-weight: bold;
+}
+.infoText {
+  font-family: $fontFamily;
+  font-size: toRem(16);
+  margin: 0px;
+  padding: 0px;
+  color: $main500;
+}

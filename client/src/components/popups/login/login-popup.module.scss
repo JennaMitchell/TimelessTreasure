@@ -58,7 +58,7 @@
   left: 10px;
   transform: translateY(-50%);
   font-size: 1rem;
-  transition: all 1s;
+  transition: all 0.5s;
 }
 
 .loginInput {
@@ -67,6 +67,13 @@
   padding-left: 10px;
   border-radius: 5px;
   border: 1px solid black;
+}
+.inputError {
+  border: 1px solid $warningMain;
+  color: $warningMain;
+}
+.errorText {
+  color: $warningMain;
 }
 .emailLogin:focus,
 .password:focus {
@@ -92,7 +99,7 @@
   text-decoration: underline;
   cursor: pointer;
 }
-.actionButton {
+.signinButton {
   background-color: $main700;
   color: $white;
   border: 0px;
@@ -101,6 +108,7 @@
   height: max(50px, 50px);
   border-radius: 10px;
   transition: all 0.5s;
+  position: relative;
 }
 .signupButton {
   background-color: transparent;
@@ -132,11 +140,11 @@
   background-color: $main700;
   color: $white;
   border-radius: 50%;
-  transition: all 1s;
+  transition: all 0.5s;
 }
 
 .closingContainer:hover,
-.actionButton:hover {
+.signinButton:hover {
   background-color: $main100;
   color: $black;
 }
