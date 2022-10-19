@@ -53,8 +53,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use("/auth", authRoute);
-console.log(56);
-console.log("main");
+
 app.use("/update", updateUserSettingsRoute);
 
 app.listen(5000, () => {

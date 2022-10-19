@@ -7,6 +7,7 @@ const initialState = {
   userEmail: "",
   username: "",
   autoLogoutTime: "",
+  sessionId: "",
 };
 
 export const userStoreSlice = createSlice({
@@ -30,6 +31,9 @@ export const userStoreSlice = createSlice({
     },
     setAutoLogoutTime(state, { payload }) {
       state.autoLogoutTime = payload;
+    },
+    setSessionId(state, { payload }) {
+      state.sessionId = payload;
     },
   },
 });

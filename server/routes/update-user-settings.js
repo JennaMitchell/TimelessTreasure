@@ -5,19 +5,18 @@ const userSettingsController = require("../controllers/user-settings");
 const router = express.Router();
 const UserSchema = require("../models/user-schema");
 const isAuth = require("../middlewear/is-auth");
-const loggedInAuth = require("../middlewear/loggedin-auth");
+// const loggedInAuth = require("../middlewear/loggedin-auth");
 
 router.patch(
   "/update-username",
   isAuth,
-  loggedInAuth,
   [
     body("username")
       .trim()
       .not()
       .isEmpty()
       .custom((value, { req }) => {
-        return UserSchema.findOne({ username: value }).then((foundUsername) => {
+        return UserSchema.findOne({ email: value }).then((foundUsername) => {
           if (foundUsername) {
             return Promise.reject("Username in use!");
           }
@@ -26,4 +25,33 @@ router.patch(
   ],
   userSettingsController.updateUsername
 );
+
+router.patch(
+  "/update-email",
+  isAuth,
+  [
+    body("email")
+      .trim()
+      .not()
+      .isEmpty()
+      .custom((value, { req }) => {
+        return UserSchema.findOne({ username: req.body.email }).then(
+          (foundEmail) => {
+            if (foundEmail) {
+              return Promise.reject("Email in use!");
+            }
+          }
+        );
+      }),
+  ],
+  userSettingsController.updateEmail
+);
+
+router.patch(
+  "/update-password",
+  isAuth,
+  [body("password").trim().isLength({ min: 8 })],
+  userSettingsController.updatePassword
+);
+
 module.exports = router;

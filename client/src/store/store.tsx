@@ -7,7 +7,6 @@ const initialState = {
   signupPopupActive: false,
   lockViewport: false,
   userAuthenticated: false,
-
   authenticationLoading: false,
   apiCallMessage: "",
   apiCallMessageType: "",

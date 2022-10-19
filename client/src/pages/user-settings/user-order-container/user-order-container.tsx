@@ -1,5 +1,5 @@
 import classes from "./user-order-container.module.scss";
-import vaseImage from "../../../images/homepage/temp-images/blue-jar.png";
+
 import {
   UserCircleIcon,
   CheckIcon,
@@ -30,7 +30,7 @@ const UserOrderContainer = ({ orderNumber, orderTimePlaced, order }: Props) => {
     return (
       <div
         className={classes.itemOrdered}
-        key={`${orderNumber}-${order.productPrice}-${index}`}
+        key={`${orderNumber}-${order.productPrice}-${index}-${orderTimePlaced}`}
       >
         <img
           className={classes.productImage}
@@ -49,7 +49,7 @@ const UserOrderContainer = ({ orderNumber, orderTimePlaced, order }: Props) => {
   });
 
   return (
-    <div className={classes.orderContainer} key={`${orderNumber}-orderNumber`}>
+    <>
       <div className={classes.moreInfoContainer}>
         <PlusIcon className={classes.moreInfoIcon} />
       </div>
@@ -75,7 +75,7 @@ const UserOrderContainer = ({ orderNumber, orderTimePlaced, order }: Props) => {
           <p className={classes.orderStatusText}>Completed</p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default UserOrderContainer;

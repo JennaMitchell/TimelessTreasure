@@ -1,24 +1,29 @@
-import classes from "./change-username.module.scss";
+import classes from "./reset-password.module.scss";
 import decorImage from "../../../../../images/homepage/decor/decor.png";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { mainStoreSliceActions } from "../../../../../store/store";
-import { updateUsernameCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
-import { userStoreSliceActions } from "../../../../../store/user-store";
+import { updatePasswordCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
+
 import Spinner from "../../../../../components/spinner/spinner";
+import { signupPasswordValidator } from "../../../../../utilities/validation-hooks/validation-hooks";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
     inputData: "";
   };
 }
-const ChangeUsername = () => {
+const ResetPassword = () => {
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
-    newUsernameInput: {
+    currentPasswordInput: {
       labelMoveout: false,
       inputData: "",
     },
-    confirmNewUsernameInput: {
+    newPasswordInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+    confirmNewPasswordInput: {
       labelMoveout: false,
       inputData: "",
     },
@@ -28,7 +33,7 @@ const ChangeUsername = () => {
   const token = useAppSelector((state) => state.userStore.userToken);
 
   const [activeInput, setActiveInput] = useState("");
-  const [changeUsernameLoading, setChangeUsernameLoading] = useState(false);
+  const [changePasswordLoading, setChangePasswordLoading] = useState(false);
   const dispatch = useAppDispatch();
 
   const inputCopyObjectHandler = () =>
@@ -81,40 +86,70 @@ const ChangeUsername = () => {
   const submitButtonHandler = () => {
     //Validation
     if (
-      inputLogicObject.newUsernameInput.inputData !==
-      inputLogicObject.confirmNewUsernameInput.inputData
+      inputLogicObject.newPasswordInput.inputData !==
+      inputLogicObject.confirmNewPasswordInput.inputData
     ) {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       dispatch(
-        mainStoreSliceActions.setAPICallMessage("Non-matching usernames.")
+        mainStoreSliceActions.setAPICallMessage("Non-matching passwords.")
       );
       return;
     }
     if (
-      inputLogicObject.newUsernameInput.inputData.length > 8 &&
-      inputLogicObject.newUsernameInput.inputData.length > 8
+      inputLogicObject.newPasswordInput.inputData.length > 100 &&
+      inputLogicObject.confirmNewPasswordInput.inputData.length > 100 &&
+      inputLogicObject.currentPasswordInput.inputData.length > 100
     ) {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-      dispatch(mainStoreSliceActions.setAPICallMessage("Username too long."));
+      dispatch(mainStoreSliceActions.setAPICallMessage("Password too long."));
       return;
     }
     if (
-      inputLogicObject.newUsernameInput.inputData.length === 0 &&
-      inputLogicObject.newUsernameInput.inputData.length === 0
+      inputLogicObject.newPasswordInput.inputData.length === 0 &&
+      inputLogicObject.confirmNewPasswordInput.inputData.length === 0 &&
+      inputLogicObject.currentPasswordInput.inputData.length === 0
     ) {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       dispatch(
-        mainStoreSliceActions.setAPICallMessage("Please enter an username.")
+        mainStoreSliceActions.setAPICallMessage("Please enter a password.")
       );
       return;
     }
-    setChangeUsernameLoading(true);
+    if (
+      inputLogicObject.newPasswordInput.inputData ===
+      inputLogicObject.currentPasswordInput.inputData
+    ) {
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      dispatch(
+        mainStoreSliceActions.setAPICallMessage("Please enter a new password")
+      );
+      return;
+    }
+
+    const passwordErrorObject = signupPasswordValidator(
+      inputLogicObject.newPasswordInput.inputData,
+      inputLogicObject.confirmNewPasswordInput.inputData
+    );
+
+    const passwordErrorObjectValues = Object.values(passwordErrorObject);
+
+    if (passwordErrorObjectValues.includes(true)) {
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      dispatch(
+        mainStoreSliceActions.setAPICallMessage("Please enter a valid password")
+      );
+      return;
+    }
+
+    setChangePasswordLoading(true);
 
     setTimeout(() => {
-      updateUsernameCall(
+      console.log(userId);
+      updatePasswordCall(
         dispatch,
         {
-          username: inputLogicObject.newUsernameInput.inputData,
+          password: inputLogicObject.newPasswordInput.inputData,
+          currentPassword: inputLogicObject.currentPasswordInput.inputData,
           userId: userId,
         },
         token
@@ -130,16 +165,11 @@ const ChangeUsername = () => {
               );
               dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
             }
-            setChangeUsernameLoading(false);
+            setChangePasswordLoading(false);
           } else {
             dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
             dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
-            dispatch(
-              userStoreSliceActions.setUsername(
-                inputLogicObject.newUsernameInput.inputData
-              )
-            );
-            setChangeUsernameLoading(false);
+            setChangePasswordLoading(false);
           }
         });
     }, 2000);
@@ -152,57 +182,88 @@ const ChangeUsername = () => {
         alt="section-img"
         src={decorImage}
       />
-      <h6 className={classes.inputTitle}>New Username</h6>
+      <h6 className={classes.inputTitle}>Current Password</h6>
       <div
         className={`${classes.inputContainer} ${
-          activeInput === "newUsernameInput" && classes.inputFocused
+          activeInput === "currentPasswordInput" && classes.inputFocused
         }`}
       >
         <label
-          htmlFor="newUsernameInput"
+          htmlFor="currentPasswordInput"
           className={`${classes.changeInputLabel} ${
-            inputLogicObject.newUsernameInput.labelMoveout && classes.moveLabel
+            inputLogicObject.currentPasswordInput.labelMoveout &&
+            classes.moveLabel
           }`}
-          id="newUsernameInputLabel"
+          id="currentPasswordInputLabel"
           onClick={inputLabelClickHandler}
         >
-          New Username
+          Current Password
         </label>
         <input
           className={classes.changeInput}
-          id="newUsernameInput"
-          maxLength={12}
+          id="currentPasswordInput"
+          maxLength={100}
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler}
           onFocus={inputFocusHandler}
+          type="password"
         />
       </div>
       <h6 className={`${classes.inputTitle} ${classes.inputTitleGap}`}>
-        Confirm New Username
+        New Password
       </h6>
       <div
         className={`${classes.inputContainer} ${
-          activeInput === "confirmNewUsernameInput" && classes.inputFocused
+          activeInput === "newPasswordInput" && classes.inputFocused
         }`}
       >
         <label
-          htmlFor="confirmNewUsernameInput"
+          htmlFor="newPasswordInput"
           className={`${classes.changeInputLabel} ${
-            inputLogicObject.confirmNewUsernameInput.labelMoveout &&
-            classes.moveLabel
+            inputLogicObject.newPasswordInput.labelMoveout && classes.moveLabel
           } `}
-          id="confirmNewUsernameInputLabel"
+          id="newPasswordInputLabel"
           onClick={inputLabelClickHandler}
         >
-          Confirm New Username
+          New Password
         </label>
         <input
           className={classes.changeInput}
-          id="confirmNewUsernameInput"
-          maxLength={12}
+          id="newPasswordInput"
+          maxLength={100}
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler}
           onFocus={inputFocusHandler}
+          type="password"
+        />
+      </div>
+      <h6 className={`${classes.inputTitle} ${classes.inputTitleGap}`}>
+        Confirm New Password
+      </h6>
+      <div
+        className={`${classes.inputContainer} ${
+          activeInput === "confirmNewPasswordInput" && classes.inputFocused
+        }`}
+      >
+        <label
+          htmlFor="confirmNewPasswordInput"
+          className={`${classes.changeInputLabel} ${
+            inputLogicObject.confirmNewPasswordInput.labelMoveout &&
+            classes.moveLabel
+          } `}
+          id="confirmNewPasswordInputLabel"
+          onClick={inputLabelClickHandler}
+        >
+          Confirm New Password
+        </label>
+        <input
+          className={classes.changeInput}
+          id="confirmNewPasswordInput"
+          maxLength={100}
+          onChange={inputChangeHandler}
+          onBlur={inputBlurHandler}
+          onFocus={inputFocusHandler}
+          type="password"
         />
       </div>
       <button
@@ -210,10 +271,10 @@ const ChangeUsername = () => {
         onClick={submitButtonHandler}
         id="change-username-submit-button"
       >
-        {changeUsernameLoading ? (
+        {changePasswordLoading ? (
           <Spinner
             parentButtonId="change-username-submit-button"
-            initialRender={changeUsernameLoading}
+            initialRender={changePasswordLoading}
           />
         ) : (
           "Submit"
@@ -222,4 +283,4 @@ const ChangeUsername = () => {
     </>
   );
 };
-export default ChangeUsername;
+export default ResetPassword;

@@ -51,7 +51,7 @@ const LoginPopup = () => {
     if (!initialRender && loginPopupActive) {
       setInitialRender(true);
     }
-  }, [loginPopupActive]);
+  }, [loginPopupActive, initialRender]);
 
   const [
     passwordRequirementsDropdownActive,
@@ -210,6 +210,7 @@ const LoginPopup = () => {
             dispatch(userStoreSliceActions.setUserLoggedIn(true));
             dispatch(userStoreSliceActions.setUserToken(jsonData.token));
             dispatch(userStoreSliceActions.setUserId(jsonData.userId));
+            dispatch(userStoreSliceActions.setSessionId(jsonData.sessionId));
             localStorage.setItem("token", jsonData.token);
             localStorage.setItem("userId", jsonData.userId);
             localStorage.setItem("expiryDate", expiryDate.toISOString());

@@ -31,6 +31,7 @@ function App() {
       <LoginPopup />
       <SignupPopup />
       <ApiCallDropdown />
+
       <Routes>
         <Route path="/" element={<Navigate replace to="/home" />} />
         <Route

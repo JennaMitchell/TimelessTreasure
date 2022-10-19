@@ -1,24 +1,25 @@
-import classes from "./change-username.module.scss";
+import classes from "./change-email.module.scss";
 import decorImage from "../../../../../images/homepage/decor/decor.png";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { mainStoreSliceActions } from "../../../../../store/store";
-import { updateUsernameCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
+import { updateEmailCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
 import { userStoreSliceActions } from "../../../../../store/user-store";
 import Spinner from "../../../../../components/spinner/spinner";
+import { emailValidator } from "../../../../../utilities/validation-hooks/validation-hooks";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
     inputData: "";
   };
 }
-const ChangeUsername = () => {
+const ChangeEmail = () => {
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
-    newUsernameInput: {
+    newEmailInput: {
       labelMoveout: false,
       inputData: "",
     },
-    confirmNewUsernameInput: {
+    confirmNewEmailInput: {
       labelMoveout: false,
       inputData: "",
     },
@@ -81,40 +82,45 @@ const ChangeUsername = () => {
   const submitButtonHandler = () => {
     //Validation
     if (
-      inputLogicObject.newUsernameInput.inputData !==
-      inputLogicObject.confirmNewUsernameInput.inputData
+      inputLogicObject.newEmailInput.inputData !==
+      inputLogicObject.confirmNewEmailInput.inputData
     ) {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-      dispatch(
-        mainStoreSliceActions.setAPICallMessage("Non-matching usernames.")
-      );
+      dispatch(mainStoreSliceActions.setAPICallMessage("Non-matching Email."));
       return;
     }
     if (
-      inputLogicObject.newUsernameInput.inputData.length > 8 &&
-      inputLogicObject.newUsernameInput.inputData.length > 8
+      inputLogicObject.newEmailInput.inputData.length > 100 &&
+      inputLogicObject.newEmailInput.inputData.length > 100
     ) {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-      dispatch(mainStoreSliceActions.setAPICallMessage("Username too long."));
+      dispatch(mainStoreSliceActions.setAPICallMessage("Email too long."));
       return;
     }
     if (
-      inputLogicObject.newUsernameInput.inputData.length === 0 &&
-      inputLogicObject.newUsernameInput.inputData.length === 0
+      inputLogicObject.newEmailInput.inputData.length === 0 &&
+      inputLogicObject.newEmailInput.inputData.length === 0
     ) {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       dispatch(
-        mainStoreSliceActions.setAPICallMessage("Please enter an username.")
+        mainStoreSliceActions.setAPICallMessage("Please enter an email.")
       );
       return;
     }
+
+    if (emailValidator(inputLogicObject.newEmailInput.inputData)) {
+      dispatch(mainStoreSliceActions.setAPICallMessageType("Error"));
+      dispatch(mainStoreSliceActions.setAPICallMessage("Invalid Email."));
+      return;
+    }
+
     setChangeUsernameLoading(true);
 
     setTimeout(() => {
-      updateUsernameCall(
+      updateEmailCall(
         dispatch,
         {
-          username: inputLogicObject.newUsernameInput.inputData,
+          email: inputLogicObject.newEmailInput.inputData,
           userId: userId,
         },
         token
@@ -135,8 +141,8 @@ const ChangeUsername = () => {
             dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
             dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
             dispatch(
-              userStoreSliceActions.setUsername(
-                inputLogicObject.newUsernameInput.inputData
+              userStoreSliceActions.setUserEmail(
+                inputLogicObject.newEmailInput.inputData
               )
             );
             setChangeUsernameLoading(false);
@@ -146,60 +152,60 @@ const ChangeUsername = () => {
   };
   return (
     <>
-      <h6 className={classes.sectionTitle}>Change Username</h6>
+      <h6 className={classes.sectionTitle}>Change Email</h6>
       <img
         className={classes.sectionImage}
         alt="section-img"
         src={decorImage}
       />
-      <h6 className={classes.inputTitle}>New Username</h6>
+      <h6 className={classes.inputTitle}>New Email</h6>
       <div
         className={`${classes.inputContainer} ${
-          activeInput === "newUsernameInput" && classes.inputFocused
+          activeInput === "newEmailInput" && classes.inputFocused
         }`}
       >
         <label
-          htmlFor="newUsernameInput"
+          htmlFor="newEmailInput"
           className={`${classes.changeInputLabel} ${
-            inputLogicObject.newUsernameInput.labelMoveout && classes.moveLabel
+            inputLogicObject.newEmailInput.labelMoveout && classes.moveLabel
           }`}
-          id="newUsernameInputLabel"
+          id="newEmailInputLabel"
           onClick={inputLabelClickHandler}
         >
-          New Username
+          New Email
         </label>
         <input
           className={classes.changeInput}
-          id="newUsernameInput"
-          maxLength={12}
+          id="newEmailInput"
+          maxLength={100}
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler}
           onFocus={inputFocusHandler}
         />
       </div>
       <h6 className={`${classes.inputTitle} ${classes.inputTitleGap}`}>
-        Confirm New Username
+        Confirm New Email
       </h6>
       <div
         className={`${classes.inputContainer} ${
-          activeInput === "confirmNewUsernameInput" && classes.inputFocused
+          activeInput === "confirmNewEmailInput" && classes.inputFocused
         }`}
       >
         <label
-          htmlFor="confirmNewUsernameInput"
+          htmlFor="confirmNewEmailInput"
           className={`${classes.changeInputLabel} ${
-            inputLogicObject.confirmNewUsernameInput.labelMoveout &&
+            inputLogicObject.confirmNewEmailInput.labelMoveout &&
             classes.moveLabel
           } `}
-          id="confirmNewUsernameInputLabel"
+          id="confirmNewEmailInputLabel"
           onClick={inputLabelClickHandler}
         >
-          Confirm New Username
+          Confirm New Email
         </label>
         <input
           className={classes.changeInput}
-          id="confirmNewUsernameInput"
-          maxLength={12}
+          id="confirmNewEmailInput"
+          maxLength={100}
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler}
           onFocus={inputFocusHandler}
@@ -222,4 +228,4 @@ const ChangeUsername = () => {
     </>
   );
 };
-export default ChangeUsername;
+export default ChangeEmail;

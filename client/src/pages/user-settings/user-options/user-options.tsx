@@ -3,15 +3,25 @@ import decorImage from "../../../images/homepage/decor/decor.png";
 import { useState } from "react";
 import UserInfo from "./option-windows/current-info/user-info";
 import ChangeUsername from "./option-windows/change-username/change-username";
+
+import { logoutHandler } from "../../../utilities/login-signup-hooks/api-calls";
+import { useAppDispatch } from "../../../store/hooks";
+import { useNavigate } from "react-router-dom";
+import ChangeEmail from "./option-windows/change-email/change-email";
+import ResetPassword from "./option-windows/reset-password/reset-password";
+import DeletePassword from "./option-windows/delete-account/delete-password";
 const UserOptions = () => {
   const [activeButton, setActiveButton] = useState("Current Info");
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const buttons = [
     "Current Info",
     "Change Username",
     "Change Email",
     "Reset Password",
     "Delete Account",
-    "Contact Us",
+    "Logout",
   ];
   const optionsButtonClicked = (e: React.MouseEvent) => {
     const targetElement = e.target as HTMLButtonElement;
@@ -19,7 +29,12 @@ const UserOptions = () => {
     if (activeButton !== targetElement.id) {
       setActiveButton(targetElement.id);
     }
+
+    if (activeButton === "Logout") {
+      logoutHandler(dispatch, navigate);
+    }
   };
+
   const renderReadyButtons = buttons.map((title, index) => {
     if (activeButton === title) {
       return (
@@ -60,6 +75,9 @@ const UserOptions = () => {
       <div className={classes.optionsInfoContainer}>
         {activeButton === "Current Info" && <UserInfo />}
         {activeButton === "Change Username" && <ChangeUsername />}
+        {activeButton === "Change Email" && <ChangeEmail />}
+        {activeButton === "Reset Password" && <ResetPassword />}
+        {activeButton === "Delete Account" && <DeletePassword />}
       </div>
     </div>
   );

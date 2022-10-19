@@ -1,5 +1,18 @@
 @import "../../../utilities/variables";
 
+.backgroundContainer {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: $navZIndex;
+  background-color: $white;
+}
+
 .topContainer {
   color: $fontColor;
   font-family: $fontFamily;
@@ -14,6 +27,8 @@
   padding: 10px;
   margin: 0 auto;
   background-color: $white;
+  z-index: $navZIndex;
+  position: relative;
 }
 
 .titleContainer {
@@ -79,6 +94,8 @@
   border-radius: 15px;
   padding: 0px 10px;
   justify-content: space-between;
+  position: relative;
+  z-index: $navZIndex;
 }
 .userIcon {
   width: max(25px, 25px);

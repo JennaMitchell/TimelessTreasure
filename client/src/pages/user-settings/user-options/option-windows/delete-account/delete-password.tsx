@@ -1,24 +1,21 @@
-import classes from "./change-username.module.scss";
+import classes from "./delete-password.module.scss";
 import decorImage from "../../../../../images/homepage/decor/decor.png";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { mainStoreSliceActions } from "../../../../../store/store";
-import { updateUsernameCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
-import { userStoreSliceActions } from "../../../../../store/user-store";
+import { updatePasswordCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
+
 import Spinner from "../../../../../components/spinner/spinner";
+
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
     inputData: "";
   };
 }
-const ChangeUsername = () => {
+const DeletePassword = () => {
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
-    newUsernameInput: {
-      labelMoveout: false,
-      inputData: "",
-    },
-    confirmNewUsernameInput: {
+    deletePasswordInput: {
       labelMoveout: false,
       inputData: "",
     },
@@ -28,7 +25,7 @@ const ChangeUsername = () => {
   const token = useAppSelector((state) => state.userStore.userToken);
 
   const [activeInput, setActiveInput] = useState("");
-  const [changeUsernameLoading, setChangeUsernameLoading] = useState(false);
+  const [changePasswordLoading, setChangePasswordLoading] = useState(false);
   const dispatch = useAppDispatch();
 
   const inputCopyObjectHandler = () =>
@@ -80,41 +77,27 @@ const ChangeUsername = () => {
 
   const submitButtonHandler = () => {
     //Validation
-    if (
-      inputLogicObject.newUsernameInput.inputData !==
-      inputLogicObject.confirmNewUsernameInput.inputData
-    ) {
+
+    if (inputLogicObject.deletePasswordInput.inputData.length > 100) {
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      dispatch(mainStoreSliceActions.setAPICallMessage("Password too long."));
+      return;
+    }
+    if (inputLogicObject.deletePasswordInput.inputData.length === 0) {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       dispatch(
-        mainStoreSliceActions.setAPICallMessage("Non-matching usernames.")
+        mainStoreSliceActions.setAPICallMessage("Please enter a password.")
       );
       return;
     }
-    if (
-      inputLogicObject.newUsernameInput.inputData.length > 8 &&
-      inputLogicObject.newUsernameInput.inputData.length > 8
-    ) {
-      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-      dispatch(mainStoreSliceActions.setAPICallMessage("Username too long."));
-      return;
-    }
-    if (
-      inputLogicObject.newUsernameInput.inputData.length === 0 &&
-      inputLogicObject.newUsernameInput.inputData.length === 0
-    ) {
-      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-      dispatch(
-        mainStoreSliceActions.setAPICallMessage("Please enter an username.")
-      );
-      return;
-    }
-    setChangeUsernameLoading(true);
+
+    setChangePasswordLoading(true);
 
     setTimeout(() => {
-      updateUsernameCall(
+      updatePasswordCall(
         dispatch,
         {
-          username: inputLogicObject.newUsernameInput.inputData,
+          password: inputLogicObject.deletePasswordInput.inputData,
           userId: userId,
         },
         token
@@ -130,16 +113,11 @@ const ChangeUsername = () => {
               );
               dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
             }
-            setChangeUsernameLoading(false);
+            setChangePasswordLoading(false);
           } else {
             dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
             dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
-            dispatch(
-              userStoreSliceActions.setUsername(
-                inputLogicObject.newUsernameInput.inputData
-              )
-            );
-            setChangeUsernameLoading(false);
+            setChangePasswordLoading(false);
           }
         });
     }, 2000);
@@ -152,74 +130,56 @@ const ChangeUsername = () => {
         alt="section-img"
         src={decorImage}
       />
-      <h6 className={classes.inputTitle}>New Username</h6>
+      <h6 className={classes.warningTitle}>Warning</h6>
+      <p className={classes.warningText}>
+        Once your account is deleted there is no way to retrieve your data.
+      </p>
+      <p className={`${classes.warningText} ${classes.gap}`}>
+        Please enter your password to confirm.
+      </p>
+      <h6 className={classes.inputTitle}>Password</h6>
       <div
         className={`${classes.inputContainer} ${
-          activeInput === "newUsernameInput" && classes.inputFocused
+          activeInput === "deletePasswordInput" && classes.inputFocused
         }`}
       >
         <label
-          htmlFor="newUsernameInput"
+          htmlFor="deletePasswordInput"
           className={`${classes.changeInputLabel} ${
-            inputLogicObject.newUsernameInput.labelMoveout && classes.moveLabel
-          }`}
-          id="newUsernameInputLabel"
-          onClick={inputLabelClickHandler}
-        >
-          New Username
-        </label>
-        <input
-          className={classes.changeInput}
-          id="newUsernameInput"
-          maxLength={12}
-          onChange={inputChangeHandler}
-          onBlur={inputBlurHandler}
-          onFocus={inputFocusHandler}
-        />
-      </div>
-      <h6 className={`${classes.inputTitle} ${classes.inputTitleGap}`}>
-        Confirm New Username
-      </h6>
-      <div
-        className={`${classes.inputContainer} ${
-          activeInput === "confirmNewUsernameInput" && classes.inputFocused
-        }`}
-      >
-        <label
-          htmlFor="confirmNewUsernameInput"
-          className={`${classes.changeInputLabel} ${
-            inputLogicObject.confirmNewUsernameInput.labelMoveout &&
+            inputLogicObject.deletePasswordInput.labelMoveout &&
             classes.moveLabel
-          } `}
-          id="confirmNewUsernameInputLabel"
+          }`}
+          id="deletePasswordInputLabel"
           onClick={inputLabelClickHandler}
         >
-          Confirm New Username
+          Current Password
         </label>
         <input
           className={classes.changeInput}
-          id="confirmNewUsernameInput"
-          maxLength={12}
+          id="deletePasswordInput"
+          maxLength={100}
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler}
           onFocus={inputFocusHandler}
+          type="password"
         />
       </div>
+
       <button
         className={classes.submitButton}
         onClick={submitButtonHandler}
         id="change-username-submit-button"
       >
-        {changeUsernameLoading ? (
+        {changePasswordLoading ? (
           <Spinner
             parentButtonId="change-username-submit-button"
-            initialRender={changeUsernameLoading}
+            initialRender={changePasswordLoading}
           />
         ) : (
-          "Submit"
+          "Delete"
         )}
       </button>
     </>
   );
 };
-export default ChangeUsername;
+export default DeletePassword;

@@ -5,17 +5,23 @@ import { tempUserOrders } from "./temp-user-order";
 import UserOptions from "./user-options/user-options";
 
 const UserSettingsPage = () => {
-  const renderReadyUserOrders = tempUserOrders.map((data) => {
+  const renderReadyUserOrders = tempUserOrders.map((data, index) => {
     if (data.order !== undefined) {
       const orderDetailsX = data.order.slice(0);
       return (
-        <UserOrderContainer
-          orderNumber={data.orderNumber}
-          orderTimePlaced={data.orderTimePlaced}
-          order={orderDetailsX}
-        />
+        <div
+          className={classes.orderContainer}
+          key={`${data.orderNumber}-orderNumber-${data.orderTimePlaced}-${index}`}
+        >
+          <UserOrderContainer
+            orderNumber={data.orderNumber}
+            orderTimePlaced={data.orderTimePlaced}
+            order={orderDetailsX}
+          />
+        </div>
       );
     }
+    return <div></div>;
   });
 
   return (

@@ -45,11 +45,9 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   req.session.isLoggedIn = true;
-  console.log("login entered");
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(52);
     res.status(401).json({
       error: errors.array(),
       message: `${errors["errors"][0].msg}`,
@@ -59,14 +57,15 @@ exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   let loadedUser;
+
   try {
     const user = await UserSchema.findOne({ email: email });
 
     loadedUser = user;
+
     const isEqual = await bcrypt.compare(password, user.password);
-    console.log(isEqual);
+
     if (!isEqual) {
-      console.log("password no match");
       res.status(401).json({
         message: `Invalid Password!`,
         error: [{ error: "Invalid Password" }],
@@ -92,6 +91,7 @@ exports.login = async (req, res, next) => {
       isSeller: loadedUser.isSeller,
       message: "Logged In",
       username: loadedUser.username,
+      sessionId: req.session._id,
     });
   } catch (err) {
     return res.status(401).json({

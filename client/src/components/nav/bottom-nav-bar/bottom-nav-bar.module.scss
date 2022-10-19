@@ -8,6 +8,7 @@
   align-items: center;
   background-color: $navbarColor;
   position: relative;
+  z-index: $navZIndex;
 }
 .mainContainer {
   width: 1000px;

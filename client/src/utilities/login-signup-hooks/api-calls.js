@@ -35,10 +35,12 @@ export const loginCall = async (dispatch, loginData) => {
   }
 };
 
-export const logoutHandler = (dispatch) => {
-  dispatch(userStoreSliceActions.setUserToken(""));
-  dispatch(userStoreSliceActions.setUserLoggedIn(false));
+export const logoutHandler = (dispatch, navigate) => {
   localStorage.removeItem("token");
   localStorage.removeItem("expiryDate");
   localStorage.removeItem("userId");
+  navigate("/");
+  dispatch(userStoreSliceActions.setUserToken(""));
+  dispatch(userStoreSliceActions.setUserLoggedIn(false));
+  dispatch(userStoreSliceActions.setSessionId(""));
 };
