@@ -12,6 +12,9 @@ const initialState = {
   apiCallMessageType: "",
   apiCallDropDownMove: false,
   apiCallDropdownActive: false,
+  forgotPasswordPopupActive: false,
+  loggedInDropDownActive: false,
+  newPostPopupActive: false,
 };
 
 const mainStoreSlice = createSlice({
@@ -47,6 +50,15 @@ const mainStoreSlice = createSlice({
     },
     setApiCallDropdownActive(state, { payload }) {
       state.apiCallDropdownActive = payload;
+    },
+    setForgotPasswordPopupActive(state, { payload }) {
+      state.forgotPasswordPopupActive = payload;
+    },
+    setLoggedInDropDownActive(state, { payload }) {
+      state.loggedInDropDownActive = payload;
+    },
+    setNewPostPopupActive(state, { payload }) {
+      state.newPostPopupActive = payload;
     },
   },
 });

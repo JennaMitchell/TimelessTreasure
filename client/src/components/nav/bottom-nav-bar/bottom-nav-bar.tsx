@@ -7,8 +7,11 @@ import ClocksDropDown from "../dropsdowns/clocks/clocks-dropdown";
 import TablewearDropDown from "../dropsdowns/tablewear/tablewear-dropdown";
 import PaintingsDropDown from "../dropsdowns/paintings/paintings-dropdown";
 import ElectronicsDropDown from "../dropsdowns/electronics/electronics-dropdown";
-
+import { useAppSelector } from "../../../store/hooks";
 const BottomNavBar = () => {
+  const loggedInDropdownActive = useAppSelector(
+    (state) => state.mainStore.loggedInDropDownActive
+  );
   const [buttonLogic, setButtonLogic] = useState(buttonLogicObject);
 
   const buttonLogicUpdator = (
@@ -16,9 +19,11 @@ const BottomNavBar = () => {
     key: string,
     state: boolean
   ) => {
-    const resetButtonLogic = clearOtherPopups(activeButtonTitle);
-    resetButtonLogic[activeButtonTitle][key] = state;
-    setButtonLogic(resetButtonLogic);
+    if (activeButtonTitle !== undefined && activeButtonTitle.length !== 0) {
+      const resetButtonLogic = clearOtherPopups(activeButtonTitle);
+      resetButtonLogic[activeButtonTitle][key] = state;
+      setButtonLogic(resetButtonLogic);
+    }
   };
 
   const clearOtherPopups = (activeButtonTitle: string) => {
@@ -104,76 +109,136 @@ const BottomNavBar = () => {
   return (
     <div className={classes.backgroundContainer}>
       <div className={classes.mainContainer}>
-        <div
-          className={classes.sectionButton}
-          onMouseEnter={buttonMouseEnterHandler}
-          onMouseLeave={buttonMouseLeaveHandler}
-          id="ceramics-button"
-        >
-          Ceramics
-          {buttonLogic["Ceramics"].buttonHover && (
-            <CeramicsDropDown
-              mouseEnterHandler={dropDownMouseEnterHandler}
-              mouseLeaveHandler={dropDownMouseLeaveHandler}
-            />
-          )}
-        </div>
-        <div
-          className={classes.sectionButton}
-          onMouseEnter={buttonMouseEnterHandler}
-          onMouseLeave={buttonMouseLeaveHandler}
-          id="clocks-button"
-        >
-          Clocks
-          {buttonLogic["Clocks"].buttonHover && (
-            <ClocksDropDown
-              mouseEnterHandler={dropDownMouseEnterHandler}
-              mouseLeaveHandler={dropDownMouseLeaveHandler}
-            />
-          )}
-        </div>
-        <div
-          className={classes.sectionButton}
-          onMouseEnter={buttonMouseEnterHandler}
-          onMouseLeave={buttonMouseLeaveHandler}
-          id="tablewear-button"
-        >
-          Tablewear
-          {buttonLogic["Tablewear"].buttonHover && (
-            <TablewearDropDown
-              mouseEnterHandler={dropDownMouseEnterHandler}
-              mouseLeaveHandler={dropDownMouseLeaveHandler}
-            />
-          )}
-        </div>
-        <div
-          className={classes.sectionButton}
-          onMouseEnter={buttonMouseEnterHandler}
-          onMouseLeave={buttonMouseLeaveHandler}
-          id="paintings-button"
-        >
-          Paintings{" "}
-          {buttonLogic["Paintings"].buttonHover && (
-            <PaintingsDropDown
-              mouseEnterHandler={dropDownMouseEnterHandler}
-              mouseLeaveHandler={dropDownMouseLeaveHandler}
-            />
-          )}
-        </div>
-        <div
-          className={classes.sectionButton}
-          onMouseEnter={buttonMouseEnterHandler}
-          onMouseLeave={buttonMouseLeaveHandler}
-          id="electronics-button"
-        >
-          Electronics{" "}
-          {buttonLogic["Electronics"].buttonHover && (
-            <ElectronicsDropDown
-              mouseEnterHandler={dropDownMouseEnterHandler}
-              mouseLeaveHandler={dropDownMouseLeaveHandler}
-            />
-          )}
-        </div>
+        {!loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="ceramics-button"
+          >
+            Ceramics
+            {buttonLogic["Ceramics"].buttonHover && (
+              <CeramicsDropDown
+                mouseEnterHandler={dropDownMouseEnterHandler}
+                mouseLeaveHandler={dropDownMouseLeaveHandler}
+              />
+            )}
+          </div>
+        )}
+        {loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="ceramics-button"
+          >
+            Ceramics
+          </div>
+        )}
+        {!loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="clocks-button"
+          >
+            Clocks
+            {buttonLogic["Clocks"].buttonHover && (
+              <ClocksDropDown
+                mouseEnterHandler={dropDownMouseEnterHandler}
+                mouseLeaveHandler={dropDownMouseLeaveHandler}
+              />
+            )}
+          </div>
+        )}
+        {loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="clocks-button"
+          >
+            Clocks
+          </div>
+        )}
+        {!loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="tablewear-button"
+          >
+            Tablewear
+            {buttonLogic["Tablewear"].buttonHover && (
+              <TablewearDropDown
+                mouseEnterHandler={dropDownMouseEnterHandler}
+                mouseLeaveHandler={dropDownMouseLeaveHandler}
+              />
+            )}
+          </div>
+        )}
+        {loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="tablewear-button"
+          >
+            Tablewear
+          </div>
+        )}
+        {!loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="paintings-button"
+          >
+            Paintings
+            {buttonLogic["Paintings"].buttonHover && (
+              <PaintingsDropDown
+                mouseEnterHandler={dropDownMouseEnterHandler}
+                mouseLeaveHandler={dropDownMouseLeaveHandler}
+              />
+            )}
+          </div>
+        )}
+        {loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="paintings-button"
+          >
+            Paintings
+          </div>
+        )}
+        {!loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="electronics-button"
+          >
+            Electronics{" "}
+            {buttonLogic["Electronics"].buttonHover && (
+              <ElectronicsDropDown
+                mouseEnterHandler={dropDownMouseEnterHandler}
+                mouseLeaveHandler={dropDownMouseLeaveHandler}
+              />
+            )}
+          </div>
+        )}
+        {loggedInDropdownActive && (
+          <div
+            className={classes.sectionButton}
+            onMouseEnter={buttonMouseEnterHandler}
+            onMouseLeave={buttonMouseLeaveHandler}
+            id="electronics-button"
+          >
+            Electronics
+          </div>
+        )}
         <button className={classes.sectionButton}>Credits</button>
       </div>
     </div>

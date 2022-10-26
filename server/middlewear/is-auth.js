@@ -13,7 +13,9 @@ module.exports = (req, res, next) => {
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, process.env.JSW_PASS);
+
     if (!decodedToken) {
+      console.log("not-verified");
       return res
         .status(401)
         .json({ error: err, message: "Not authenticated.", status: 401 });
@@ -23,6 +25,7 @@ module.exports = (req, res, next) => {
   }
 
   req.userId = decodedToken.userId;
-  console.log("line 24 is-auth");
+  console.log("verified");
+
   next();
 };

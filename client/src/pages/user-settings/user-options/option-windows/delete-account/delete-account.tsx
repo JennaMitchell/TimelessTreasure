@@ -1,25 +1,26 @@
-import classes from "./delete-password.module.scss";
+import classes from "./delete-account.module.scss";
 import decorImage from "../../../../../images/homepage/decor/decor.png";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { mainStoreSliceActions } from "../../../../../store/store";
-import { updatePasswordCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
-
+import { deleteAccountCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
+import { useNavigate } from "react-router-dom";
 import Spinner from "../../../../../components/spinner/spinner";
-
+import { userStoreSliceActions } from "../../../../../store/user-store";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
     inputData: "";
   };
 }
-const DeletePassword = () => {
+const DeleteAccount = () => {
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
     deletePasswordInput: {
       labelMoveout: false,
       inputData: "",
     },
   });
+  const navigate = useNavigate();
 
   const userId = useAppSelector((state) => state.userStore.userId);
   const token = useAppSelector((state) => state.userStore.userToken);
@@ -94,7 +95,7 @@ const DeletePassword = () => {
     setChangePasswordLoading(true);
 
     setTimeout(() => {
-      updatePasswordCall(
+      deleteAccountCall(
         dispatch,
         {
           password: inputLogicObject.deletePasswordInput.inputData,
@@ -117,7 +118,15 @@ const DeletePassword = () => {
           } else {
             dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
             dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+            dispatch(userStoreSliceActions.setUsername(""));
+            dispatch(userStoreSliceActions.setUserEmail(""));
+            dispatch(userStoreSliceActions.setUserLoggedIn(false));
+            dispatch(userStoreSliceActions.setUserToken(""));
+            dispatch(userStoreSliceActions.setUserId(""));
+            dispatch(userStoreSliceActions.setSessionId(""));
+
             setChangePasswordLoading(false);
+            navigate("/");
           }
         });
     }, 2000);
@@ -132,7 +141,7 @@ const DeletePassword = () => {
       />
       <h6 className={classes.warningTitle}>Warning</h6>
       <p className={classes.warningText}>
-        Once your account is deleted there is no way to retrieve your data.
+        Once your account is deleted it cannot be retrieved.
       </p>
       <p className={`${classes.warningText} ${classes.gap}`}>
         Please enter your password to confirm.
@@ -182,4 +191,4 @@ const DeletePassword = () => {
     </>
   );
 };
-export default DeletePassword;
+export default DeleteAccount;

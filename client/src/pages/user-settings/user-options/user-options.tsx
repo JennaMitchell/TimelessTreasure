@@ -9,7 +9,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import ChangeEmail from "./option-windows/change-email/change-email";
 import ResetPassword from "./option-windows/reset-password/reset-password";
-import DeletePassword from "./option-windows/delete-account/delete-password";
+import DeleteAccount from "./option-windows/delete-account/delete-account";
 const UserOptions = () => {
   const [activeButton, setActiveButton] = useState("Current Info");
 
@@ -24,13 +24,14 @@ const UserOptions = () => {
     "Logout",
   ];
   const optionsButtonClicked = (e: React.MouseEvent) => {
+    e.preventDefault();
     const targetElement = e.target as HTMLButtonElement;
 
     if (activeButton !== targetElement.id) {
       setActiveButton(targetElement.id);
     }
 
-    if (activeButton === "Logout") {
+    if (targetElement.id === "Logout") {
       logoutHandler(dispatch, navigate);
     }
   };
@@ -77,7 +78,7 @@ const UserOptions = () => {
         {activeButton === "Change Username" && <ChangeUsername />}
         {activeButton === "Change Email" && <ChangeEmail />}
         {activeButton === "Reset Password" && <ResetPassword />}
-        {activeButton === "Delete Account" && <DeletePassword />}
+        {activeButton === "Delete Account" && <DeleteAccount />}
       </div>
     </div>
   );

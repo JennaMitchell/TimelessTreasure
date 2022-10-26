@@ -11,7 +11,10 @@ import ApiCallDropdown from "./components/api-call-dropdown/api-call-dropdown";
 import LoadingPage from "./components/loading-page/loading-page";
 import Cart from "./pages/cart/cart";
 import UserSettingsPage from "./pages/user-settings/user-settings-page";
-
+import ForgotPasswordPopup from "./components/popups/forgot-password/forgot-password-popup";
+import LoggedInDropdown from "./components/logged-in-dropdown/logged-in-dropdown";
+import SellerOrdersPage from "./pages/seller-orders/seller-orders";
+import NewPostPopup from "./components/popups/new-post/new-post-popup";
 function App() {
   const lockViewport = useAppSelector((state) => state.mainStore.lockViewport);
   const loadingPageActive = useAppSelector(
@@ -30,7 +33,10 @@ function App() {
       {loadingPageActive && <LoadingPage />}
       <LoginPopup />
       <SignupPopup />
+      <ForgotPasswordPopup />
       <ApiCallDropdown />
+      <LoggedInDropdown />
+      <NewPostPopup />
 
       <Routes>
         <Route path="/" element={<Navigate replace to="/home" />} />
@@ -71,6 +77,16 @@ function App() {
             <>
               <Nav />
               <UserSettingsPage />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/seller-orders"
+          element={
+            <>
+              <Nav />
+              <SellerOrdersPage />
               <Footer />
             </>
           }

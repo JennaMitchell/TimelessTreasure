@@ -1,4 +1,4 @@
-import classes from "./login-popup.module.scss";
+import classes from "./forgot-password-popup.module.scss";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import decor from "../../../images/homepage/decor/decor.png";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -15,11 +15,7 @@ import {
 
 import Spinner from "../../spinner/spinner";
 import { userStoreSliceActions } from "../../../store/user-store";
-import {
-  clearUserStateData,
-  clearActivePopups,
-} from "../../../utilities/refresh-hooks/refresh-hooks";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 interface LogicObject {
   [key: string]: {
@@ -27,24 +23,19 @@ interface LogicObject {
     inputData: "";
   };
 }
-const LoginPopup = () => {
-  const loginPopupActive = useAppSelector(
-    (state) => state.mainStore.loginPopupActive
+const ForgotPasswordPopup = () => {
+  const forgotPasswordPopupActive = useAppSelector(
+    (state) => state.mainStore.forgotPasswordPopupActive
   );
   const dispatch = useAppDispatch();
   const [initialRender, setInitialRender] = useState(false);
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
-    emailLoginInput: {
-      labelMoveout: false,
-      inputData: "",
-    },
-    passwordLoginInput: {
+    forgotPasswordEmailInput: {
       labelMoveout: false,
       inputData: "",
     },
   });
   const [signingInActive, setSigningInActive] = useState(false);
-  const navigate = useNavigate();
 
   const apiCallDropdownActive = useAppSelector(
     (state) => state.mainStore.apiCallDropdownActive
@@ -54,18 +45,18 @@ const LoginPopup = () => {
   );
 
   useEffect(() => {
-    if (!initialRender && loginPopupActive) {
+    if (!initialRender && forgotPasswordPopupActive) {
       setInitialRender(true);
     }
-  }, [loginPopupActive, initialRender]);
+  }, [forgotPasswordPopupActive, initialRender]);
 
   const [
     passwordRequirementsDropdownActive,
     setPasswordRequirementsDropdownActive,
   ] = useState(false);
 
-  const signupButtonHandler = () => {
-    dispatch(mainStoreSliceActions.setLoginPopupActive(false));
+  const submitButtonHandler = () => {
+    dispatch(mainStoreSliceActions.setForgotPasswordPopupActive(false));
     dispatch(mainStoreSliceActions.setSignupPopupActive(true));
     if (apiCallDropdownActive) {
       dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
@@ -79,7 +70,7 @@ const LoginPopup = () => {
 
   const closingIconHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(false));
-    dispatch(mainStoreSliceActions.setLoginPopupActive(false));
+    dispatch(mainStoreSliceActions.setForgotPasswordPopupActive(false));
     if (apiCallDropdownActive) {
       dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
       setTimeout(() => {
@@ -93,7 +84,7 @@ const LoginPopup = () => {
     const targetElement = e.target as HTMLElement;
     if (targetElement.id === "dialogContainer") {
       dispatch(mainStoreSliceActions.setLockViewPort(false));
-      dispatch(mainStoreSliceActions.setLoginPopupActive(false));
+      dispatch(mainStoreSliceActions.setForgotPasswordPopupActive(false));
     }
   };
   const inputCopyObjectHandler = () =>
@@ -148,7 +139,7 @@ const LoginPopup = () => {
   const signInButtonHandler = (e: React.MouseEvent) => {
     e.preventDefault();
     const validEmail = !emailValidator(
-      inputLogicObject.emailLoginInput.inputData
+      inputLogicObject.forgotPasswordEmailInput.inputData
     );
 
     const validPasswordObject = loginPasswordValidator(
@@ -169,9 +160,21 @@ const LoginPopup = () => {
     }
 
     setTimeout(() => {
-      console.log("login Call");
+      const validEmail = emailValidator(
+        inputLogicObject.forgotPasswordEmailInput.inputData
+      );
+      const validPasswordCheck = loginPasswordValidator(
+        inputLogicObject.passwordLoginInput.inputData
+      );
+      if (!validEmail || !validPasswordCheck) {
+        dispatch(
+          mainStoreSliceActions.setAPICallMessage("Invalid Login Or Password")
+        );
+        dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      }
+
       loginCall(dispatch, {
-        email: inputLogicObject.emailLoginInput.inputData.toLowerCase(),
+        email: inputLogicObject.forgotPasswordEmailInput.inputData,
         password: inputLogicObject.passwordLoginInput.inputData,
       })
         .then((data) => {
@@ -192,9 +195,7 @@ const LoginPopup = () => {
             );
 
             setTimeout(() => {
-              clearUserStateData(dispatch);
-              clearActivePopups(dispatch);
-              logoutHandler(dispatch, navigate);
+              logoutHandler();
             }, remainingMilliseconds);
             dispatch(
               userStoreSliceActions.setAutoLogoutTime(expiryDate.toString())
@@ -207,7 +208,6 @@ const LoginPopup = () => {
             dispatch(userStoreSliceActions.setUserToken(jsonData.token));
             dispatch(userStoreSliceActions.setUserId(jsonData.userId));
             dispatch(userStoreSliceActions.setSessionId(jsonData.sessionId));
-            dispatch(userStoreSliceActions.setIsSeller(jsonData.isSeller));
             localStorage.setItem("token", jsonData.token);
             localStorage.setItem("userId", jsonData.userId);
             localStorage.setItem("expiryDate", expiryDate.toISOString());
@@ -219,99 +219,40 @@ const LoginPopup = () => {
     }, 2000);
   };
 
-  const forgotPasswordHandler = () => {
-    dispatch(mainStoreSliceActions.setLoginPopupActive(false));
-    dispatch(mainStoreSliceActions.setForgotPasswordPopupActive(true));
+  const signInTextHandler = () => {
+    dispatch(mainStoreSliceActions.setLoginPopupActive(true));
+    dispatch(mainStoreSliceActions.setForgotPasswordPopupActive(false));
   };
 
   return (
     <>
-      {loginPopupActive && (
+      {forgotPasswordPopupActive && (
         <div
-          className={classes.loginDialog}
+          className={classes.forgotPasswordDialog}
           id="dialogContainer"
           onClick={dialogBackdropClickHandler}
         >
-          <form className={classes.loginForm}>
+          <form className={classes.forgotPasswordForm}>
             <div
               className={classes.closingContainer}
               onClick={closingIconHandler}
             >
               <XMarkIcon className={classes.closingIcon} />
             </div>
-            <h6 className={classes.loginTitle}>Login</h6>
+            <h6 className={classes.forgotPasswordTitle}>Forgot Password</h6>
             <img src={decor} alt="text-decor" className={classes.textDecor} />
-            <div className={classes.inputContainer}>
-              <label
-                className={`${classes.inputLabel} ${
-                  inputLogicObject.emailLoginInput.labelMoveout &&
-                  classes.activeInputLabel
-                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
-                onClick={inputLabelClickHandler}
-                htmlFor="emailLoginInput"
-              >
-                Email
-              </label>
-              <input
-                className={`${classes.loginInput} ${
-                  apiCallMessageType === "ERROR" && classes.inputError
-                }`}
-                id="emailLoginInput"
-                onChange={inputChangeHandler}
-                onBlur={inputBlurHandler}
-                onFocus={inputFocusHandler}
-              />
-            </div>
-            <div className={classes.inputContainer}>
-              <label
-                className={`${classes.inputLabel} ${
-                  inputLogicObject.passwordLoginInput.labelMoveout &&
-                  classes.activeInputLabel
-                } ${apiCallMessageType === "ERROR" && classes.errorText}`}
-                onClick={inputLabelClickHandler}
-                htmlFor="passwordLoginInput"
-              >
-                Password
-              </label>
-              <input
-                className={`${classes.loginInput} ${
-                  apiCallMessageType === "ERROR" && classes.inputError
-                }`}
-                id="passwordLoginInput"
-                onChange={inputChangeHandler}
-                onBlur={inputBlurHandler}
-                onFocus={inputFocusHandler}
-                type="password"
-              />
-              <p
-                className={classes.forgotPassword}
-                onClick={forgotPasswordHandler}
-              >
-                Forgot your password?
-              </p>
-            </div>
-
+            <p className={classes.forgotPasswordWarningTitle}>
+              Service Unavailable
+            </p>
+            <p className={classes.forgotPasswordText}>
+              {" "}
+              All users and data are erased every 24 hours
+            </p>
             <button
               className={classes.signinButton}
-              onClick={signInButtonHandler}
-              id="loginSignInButton"
+              onClick={signInTextHandler}
             >
-              {initialRender &&
-                (signingInActive ? (
-                  <Spinner
-                    parentButtonId={"loginSignInButton"}
-                    initialRender={initialRender}
-                  />
-                ) : (
-                  "Sign In"
-                ))}
-            </button>
-            <p className={classes.orText}>- - or - -</p>
-            <button
-              className={classes.signupButton}
-              onClick={signupButtonHandler}
-            >
-              Signup
+              Back to Signin
             </button>
           </form>
         </div>
@@ -319,4 +260,4 @@ const LoginPopup = () => {
     </>
   );
 };
-export default LoginPopup;
+export default ForgotPasswordPopup;

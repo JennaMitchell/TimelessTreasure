@@ -1,0 +1,100 @@
+@import "../../utilities/variables";
+.topContainer {
+  width: max(1000px, 1000px);
+  min-height: calc(100vh - 410px);
+  height: max-content;
+  max-height: max-content;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  margin: 0px auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.sectionTitle {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(48);
+  line-height: toRem(48);
+  font-family: $fontFamily;
+  color: $main600;
+  width: max(80%, 80%);
+  height: max-content;
+  text-align: center;
+}
+.textDecor {
+  width: max(300px, 300px);
+  height: max(50px, 50px);
+  object-fit: contain;
+  padding-right: 2.5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+.menuIconContainer {
+  box-sizing: border-box;
+  width: max(40px, 40px);
+  height: max(40px, 40px);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $white;
+}
+.menuIcon {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  color: black;
+}
+.ordersContainer {
+  width: max(100%, 100%);
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px 0px;
+  align-items: center;
+  justify-content: flex-start;
+}
+.newProductButton {
+  position: absolute;
+  top: 60px;
+  left: 0px;
+  background-color: $main800;
+  color: $white;
+  width: max(100px, 100px);
+  height: max(40px, 40px);
+  border: 0px;
+  font-size: toRem(16);
+  border-radius: 5px;
+  transition: all 1s;
+}
+.newProductButton:hover {
+  background-color: $main100;
+  color: $black;
+}
+.tempButton {
+  position: fixed;
+  width: max(100px, 100px);
+  height: max(60px, 60px);
+  background-color: brown;
+  z-index: 12;
+  top: 50%;
+  left: 50%;
+  font-size: toRem(16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  transition: all 1s;
+}
+.tempButton:hover {
+  background-color: $main100;
+}

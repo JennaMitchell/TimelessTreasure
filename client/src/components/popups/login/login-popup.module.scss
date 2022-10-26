@@ -23,17 +23,19 @@
   flex-direction: column;
   align-items: center;
   z-index: $popupZIndex;
-
-  gap: 20px;
+  gap: 10px;
   padding: 20px;
 }
 .loginTitle {
   margin: 0px;
   padding: 0px;
-  font-size: 3.2rem;
+  font-size: toRem(48);
+  line-height: toRem(48);
   font-family: $fontFamily;
   color: $main600;
-  margin-bottom: 20px;
+  width: max(80%, 80%);
+  height: max-content;
+  text-align: center;
 }
 .inputContainer {
   width: max-content;
@@ -57,8 +59,9 @@
   top: 50%;
   left: 10px;
   transform: translateY(-50%);
-  font-size: 1rem;
+  font-size: toRem(16);
   transition: all 0.5s;
+  font-family: $fontFamily;
 }
 
 .loginInput {
@@ -67,6 +70,8 @@
   padding-left: 10px;
   border-radius: 5px;
   border: 1px solid black;
+  font-family: $fontFamily;
+  font-size: toRem(16);
 }
 .inputError {
   border: 1px solid $warningMain;
@@ -89,10 +94,11 @@
 
 .forgotPassword {
   position: absolute;
-  bottom: -30px;
+  bottom: -25px;
   right: 5px;
   transition: all 0.5s;
-  font-size: 0.67rem;
+  font-size: toRem(10);
+  line-height: toRem(10);
 }
 .forgotPassword:hover {
   color: $main600;
@@ -114,7 +120,7 @@
   background-color: transparent;
   color: $black;
   border: 0px;
-  font-size: 0.8rem;
+  font-size: toRem(12);
   width: max(60px, 60px);
   height: max(30px, 30px);
   border-radius: 10px;
@@ -126,8 +132,6 @@
   height: max(30px, 30px);
   object-fit: contain;
   padding-right: 2.5px;
-  position: absolute;
-  top: 95px;
 }
 .closingContainer {
   width: max(30px, 30px);
@@ -165,10 +169,9 @@
   color: $main600;
 }
 .orText {
-  font-size: 0.67rem;
+  font-size: toRem(10);
+  line-height: toRem(10);
   padding: 0px;
   margin: 0px;
   font-family: $fontFamily;
-  position: absolute;
-  bottom: 38px;
 }

@@ -40,6 +40,15 @@ const TopNavBar = () => {
     );
   });
 
+  const loggedInDropdownActive = useAppSelector(
+    (state) => state.mainStore.loggedInDropDownActive
+  );
+  const userButtonHandler = () => {
+    dispatch(
+      mainStoreSliceActions.setLoggedInDropDownActive(!loggedInDropdownActive)
+    );
+  };
+
   return (
     <div className={classes.backgroundContainer}>
       <div className={classes.topContainer}>
@@ -54,10 +63,10 @@ const TopNavBar = () => {
             </button>
           )}
           {userLoggedIn && (
-            <NavLink className={classes.userButton} to="/user-settings">
+            <button className={classes.userButton} onClick={userButtonHandler}>
               <UserCircleIcon className={classes.userIcon} />
               <p className={classes.username}>{username}</p>
-            </NavLink>
+            </button>
           )}
 
           <div

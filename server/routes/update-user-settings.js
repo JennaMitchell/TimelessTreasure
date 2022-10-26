@@ -54,4 +54,11 @@ router.patch(
   userSettingsController.updatePassword
 );
 
+router.delete(
+  "/delete-account",
+  isAuth,
+  [body("password").trim().isLength({ min: 8 })],
+  userSettingsController.deleteAccount
+);
+
 module.exports = router;

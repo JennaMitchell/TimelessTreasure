@@ -3,18 +3,37 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./vars.env" });
-
+const multer = require("multer");
 const authRoute = require("./routes/auth");
 const updateUserSettingsRoute = require("./routes/update-user-settings");
-// const productRoute = require("./routes/product");
-// const cartRoute = require("./routes/cart");
-// const orderRoute = require("./routes/order");
-// const stripeRoute = require("./routes/stripe");
-
+const productRoute = require("./routes/products");
+const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+    // folder where we want to keep the files is images folder
+  },
+  filename: (req, file, cb) => {
+    const date = new Date();
+    cb(null, date.toISOString() + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype == "image/png" ||
+    file.mimetype === "imgage/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 app.use(cors());
 const store = new MongoDBStore({
@@ -41,6 +60,16 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"),
+  (req, res, next) => {
+    console.log("multer used");
+    next();
+  }
+);
+// image is the inputName of the incoming file
+app.use("/images", express.static(path.join(__dirname, "images")));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -55,6 +84,7 @@ app.use(express.json());
 app.use("/auth", authRoute);
 
 app.use("/update", updateUserSettingsRoute);
+app.use("/product", productRoute);
 
 app.listen(5000, () => {
   console.log("Backend server is running!");

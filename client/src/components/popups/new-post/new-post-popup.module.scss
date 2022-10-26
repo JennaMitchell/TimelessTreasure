@@ -1,0 +1,242 @@
+@import "../../../utilities/variables";
+.newPostBackdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: $popupBackdropZIndex;
+  position: fixed;
+  width: max(100vw, 100vw);
+  height: max(100vh, 100vh);
+  display: grid;
+  place-items: center;
+}
+
+.newPostContentContainer {
+  width: max(400px, 400px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  background-color: white;
+  position: relative;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: $popupZIndex;
+  gap: 010px;
+  padding: 20px;
+}
+.textDecor {
+  width: max(200px, 200px);
+  height: max(30px, 30px);
+  object-fit: contain;
+  padding-right: 2.5px;
+}
+.loginTitle {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(48);
+  line-height: toRem(48);
+  font-family: $fontFamily;
+  color: $main600;
+  width: max(80%, 80%);
+  height: max-content;
+  text-align: center;
+}
+
+.inputContainer {
+  width: max-content;
+  min-width: max-content;
+  max-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  position: relative;
+}
+.inputPriceContainer {
+  width: max(332.5px, 332.5px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.priceSelectContainer {
+  width: max(60px, 60px);
+  height: max(40px, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-left: 5px;
+  font-family: $fontFamily;
+  background-color: $white;
+  border: 0px;
+}
+.priceOption {
+  font-size: toRem(14);
+  line-height: toRem(14);
+  font-family: $fontFamily;
+}
+.inputLabel,
+.priceInputLabel {
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  transition: all 0.5s;
+  font-family: $fontFamily;
+}
+.priceInputLabel {
+  left: 20%;
+}
+.userInput {
+  height: max(40px, 40px);
+  width: max(320px, 320px);
+  padding-left: 10px;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+.priceInput {
+  height: max(40px, 40px);
+  width: max(320px, 320px);
+  padding-left: 10px;
+  border-radius: 5px;
+  border: 0px;
+  font-family: $fontFamily;
+}
+.priceInput:focus {
+  outline: 0px;
+}
+.inputError {
+  border: 1px solid $warningMain;
+  color: $warningMain;
+}
+.errorText {
+  color: $warningMain;
+}
+.emailLogin:focus,
+.password:focus {
+  border: 0px;
+}
+.activeInputLabel {
+  top: 0px;
+  left: 5px;
+  padding: 0px 5px;
+  background-color: $white;
+  font-size: 12px;
+}
+.tagsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: max(332.5px, 332.5px);
+  max-height: max-content;
+  height: max-content;
+}
+.selectionTagContainer {
+  width: max(100%, 100%);
+  max-height: max-content;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.dropDownOptionButton {
+  width: max(100%, 100%);
+  max-height: max-content;
+  height: max-content;
+  background-color: $main800;
+  color: $white;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  border-radius: 2.5px;
+}
+.dropDownArrow {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+}
+.selectionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: max(100%, 100%);
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.productContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: max(325px, 325px);
+  height: max-content;
+  max-height: max-content;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  padding: 0px;
+  margin: 0px;
+  line-height: toRem(16);
+}
+.productSelection {
+  width: max(130px, 130px);
+  height: max-content;
+  max-height: max-content;
+  text-align: center;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: $white;
+  text-align: right;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+  line-height: toRem(16);
+}
+.productOption {
+  font-size: toRem(16);
+  font-family: $fontFamily;
+}
+.submitButton {
+  width: max(90px, 90px);
+  height: max(50px, 50px);
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $main800;
+  color: $white;
+  border-radius: 10px;
+  border: 0px;
+  transition: all 1s;
+}
+.submitButton:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.imageInput {
+  width: max(200px, 200px);
+  height: max-content;
+  max-height: max-content;
+  margin-top: 5px;
+}

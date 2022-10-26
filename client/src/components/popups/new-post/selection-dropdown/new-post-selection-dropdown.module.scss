@@ -1,0 +1,95 @@
+@import "../../../../utilities/variables";
+.checkBoxContainer {
+  width: max(100%, 100%);
+  max-height: max-content;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  color: $black;
+  font-family: $fontFamily;
+}
+.checkMarkContainer {
+  background-color: $white;
+  color: $main800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 50%;
+  box-sizing: border-box;
+  padding: 3px;
+  width: max(25px, 25px);
+  height: max(25px, 25px);
+  transition: all 1s;
+}
+.checkMarkContainer:hover {
+  border: 1px solid $main800;
+  background-color: $main200;
+}
+.checkIcon {
+  width: max(98%, 98%);
+  height: max(98%, 98%);
+  z-index: 1;
+}
+.dropDownIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+}
+
+.dropDownHeaderButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0px;
+  width: max(325px, 325px);
+  height: max-content;
+  max-height: max-content;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  text-align: left;
+
+  color: $white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.dropdownSelectionContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: max(100%, 100%);
+  height: max-content;
+  max-height: max-content;
+  background-color: $main100;
+  color: $black;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.buttonTitle {
+  margin: 0px;
+  padding: 5px 10px 5px 10px;
+  font-size: toRem(16);
+  max-width: 325px;
+  width: 325px;
+  background-color: $main800;
+  border: none;
+  color: $white;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-family: $fontFamily;
+  border: 2px solid $main900;
+}
+.buttonActiveIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+  padding-top: 5px;
+  color: $white;
+}

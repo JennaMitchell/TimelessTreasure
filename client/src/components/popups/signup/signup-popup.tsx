@@ -9,6 +9,7 @@ import {
   signupPasswordValidator,
 } from "../../../utilities/validation-hooks/validation-hooks";
 import Spinner from "../../spinner/spinner";
+import { CheckIcon } from "@heroicons/react/24/solid";
 
 import SignupRequirements from "./signup-requirements/signup-requirements";
 import { signupCall } from "../../../utilities/login-signup-hooks/api-calls.js";
@@ -27,6 +28,16 @@ const SignupPopup = () => {
   const dispatch = useAppDispatch();
   const [signupLoading, setSignupLoading] = useState(false);
   const [initialRender, setInitialRender] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
+  const sellerTypeHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsSeller(true);
+  };
+  const buyerTypeHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsSeller(false);
+  };
+
   useEffect(() => {
     if (!initialRender && signupPopupActive) {
       setInitialRender(true);
@@ -174,10 +185,10 @@ const SignupPopup = () => {
       // sign up function
       let promiseData: any = "";
       signupCall(dispatch, {
-        email: inputLogicObject.emailSignupInput.inputData,
+        email: inputLogicObject.emailSignupInput.inputData.toLowerCase(),
         password: inputLogicObject.passwordSignupInput.inputData,
         username: inputLogicObject.usernameSignupInput.inputData,
-        isSeller: false,
+        isSeller: isSeller,
       })
         .then((data) => {
           promiseData = data?.json();
@@ -204,11 +215,11 @@ const SignupPopup = () => {
     <>
       {signupPopupActive && (
         <div
-          className={classes.loginDialog}
+          className={classes.signupDialog}
           id="dialogContainer"
           onClick={dialogBackdropClickHandler}
         >
-          <form className={classes.loginForm}>
+          <form className={classes.signupForm}>
             <div
               className={classes.closingContainer}
               onClick={closingIconHandler}
@@ -318,6 +329,40 @@ const SignupPopup = () => {
                 onFocus={inputFocusHandler}
                 type="password"
               />
+            </div>
+
+            <div className={classes.radialOptionsTopContainer}>
+              <div className={classes.radialContainer}>
+                <button
+                  className={classes.sellerRadial}
+                  id="seller-checkbox"
+                  onClick={sellerTypeHandler}
+                >
+                  {isSeller && <CheckIcon className={classes.checkIcon} />}
+                </button>
+
+                <label
+                  htmlFor="seller-checkbox"
+                  className={classes.checkboxLabel}
+                >
+                  Seller
+                </label>
+              </div>
+              <div className={classes.radialContainer}>
+                <button
+                  className={classes.sellerRadial}
+                  id="buyer-checkbox"
+                  onClick={buyerTypeHandler}
+                >
+                  {!isSeller && <CheckIcon className={classes.checkIcon} />}
+                </button>
+                <label
+                  htmlFor="buyer-checkbox"
+                  className={classes.checkboxLabel}
+                >
+                  Buyer
+                </label>
+              </div>
             </div>
 
             <button

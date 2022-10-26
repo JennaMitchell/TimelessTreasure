@@ -15,7 +15,7 @@ const ElectronicsDropDown = ({
       className={classes.mainContainer}
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
-      id="camera-dropdown"
+      id="electronics-dropdown"
     >
       <div className={classes.options}>
         <button className={classes.productButton}>Cameras</button>

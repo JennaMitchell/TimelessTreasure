@@ -8,6 +8,8 @@ const initialState = {
   username: "",
   autoLogoutTime: "",
   sessionId: "",
+  isSeller: false,
+  sellerData: [],
 };
 
 export const userStoreSlice = createSlice({
@@ -34,6 +36,12 @@ export const userStoreSlice = createSlice({
     },
     setSessionId(state, { payload }) {
       state.sessionId = payload;
+    },
+    setIsSeller(state, { payload }) {
+      state.isSeller = payload;
+    },
+    setSellerData(state, { payload }) {
+      state.sellerData = payload;
     },
   },
 });

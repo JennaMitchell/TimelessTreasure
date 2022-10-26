@@ -19,7 +19,6 @@ exports.signup = async (req, res, next) => {
   const isSeller = req.body.isSeller;
   try {
     const hashedPw = await bcrypt.hash(password, 12);
-    console.log(hashedPw);
 
     const newUser = new UserSchema({
       email: email,

@@ -1,0 +1,51 @@
+@import "../../utilities/variables";
+
+.loggedInDropDownMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: max(120px, 120px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  gap: 10px;
+  position: absolute;
+  top: -300px;
+  left: 50.75%;
+  padding: 10px 10px 10px 10px;
+  box-sizing: border-box;
+  z-index: $loggedInMenuZIndex;
+  background-color: $white;
+  transition: top 1s;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.dropdownMoveOut {
+  top: 110px;
+}
+.userOptionButton {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(16);
+  line-height: toRem(16);
+  font-family: $fontFamily;
+  width: max(100px, 100px);
+  height: max(40px, 40px);
+  background-color: $main800;
+  color: $white;
+  border-radius: 10px;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: all 1s;
+  border: 0px;
+  position: relative;
+}
+.userOptionButton:hover,
+.postOption:hover {
+  background-color: $main100;
+  color: $black;
+}

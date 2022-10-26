@@ -1,8 +1,8 @@
 @import "../../../../utilities/variables";
 
 .mainContainer {
-  width: max(800px, 800px);
-  height: max(400px, 400px);
+  width: max(600px, 600px);
+  height: max(300px, 300px);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 100%;
@@ -14,12 +14,13 @@
   left: -400px;
   gap: 10px;
   z-index: $menuDropDownZIndex;
+  box-sizing: content-box;
 }
 .options {
   width: max(100%, 100%);
   height: max(100%, 100%);
   display: grid;
-  grid-template-rows: max-content repeat(6, calc(400px / 7));
+  grid-template-rows: max-content repeat(6, calc(300px / 7));
   grid-template-columns: 100%;
   align-items: center;
   justify-content: center;
@@ -29,7 +30,7 @@
   height: max(100%, 100%);
   background-color: inherit;
   text-align: left;
-  font-size: 1.2rem;
+  font-size: toRem(16);
   border: none;
   border-bottom: 1px solid grey;
   transition: all 1s;
