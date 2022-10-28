@@ -3,7 +3,7 @@ import decorImage from "../../../../../images/homepage/decor/decor.png";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { mainStoreSliceActions } from "../../../../../store/store";
-import { updatePasswordCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
+import { updatePasswordCall } from "../../../../../utilities/user-settings-api-hooks/api-calls-user-setting-hooks";
 
 import Spinner from "../../../../../components/spinner/spinner";
 import { signupPasswordValidator } from "../../../../../utilities/validation-hooks/validation-hooks";

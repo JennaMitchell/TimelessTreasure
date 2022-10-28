@@ -10,7 +10,7 @@
   justify-content: center;
   box-shadow: 0 0 10px black;
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
   position: relative;
 }
 .actionButtonsContainer {
@@ -23,43 +23,11 @@
   justify-items: center;
   gap: 10px;
 }
-.actionButton {
-  width: max(30px, 30px);
-  height: max(30px, 30px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 0px;
-  background-color: $main800;
-  box-sizing: border-box;
-  padding: 5px;
-  color: $white;
-  border-radius: 5px;
-  transition: all 1s;
-  position: absolute;
-  border-radius: 50%;
-}
-.actionIcon {
-  width: max(100%, 100%);
-  height: max(100%, 100%);
-}
-.actionButton:hover {
-  background-color: $white;
-  color: $main800;
-}
-.closingIcon {
-  top: 7.5px;
-  right: 7.5px;
-}
-.updateIcon {
-  top: 45px;
-  right: 7.5px;
-}
 
 .productImage {
   width: max(200px, 200px);
   height: max(200px, 200px);
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .productTitle {
@@ -177,4 +145,37 @@
 .moreInfoContainer:hover {
   background-color: $main200;
   color: $black;
+}
+.buttonControlsContainer {
+  width: max(200px, 200px);
+  max-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+.actionButton {
+  width: max(85px, 85px);
+  height: max(40px, 40px);
+  font-size: toRem(14);
+  font-family: $fontFamily;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  border: 0px;
+  color: $white;
+  background-color: $main800;
+  border-radius: 5px;
+  transition: all 1s;
+}
+.actionButton:hover {
+  color: $main800;
+  background-color: $main200;
+}
+.buttonIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+  color: inherit;
 }

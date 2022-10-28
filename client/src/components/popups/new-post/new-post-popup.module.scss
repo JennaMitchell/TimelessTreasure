@@ -21,8 +21,8 @@
   flex-direction: column;
   align-items: center;
   z-index: $popupZIndex;
-  gap: 010px;
-  padding: 20px;
+  gap: 10px;
+  padding: 20px 0px 20px 0px;
 }
 .textDecor {
   width: max(200px, 200px);
@@ -30,7 +30,7 @@
   object-fit: contain;
   padding-right: 2.5px;
 }
-.loginTitle {
+.popupTitle {
   margin: 0px;
   padding: 0px;
   font-size: toRem(48);
@@ -239,4 +239,26 @@
   height: max-content;
   max-height: max-content;
   margin-top: 5px;
+}
+.closingContainer {
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: $main700;
+  color: $white;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.closingContainer:hover {
+  background-color: $main100;
+  color: $black;
+}
+.closingIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
 }

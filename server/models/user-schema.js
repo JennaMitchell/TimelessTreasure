@@ -8,8 +8,6 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-
-  // img: { type: String },
 });
 
 module.exports = mongoose.model("UserSchema", UserSchema);

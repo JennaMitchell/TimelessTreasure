@@ -4,6 +4,7 @@ import {
   UserCircleIcon,
   CheckIcon,
   PlusIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 export interface OrderDetails {
   productImage: string;
@@ -81,10 +82,15 @@ const PendingSellerOrderContainer = ({
         </div>
         <div
           className={`${classes.orderStatusContainer} ${
-            status === "Ship Immediately" && classes.warningContainer
+            status === "Ship" && classes.warningContainer
           }`}
         >
-          <CheckIcon className={classes.orderStatusIcon} />
+          {status === "Shipped" && (
+            <CheckIcon className={classes.orderStatusIcon} />
+          )}
+          {status === "Ship" && (
+            <XMarkIcon className={classes.orderStatusIcon} />
+          )}
           <p className={classes.orderStatusText}>{status}</p>
         </div>
       </div>

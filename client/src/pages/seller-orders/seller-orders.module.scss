@@ -55,7 +55,7 @@
   width: max(100%, 100%);
   height: max-content;
   max-height: max-content;
-  min-height: max-content;
+  min-height: 330px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
@@ -86,8 +86,8 @@
   height: max(60px, 60px);
   background-color: brown;
   z-index: 12;
-  top: 50%;
-  left: 50%;
+  top: 20%;
+  left: 10%;
   font-size: toRem(16);
   display: flex;
   align-items: center;
@@ -97,4 +97,15 @@
 }
 .tempButton:hover {
   background-color: $main100;
+}
+.noDataFoundText {
+  font-size: toRem(22);
+  font-family: $fontFamily;
+  color: $main800;
+  text-align: center;
+  padding: 0px;
+  margin: 0px;
+  justify-self: center;
+  align-self: center;
+  grid-column: 1 / span 3;
 }

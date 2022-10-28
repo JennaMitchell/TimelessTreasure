@@ -6,7 +6,7 @@ interface SelectedTypes {
 
 const productTypeSubSelection: SelectedTypes = {
   Ceramics: {
-    Types: ["Earthware", "Stoneware", "Porcelian", "Bone China", "Fire Bricks"],
+    Type: ["Earthware", "Stoneware", "Porcelian", "Bone China", "Fire Bricks"],
   },
   Clocks: {
     Type: ["Wall", "Pendulum", "Mantel", "Alarm", "Cuckoo"],

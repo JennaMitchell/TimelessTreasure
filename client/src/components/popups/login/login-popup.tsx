@@ -7,7 +7,7 @@ import { mainStoreSliceActions } from "../../../store/store";
 import {
   loginCall,
   logoutHandler,
-} from "../../../utilities/login-signup-hooks/api-calls";
+} from "../../../utilities/login-signup-api-hooks/api-calls";
 import {
   loginPasswordValidator,
   emailValidator,

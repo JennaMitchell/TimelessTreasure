@@ -3,7 +3,7 @@ import decorImage from "../../../../../images/homepage/decor/decor.png";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { mainStoreSliceActions } from "../../../../../store/store";
-import { deleteAccountCall } from "../../../../../utilities/user-settings-hooks/api-calls-user-setting-hooks";
+import { deleteAccountCall } from "../../../../../utilities/user-settings-api-hooks/api-calls-user-setting-hooks";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../../../../components/spinner/spinner";
 import { userStoreSliceActions } from "../../../../../store/user-store";

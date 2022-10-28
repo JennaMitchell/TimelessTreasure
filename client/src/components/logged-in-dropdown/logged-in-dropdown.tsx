@@ -1,8 +1,8 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { mainStoreSliceActions } from "../../store/store";
 
-import { logoutHandler } from "../../utilities/login-signup-hooks/api-calls";
+import { logoutHandler } from "../../utilities/login-signup-api-hooks/api-calls";
 import classes from "./logged-in-dropdown.module.scss";
 
 const LoggedInDropdown = () => {
@@ -10,9 +10,10 @@ const LoggedInDropdown = () => {
   const loggedInDropDownActive = useAppSelector(
     (state) => state.mainStore.loggedInDropDownActive
   );
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const logoutButtonHandler = () => {
-    logoutHandler();
+    logoutHandler(dispatch, navigate);
     dropdownButtonHandler();
   };
   const dropdownButtonHandler = () => {

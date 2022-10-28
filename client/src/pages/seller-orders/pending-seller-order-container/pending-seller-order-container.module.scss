@@ -147,14 +147,13 @@
 .orderStatusContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-between;
   background-color: $sucessLight;
   color: $successMain;
   border: 1px solid $successDark;
   border-radius: 10px;
   height: max(50px, 50px);
-  width: max(110px, 110px);
+  width: max(90px, 90px);
   padding: 0px 5px;
 }
 .orderStatusIcon {
@@ -168,8 +167,8 @@
   padding: 0px;
   margin: 0px;
   font-size: toRem(14);
-  width: max(80px, 80px);
-  text-align: flex-start;
+  width: max(60px, 60px);
+  text-align: center;
 }
 
 .moreInfoContainer {

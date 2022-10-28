@@ -1,0 +1,257 @@
+@import "../../../utilities/variables";
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: $popupBackdropZIndex;
+  position: fixed;
+  width: max(100vw, 100vw);
+  height: max(100vh, 100vh);
+  display: grid;
+  place-items: center;
+  top: 0px;
+  left: 0px;
+}
+
+.popupContainer {
+  width: max(330px, 330px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  background-color: white;
+  position: relative;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: $popupZIndex;
+  gap: 10px;
+  padding: 20px 0px 20px 0px;
+}
+.textDecor {
+  width: max(200px, 200px);
+  height: max(30px, 30px);
+  object-fit: contain;
+  padding-right: 2.5px;
+}
+.popupTitle {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(48);
+  line-height: toRem(48);
+  font-family: $fontFamily;
+  color: $main600;
+  width: max(80%, 80%);
+  height: max-content;
+  text-align: center;
+}
+.closingContainer {
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: $main700;
+  color: $white;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.closingContainer:hover {
+  background-color: $main100;
+  color: $black;
+}
+.closingIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+}
+.warningText {
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  width: max(240px, 240px);
+  text-align: center;
+}
+.actionButtonsContainer {
+  width: max(240px, 240px);
+  max-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.actionButton {
+  width: max(90px, 90px);
+  height: max(50px, 50px);
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  border: 0px;
+  color: $white;
+  background-color: $main800;
+  border-radius: 5px;
+  transition: all 1s;
+}
+.actionButton:hover {
+  color: $main800;
+  background-color: $main200;
+}
+
+.productImage {
+  width: max(200px, 200px);
+  height: max(200px, 200px);
+  object-fit: cover;
+}
+
+.productPrice {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(12);
+  font-family: $fontFamily;
+  height: max-content;
+  min-height: max-content;
+  color: $main800;
+  max-height: max-content;
+}
+
+.imageInputContainer {
+  width: max(280px, 280px);
+  height: max-content;
+  max-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.imageInputText {
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  color: $main800;
+  padding: 0px;
+  margin: 0px;
+}
+.newImageInput {
+  width: max(180px, 180px);
+  padding: 0px;
+  margin: 0px;
+  padding-top: 5px;
+}
+.titleInputContainer,
+.priceInputContainer {
+  width: max-content;
+  max-width: max-content;
+  max-height: max-content;
+  position: relative;
+}
+.priceInputContainer {
+  border: 1px solid black;
+  border-radius: 5px;
+  display: flex;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 2px;
+  align-items: center;
+  justify-content: center;
+  height: max(45px, 45px);
+}
+
+.inputLabel {
+  font-size: toRem(12);
+  color: $main800;
+  position: absolute;
+  padding: 2px 5px;
+  margin: 0px;
+  z-index: 2;
+  background-color: $white;
+  top: -7.5px;
+  left: 7.5px;
+}
+
+.titleProductInput {
+  text-align: left;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-size: toRem(16);
+  width: max(220px, 220px);
+  position: relative;
+
+  font-family: $fontFamily;
+  height: max(45px, 45px);
+  color: $main800;
+  padding-left: 10px;
+
+  border: 1px solid black;
+  border-radius: 5px;
+  box-sizing: border-box;
+  outline: 0px;
+}
+
+.priceProductInput {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  height: max(100%, 100%);
+
+  color: $main800;
+
+  text-align: left;
+  width: max(145px, 145px);
+  border: 0px;
+  outline: 0px;
+}
+
+.priceSelectContainer {
+  width: max(60px, 60px);
+  height: max(40px, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-left: 5px;
+  font-family: $fontFamily;
+  background-color: $white;
+  border: 0px;
+  color: $main800;
+}
+.priceOption {
+  font-size: toRem(14);
+  line-height: toRem(14);
+  font-family: $fontFamily;
+}
+.quantityInputContainer {
+  width: max(220px, 220px);
+  position: relative;
+  font-family: $fontFamily;
+  height: max(45px, 45px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.quantityLabel {
+  font-size: toRem(16);
+  width: max-content;
+  max-width: max-content;
+  max-height: max-content;
+  color: $main800;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+}
+.quantitySelect,
+.quantityOption {
+  width: max(60px, 60px);
+  height: max-content;
+  max-height: max-content;
+  text-align: right;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  color: $main800;
+}
+.quantitySelect {
+  background-color: $white;
+  border: 0px;
+}

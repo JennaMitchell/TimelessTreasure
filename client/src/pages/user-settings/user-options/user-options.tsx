@@ -4,7 +4,7 @@ import { useState } from "react";
 import UserInfo from "./option-windows/current-info/user-info";
 import ChangeUsername from "./option-windows/change-username/change-username";
 
-import { logoutHandler } from "../../../utilities/login-signup-hooks/api-calls";
+import { logoutHandler } from "../../../utilities/login-signup-api-hooks/api-calls";
 import { useAppDispatch } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import ChangeEmail from "./option-windows/change-email/change-email";

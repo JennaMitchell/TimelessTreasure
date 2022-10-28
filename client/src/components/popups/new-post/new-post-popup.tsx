@@ -6,8 +6,10 @@ import { mainStoreSliceActions } from "../../../store/store";
 import React, { useState, useEffect, useRef } from "react";
 import NewPostSelectionDropdrop from "./selection-dropdown/new-post-selection-dropdown";
 import productTypeSubSelection from "./product-type-sub-selection";
-import { newProductCall } from "../../../utilities/product-hooks/seller-product-hooks";
+import { newProductCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
 import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
+import { priceValidator } from "../../../utilities/validation-hooks/validation-hooks";
+import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
@@ -21,15 +23,21 @@ const NewPostPopup = () => {
   const imageInputRef = useRef(null);
   const dispatch = useAppDispatch();
   const closingIconHandler = () => {
+    setProductType("Ceramics");
+    dispatch(mainStoreSliceActions.setPostPopupType("Ceramics"));
     dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
     dispatch(mainStoreSliceActions.setLockViewPort(false));
   };
   const newPostPopupActive = useAppSelector(
     (state) => state.mainStore.newPostPopupActive
   );
+  const postPopupType = useAppSelector(
+    (state) => state.mainStore.postPopupType
+  );
+
   const userId = useAppSelector((state) => state.userStore.userId);
   const userToken = useAppSelector((state) => state.userStore.userToken);
-  const acceptedImageFormats = ["png", "jpg"];
+  const acceptedImageFormats = ["png", "jpg", "jpeg"];
   const acceptedProductTypes = [
     "Ceramics",
     "Clocks",
@@ -40,7 +48,7 @@ const NewPostPopup = () => {
 
   const [initialRender, setInitialRender] = useState(false);
   const [productType, setProductType] = useState("Ceramics");
-  const [priceType, setPriceType] = useState("USD");
+
   const [productQuantity, setProductQuantity] = useState(1);
   const maxQuantity = 99;
 
@@ -80,9 +88,6 @@ const NewPostPopup = () => {
     },
   });
 
-  const apiCallDropdownActive = useAppSelector(
-    (state) => state.mainStore.apiCallDropdownActive
-  );
   const apiCallMessageType = useAppSelector(
     (state) => state.mainStore.apiCallMessageType
   );
@@ -97,26 +102,21 @@ const NewPostPopup = () => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     e.preventDefault();
-    setPriceType(e.target.value);
+    dispatch(mainStoreSliceActions.setPostPopupType(e.target.value));
   };
 
   useEffect(() => {
     if (!initialRender && newPostPopupActive) {
       setInitialRender(true);
+      console.log(initialRender);
     }
   }, [newPostPopupActive, initialRender]);
-
-  const [
-    passwordRequirementsDropdownActive,
-    setPasswordRequirementsDropdownActive,
-  ] = useState(false);
 
   const dialogBackdropClickHandler = (e: React.MouseEvent) => {
     const targetElement = e.target as HTMLElement;
 
     if (targetElement.id === "new-post-backdrop") {
-      dispatch(mainStoreSliceActions.setLockViewPort(false));
-      dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
+      closingIconHandler();
     }
   };
   const inputCopyObjectHandler = () =>
@@ -139,14 +139,6 @@ const NewPostPopup = () => {
       copyOfInputObject[targetElement.id].labelMoveout =
         !copyOfInputObject[targetElement.id].labelMoveout;
       setInputLogicObject(copyOfInputObject);
-    }
-    if (
-      targetElement.id === "passwordSignupInput" ||
-      targetElement.id === "confirmationPasswordSignupInput"
-    ) {
-      if (!passwordRequirementsDropdownActive) {
-        setPasswordRequirementsDropdownActive(true);
-      }
     }
   };
   const inputBlurHandler = (e: React.ChangeEvent) => {
@@ -218,6 +210,13 @@ const NewPostPopup = () => {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
     }
+    if (priceValidator(inputLogicObject.pricePostInput.inputData)) {
+      dispatch(
+        mainStoreSliceActions.setAPICallMessage("Please enter a valid price!")
+      );
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      return;
+    }
     if (productQuantity <= 0 || productQuantity >= 99) {
       dispatch(mainStoreSliceActions.setAPICallMessage("Invalid Quantity!"));
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
@@ -232,19 +231,28 @@ const NewPostPopup = () => {
     }
     const formData = new FormData();
 
-    if (imageInputRef.current != null) {
+    if (imageInputRef.current !== null) {
       const imageInput = imageInputRef.current as HTMLInputElement;
-      if (imageInput?.files != null) {
+      console.log(imageInput.value.length);
+      if (imageInput?.files !== null) {
         formData.append("image", imageInput.files[0]);
+      }
+      if (imageInput.value.length === 0) {
+        dispatch(mainStoreSliceActions.setAPICallMessage("No image added!"));
+        dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+        return;
       }
     }
 
     formData.append("tags", JSON.stringify(dropDownSelectedTypes));
 
     formData.append("title", inputLogicObject.titlePostInput.inputData);
-    formData.append("price", inputLogicObject.pricePostInput.inputData);
+    formData.append(
+      "price",
+      priceInputCleaner(inputLogicObject.pricePostInput.inputData)
+    );
     formData.append("quantity", JSON.stringify(productQuantity));
-    formData.append("priceType", priceType);
+    formData.append("priceType", postPopupType);
     formData.append("productType", productType);
 
     const productId = keyIdGenerator();
@@ -265,6 +273,7 @@ const NewPostPopup = () => {
         } else {
           dispatch(mainStoreSliceActions.setAPICallMessage("Product Uploaded"));
           dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          closingIconHandler();
         }
       });
   };
@@ -289,7 +298,7 @@ const NewPostPopup = () => {
             >
               <XMarkIcon className={classes.closingIcon} />
             </div>
-            <h6 className={classes.loginTitle}>New Post</h6>
+            <h6 className={classes.popupTitle}>New Post</h6>
             <img src={decor} alt="text-decor" className={classes.textDecor} />
             <div className={classes.inputContainer}>
               <label
@@ -312,9 +321,15 @@ const NewPostPopup = () => {
                 onFocus={inputFocusHandler}
               />
             </div>
-            <div className={classes.inputPriceContainer}>
+            <div
+              className={`${classes.inputPriceContainer} ${
+                apiCallMessageType === "ERROR" && classes.inputError
+              }`}
+            >
               <select
-                className={classes.priceSelectContainer}
+                className={`${classes.priceSelectContainer} ${
+                  apiCallMessageType === "ERROR" && classes.errorText
+                }`}
                 onChange={priceTypeSelectionHandler}
               >
                 <option className={classes.priceOption}>USD</option>
@@ -333,8 +348,8 @@ const NewPostPopup = () => {
               </label>
               <input
                 className={`${classes.priceInput} ${
-                  apiCallMessageType === "ERROR" && classes.inputError
-                }`}
+                  apiCallMessageType === "ERROR" && classes.errorText
+                } `}
                 id="pricePostInput"
                 onChange={inputChangeHandler}
                 onBlur={inputBlurHandler}

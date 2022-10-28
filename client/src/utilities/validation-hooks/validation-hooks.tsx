@@ -123,3 +123,29 @@ export const loginPasswordValidator = (password: string) => {
 
   return validPassword;
 };
+
+export const priceValidator = (price: string) => {
+  const trimmedPrice = price.trim();
+  const internalSpaceRegexExpression = /\s/;
+  const invalidCharactersRegexExpression = /[^0-9.$€]/;
+  const firstCharacterRegexExpression = /[$€]/;
+  const moreThanOneAcceptedCharacterRegexExpression = /[.$€]{2,}/;
+  let error = false;
+  if (invalidCharactersRegexExpression.test(trimmedPrice)) {
+    error = true;
+  }
+
+  if (firstCharacterRegexExpression.test(trimmedPrice)) {
+    if (!firstCharacterRegexExpression.test(trimmedPrice[0])) {
+      error = true;
+    }
+  }
+  if (moreThanOneAcceptedCharacterRegexExpression.test(trimmedPrice)) {
+    error = true;
+  }
+  if (internalSpaceRegexExpression.test(trimmedPrice)) {
+    error = true;
+  }
+
+  return error;
+};

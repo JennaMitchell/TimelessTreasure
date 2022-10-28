@@ -14,6 +14,30 @@ router.get(
   sellerController.getAllSellerData
 );
 
+router.delete("/delete", isAuth, productController.deletePost);
+router.patch(
+  "/update",
+  isAuth,
+  [
+    body("title").trim().not().isEmpty(),
+    body("price").trim().not().isEmpty(),
+    body("productId")
+      .trim()
+      .not()
+      .isEmpty()
+      .custom((value, { req }) => {
+        return ProductSchema.findOne({ productId: value }).then(
+          (foundProduct) => {
+            if (!foundProduct) {
+              return Promise.reject("Id no longer in use!");
+            }
+          }
+        );
+      }),
+    body("quantity").trim().not().isEmpty(),
+  ],
+  productController.updateProduct
+);
 router.post(
   "/new",
   isAuth,
@@ -22,6 +46,7 @@ router.post(
     body("price").trim().not().isEmpty(),
     body("priceType").trim().not().isEmpty(),
     body("userId").trim().not().isEmpty(),
+    body("quantity").trim().not().isEmpty(),
     body("productId")
       .trim()
       .not()

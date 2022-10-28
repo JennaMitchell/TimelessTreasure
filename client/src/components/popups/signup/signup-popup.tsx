@@ -12,7 +12,7 @@ import Spinner from "../../spinner/spinner";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
 import SignupRequirements from "./signup-requirements/signup-requirements";
-import { signupCall } from "../../../utilities/login-signup-hooks/api-calls.js";
+import { signupCall } from "../../../utilities/login-signup-api-hooks/api-calls.js";
 
 interface LogicObject {
   [key: string]: {
@@ -42,7 +42,7 @@ const SignupPopup = () => {
     if (!initialRender && signupPopupActive) {
       setInitialRender(true);
     }
-  }, [signupPopupActive]);
+  }, [signupPopupActive, initialRender]);
 
   const apiCallDropdownActive = useAppSelector(
     (state) => state.mainStore.apiCallDropdownActive

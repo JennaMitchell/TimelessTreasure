@@ -99,7 +99,7 @@ export const tempSellerOrders = [
         productQty: "6",
       },
     ],
-    status: "Ship Immediately",
+    status: "Ship",
   },
 ];
 export const tempSellerItemsForSale = [

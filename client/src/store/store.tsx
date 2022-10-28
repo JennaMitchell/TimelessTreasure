@@ -15,6 +15,10 @@ const initialState = {
   forgotPasswordPopupActive: false,
   loggedInDropDownActive: false,
   newPostPopupActive: false,
+  postPopupType: "Cermaics",
+  deletePostPopup: false,
+  editPostPopup: false,
+  activeEditPostPopupId: "",
 };
 
 const mainStoreSlice = createSlice({
@@ -59,6 +63,18 @@ const mainStoreSlice = createSlice({
     },
     setNewPostPopupActive(state, { payload }) {
       state.newPostPopupActive = payload;
+    },
+    setPostPopupType(state, { payload }) {
+      state.postPopupType = payload;
+    },
+    setDeletePostPopup(state, { payload }) {
+      state.deletePostPopup = payload;
+    },
+    setEditPostPopup(state, { payload }) {
+      state.editPostPopup = payload;
+    },
+    setActiveEditPostPopupId(state, { payload }) {
+      state.activeEditPostPopupId = payload;
     },
   },
 });

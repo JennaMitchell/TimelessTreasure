@@ -3,20 +3,20 @@ import classes from "./seller-orders.module.scss";
 import PendingSellerOrderContainer from "./pending-seller-order-container/pending-seller-order-container";
 import FulfilledSellerOrders from "./fulfilled-seller-orders/fulfilled-seller-orders";
 import decor from "../../images/homepage/decor/decor.png";
-import { tempSellerOrders, tempSellerItemsForSale } from "./temp-seller-orders";
+import { tempSellerOrders } from "./temp-seller-orders";
 import ItemForSaleContainer from "./item-for-sale-container/item-for-sale-container";
 import { useAppDispatch } from "../../store/hooks";
 import { mainStoreSliceActions } from "../../store/store";
 import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
-import { useEffect } from "react";
-import { getSellersItemsForSaleCall } from "../../utilities/product-hooks/seller-product-hooks";
+
+import { getSellersItemsForSaleCall } from "../../utilities/product-api-hooks/seller-product-hooks";
 import { useAppSelector } from "../../store/hooks";
 import { userStoreSliceActions } from "../../store/user-store";
 const SellerOrdersPage = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.userStore.userId);
   const userToken = useAppSelector((state) => state.userStore.userToken);
-
+  const sellerData: any = useAppSelector((state) => state.userStore.sellerData);
   const pendingOrders = [];
   const fulfilledOrders = [];
   const newPostHandler = () => {
@@ -30,7 +30,7 @@ const SellerOrdersPage = () => {
         return response?.json();
       })
       .then((jsonData) => {
-        if (jsonData != undefined) {
+        if (jsonData !== undefined) {
           if ("error" in jsonData) {
             if (jsonData.error.length !== 0) {
               dispatch(
@@ -43,6 +43,7 @@ const SellerOrdersPage = () => {
               mainStoreSliceActions.setAPICallMessage("Data Retrieved!")
             );
             dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+
             dispatch(userStoreSliceActions.setSellerData(jsonData));
           }
         } else {
@@ -61,19 +62,32 @@ const SellerOrdersPage = () => {
     }
   }
 
-  const renderReadyItemsForSale = tempSellerItemsForSale.map((data, index) => {
-    const keyId = keyIdGenerator();
-    return (
-      <ItemForSaleContainer
-        productImage={data.productImage}
-        productPrice={data.productPrice}
-        productQty={data.quanityAvailable}
-        productTitle={data.productTitle}
-        index={index}
-        key={keyId}
-      />
-    );
-  });
+  const renderReadySellerDataItemsForSale = [];
+
+  if (sellerData.length !== 0) {
+    for (
+      let dataIndex = 0;
+      dataIndex < sellerData.foundProducts.length;
+      dataIndex++
+    ) {
+      const keyId = keyIdGenerator();
+
+      if (sellerData.foundProducts[dataIndex].status === "For Sale") {
+        renderReadySellerDataItemsForSale.push(
+          <ItemForSaleContainer
+            productImage={sellerData.foundProducts[dataIndex].imageUrl}
+            productPrice={sellerData.foundProducts[dataIndex].price}
+            productQty={sellerData.foundProducts[dataIndex].quantity}
+            productTitle={sellerData.foundProducts[dataIndex].title}
+            productPriceType={sellerData.foundProducts[dataIndex].priceType}
+            productId={sellerData.foundProducts[dataIndex].productId}
+            index={dataIndex}
+            key={keyId}
+          />
+        );
+      }
+    }
+  }
 
   const renderReadyPendingOrders = pendingOrders.map((data) => {
     const keyId = keyIdGenerator();
@@ -110,7 +124,13 @@ const SellerOrdersPage = () => {
       </button>
       <h6 className={classes.sectionTitle}>Items For Sale</h6>
       <img src={decor} alt="text-decor" className={classes.textDecor} />
-      <div className={classes.ordersContainer}>{renderReadyItemsForSale} </div>
+      {/* <div className={classes.ordersContainer}>{renderReadyItemsForSale} </div> */}
+      <div className={classes.ordersContainer}>
+        {renderReadySellerDataItemsForSale}
+        {renderReadySellerDataItemsForSale.length === 0 && (
+          <h6 className={classes.noDataFoundText}>No Data Found</h6>
+        )}
+      </div>
       <h6 className={classes.sectionTitle}>Pending Orders</h6>
       <img src={decor} alt="text-decor" className={classes.textDecor} />
       <div className={classes.ordersContainer}>{renderReadyPendingOrders}</div>
