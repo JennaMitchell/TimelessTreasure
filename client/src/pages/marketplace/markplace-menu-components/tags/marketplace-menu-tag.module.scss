@@ -1,0 +1,36 @@
+@import "../../../../utilities/variables";
+.tagContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  width: max-content;
+  max-width: max-content;
+  min-width: max-content;
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  background-color: $main800;
+  padding: 5px 5px;
+  border-radius: 4px;
+  transition: all 0.5s;
+  color: $white;
+}
+.tagContainer:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.tagTitles {
+  width: max-content;
+  padding: 0px;
+  margin: 0px;
+  height: max-content;
+  font-size: 16px;
+  color: inherit;
+}
+
+.removeTagIcon {
+  width: max(16px, 16px);
+  height: max(16px, 16px);
+  color: inherit;
+}

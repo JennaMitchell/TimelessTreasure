@@ -1,12 +1,22 @@
 import classes from "./ceramics-dropdown.module.scss";
 import ceramicsPhoto from "../../../../images/nav-dropdowns/antique-vase.jpg";
-
+import { dropDownNavCategoryHandler } from "../../../../utilities/generic-hooks/generic-hooks";
+import { useAppDispatch } from "../../../../store/hooks";
+import { useNavigate } from "react-router-dom";
 interface Props {
   mouseEnterHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
   mouseLeaveHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const CeramicsDropDown = ({ mouseEnterHandler, mouseLeaveHandler }: Props) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const navButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const targetElement = e.target as HTMLButtonElement;
+    dropDownNavCategoryHandler(targetElement.id, dispatch, navigate);
+  };
+
   return (
     <div
       className={classes.mainContainer}
@@ -15,11 +25,41 @@ const CeramicsDropDown = ({ mouseEnterHandler, mouseLeaveHandler }: Props) => {
       id="ceramics-dropdown"
     >
       <div className={classes.options}>
-        <button className={classes.productButton}>Earthenware</button>
-        <button className={classes.productButton}>Stoneware</button>
-        <button className={classes.productButton}>Porcelian</button>
-        <button className={classes.productButton}>Bone China</button>
-        <button className={classes.productButton}>Fired Bricks</button>
+        <button
+          className={classes.productButton}
+          id={"ceramics-earthenware-nav-button"}
+          onClick={navButtonHandler}
+        >
+          Earthenware
+        </button>
+        <button
+          className={classes.productButton}
+          id={"ceramics-stoneware-nav-button"}
+          onClick={navButtonHandler}
+        >
+          Stoneware
+        </button>
+        <button
+          className={classes.productButton}
+          id={"ceramics-porcelian-nav-button"}
+          onClick={navButtonHandler}
+        >
+          Porcelian
+        </button>
+        <button
+          className={classes.productButton}
+          id={"ceramics-boneChina-nav-button"}
+          onClick={navButtonHandler}
+        >
+          Bone China
+        </button>
+        <button
+          className={classes.productButton}
+          id={"ceramics-firedBricks-nav-button"}
+          onClick={navButtonHandler}
+        >
+          Fired Bricks
+        </button>
       </div>
       <img
         className={classes.imageContainer}

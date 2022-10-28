@@ -1,5 +1,8 @@
 import classes from "./clocks-dropdown.module.scss";
 import clocksPhoto from "../../../../images/nav-dropdowns/antique-clock.jpg";
+import { dropDownNavCategoryHandler } from "../../../../utilities/generic-hooks/generic-hooks";
+import { useAppDispatch } from "../../../../store/hooks";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   mouseEnterHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -7,6 +10,13 @@ interface Props {
 }
 
 const ClocksDropDown = ({ mouseEnterHandler, mouseLeaveHandler }: Props) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const navButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const targetElement = e.target as HTMLButtonElement;
+    dropDownNavCategoryHandler(targetElement.id, dispatch, navigate);
+  };
   return (
     <div
       className={classes.mainContainer}
@@ -21,23 +31,88 @@ const ClocksDropDown = ({ mouseEnterHandler, mouseLeaveHandler }: Props) => {
       />
       <div className={classes.options}>
         <h6 className={classes.optionsTitle}>Type</h6>
-        <button className={classes.productButton}>Wall</button>
-        <button className={classes.productButton}>Pendulum</button>
-        <button className={classes.productButton}>Mantel</button>
-        <button className={classes.productButton}>Alarm</button>
-        <button className={classes.productButton}>Cuckoo</button>
+        <button
+          className={classes.productButton}
+          id="clocks-wall-nav-button"
+          onClick={navButtonHandler}
+        >
+          Wall
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-pendulum-nav-button"
+        >
+          Pendulum
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-mantel-nav-button"
+          onClick={navButtonHandler}
+        >
+          Mantel
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-alarm-nav-button"
+          onClick={navButtonHandler}
+        >
+          Alarm
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-cuckoo-nav-button"
+          onClick={navButtonHandler}
+        >
+          Cuckoo
+        </button>
       </div>
       <div className={classes.options}>
         <h6 className={classes.optionsTitle}>Size</h6>
-        <button className={classes.productButton}>Small</button>
-        <button className={classes.productButton}>Medium</button>
-        <button className={classes.productButton}>Large</button>
-        <button className={classes.productButton}>OverSized</button>
+        <button
+          className={classes.productButton}
+          id="clocks-small-nav-button"
+          onClick={navButtonHandler}
+        >
+          Small
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-medium-nav-button"
+          onClick={navButtonHandler}
+        >
+          Medium
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-large-nav-button"
+          onClick={navButtonHandler}
+        >
+          Large
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-overSized-nav-button"
+          onClick={navButtonHandler}
+        >
+          OverSized
+        </button>
       </div>
       <div className={classes.options}>
         <h6 className={classes.optionsTitle}>Style</h6>
-        <button className={classes.productButton}>Digital</button>
-        <button className={classes.productButton}>Analog</button>
+        <button
+          className={classes.productButton}
+          id="clocks-digital-nav-button"
+          onClick={navButtonHandler}
+        >
+          Digital
+        </button>
+        <button
+          className={classes.productButton}
+          id="clocks-analog-nav-button"
+          onClick={navButtonHandler}
+        >
+          Analog
+        </button>
       </div>
     </div>
   );

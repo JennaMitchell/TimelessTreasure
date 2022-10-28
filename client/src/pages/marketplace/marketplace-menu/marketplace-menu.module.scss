@@ -8,6 +8,7 @@
   align-items: center;
   justify-items: center;
   gap: 15px;
+  margin-top: 15px;
 }
 .contentBlock {
   width: max(100%, 100%);
@@ -107,41 +108,14 @@
   padding: 10px;
   border-radius: 10px;
   box-sizing: border-box;
-}
-.tagContainer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 5px;
-  width: max-content;
-  max-width: max-content;
-  min-width: max-content;
-  height: max-content;
-  min-height: max-content;
-  max-height: max-content;
-  background-color: $main800;
-  padding: 5px 5px;
-  border-radius: 4px;
-  transition: all 0.5s;
-  color: $white;
+  gap: 10px;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  align-content: flex-start;
+  justify-content: flex-start;
 }
-.tagContainer:hover {
-  background-color: $main200;
-  color: $main800;
-}
-.tagTitles {
-  width: max-content;
-  padding: 0px;
-  margin: 0px;
-  height: max-content;
-  font-size: 16px;
-  color: inherit;
-}
-.removeTagIcon {
-  width: max(16px, 16px);
-  height: max(16px, 16px);
-  color: inherit;
-}
+
 .categoryBlock {
   width: max(100%, 100%);
   height: max-content;
@@ -151,9 +125,18 @@
   flex-direction: column;
   gap: 10px;
 }
+.filterButtonContainer {
+  width: max(100%, 100%);
+  height: max-content;
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .categoryButton {
   background-color: $white;
-  font-size: toRem(14);
+  font-size: toRem(16);
   padding: 10px 0px;
   width: max(100%, 100%);
   border: none;
@@ -162,10 +145,19 @@
   color: $main1000;
   border-bottom: 1px solid $main1000;
   transition: all 0.5s;
+  display: flex;
+  z-index: 2;
+  align-items: center;
+  justify-content: space-between;
 }
 .categoryButton:hover {
   border-bottom: 1px solid $main400;
   color: $main400;
+}
+.categoryButtonIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+  color: inherit;
 }
 .recentlyViewedItemContainer {
   width: max(100%, 100%);
@@ -241,6 +233,20 @@
 .priceRangeCheckbox {
   width: max(15px, 15px);
   height: max(15px, 15px);
+  border-radius: 50%;
+  background-color: $white;
+  border: 1px solid $main800;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  padding: 0px;
+}
+.priceCheckIcon {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  color: $white;
+  background-color: $main800;
+  border-radius: 50%;
 }
 .priceRangeText {
   width: max-content;

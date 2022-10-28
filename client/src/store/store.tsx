@@ -19,6 +19,7 @@ const initialState = {
   deletePostPopup: false,
   editPostPopup: false,
   activeEditPostPopupId: "",
+  navMenuSubCategoryClicked: [],
 };
 
 const mainStoreSlice = createSlice({
@@ -75,6 +76,9 @@ const mainStoreSlice = createSlice({
     },
     setActiveEditPostPopupId(state, { payload }) {
       state.activeEditPostPopupId = payload;
+    },
+    setNavMenuSubCategoryClicked(state, { payload }) {
+      state.navMenuSubCategoryClicked = payload;
     },
   },
 });

@@ -1,13 +1,16 @@
 import classes from "./marketplace-menu.module.scss";
-import {
-  XMarkIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@heroicons/react/24/solid";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
 import blueVase from "../../../images/homepage/photo-carousel/antique-vase.jpg";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { mainStoreSliceActions } from "../../../store/store";
+import MarkplaceMenuTag from "../markplace-menu-components/tags/marketplace-menu-tag";
+import CategoryFilterDropdown from "../markplace-menu-components/category-filter-dropdown/category-filter-dropdown";
+import { capitalizeFirstLetter } from "../../../utilities/generic-hooks/generic-hooks";
+import productTypeSubSelection from "../../../utilities/product-type-sub-selection";
 const MarketplaceMenu = () => {
+  const dispatch = useAppDispatch();
   const [searchContainerActive, setSearchContainerActive] = useState(false);
   const [activeTagsActive, setActiveTagsActive] = useState(false);
   const [productCategoriesActive, setProductCategoriesActive] = useState(false);
@@ -17,29 +20,159 @@ const MarketplaceMenu = () => {
   const [searchLabelMoveout, setSearchLabelMoveout] = useState(false);
   const [searchInputData, setSearchInputData] = useState("");
   const [searchInputActive, setSearchInputActive] = useState(false);
+  const [activeTags, setActiveTags] = useState<string[]>([]);
+  const [activeFilterDropdown, setActiveFilterDropdown] = useState("");
+
+  const tagClickedHandler = (targetId: string) => {
+    const copyOfActiveTags = activeTags.slice();
+
+    const indexOfTagToRemove = copyOfActiveTags.indexOf(targetId);
+    copyOfActiveTags.splice(indexOfTagToRemove, 1);
+    setActiveTags(copyOfActiveTags);
+  };
+
+  const dropdownClickedButtonRetriever = (
+    filterClicked: string,
+    remove: boolean,
+    productType: string
+  ) => {
+    const copyOfActiveTags = activeTags.slice();
+    const type = copyOfActiveTags[0];
+    const typeKeys = Object.keys(productTypeSubSelection[type]);
+    const typeValues = Object.values(productTypeSubSelection[type]);
+    const indexOfClickedKey = typeKeys.indexOf(productType);
+    const valuesToCheckArray = typeValues[indexOfClickedKey];
+    let valueOfSubCatToRemove = "";
+
+    for (let j = 0; j < valuesToCheckArray.length; j++) {
+      if (copyOfActiveTags.includes(valuesToCheckArray[j])) {
+        console.log(copyOfActiveTags.includes(valuesToCheckArray[j]));
+        valueOfSubCatToRemove = valuesToCheckArray[j];
+        break;
+      }
+    }
+
+    if (valueOfSubCatToRemove.length !== 0) {
+      const indexOfValueToRemove = copyOfActiveTags.indexOf(
+        valueOfSubCatToRemove
+      );
+      copyOfActiveTags.splice(indexOfValueToRemove, 1);
+    }
+
+    if (remove) {
+      const indexOfItemToRemove = copyOfActiveTags.indexOf(filterClicked);
+      copyOfActiveTags.splice(indexOfItemToRemove, 1);
+
+      setActiveTags(copyOfActiveTags);
+    } else {
+      const indexOfItem = copyOfActiveTags.indexOf(filterClicked);
+      if (indexOfItem === -1) {
+        copyOfActiveTags.push(filterClicked);
+        setActiveTags(copyOfActiveTags);
+      } else {
+        copyOfActiveTags.splice(indexOfItem, 1);
+        setActiveTags(copyOfActiveTags);
+      }
+    }
+  };
+
+  const filterDropdownHandler = (e: React.MouseEvent) => {
+    const targetElement = e.target as HTMLButtonElement;
+    const targetId = targetElement.id;
+
+    const indexOfDash = targetId.indexOf("-");
+    const categorySelected = capitalizeFirstLetter(
+      targetId.slice(0, indexOfDash)
+    );
+    setActiveTags([categorySelected]);
+
+    if (activeFilterDropdown === categorySelected) {
+      setActiveFilterDropdown("");
+    } else {
+      setActiveFilterDropdown(categorySelected);
+    }
+  };
+
+  const navMenuSubCategoryClicked = useAppSelector(
+    (state) => state.mainStore.navMenuSubCategoryClicked
+  );
   const priceRanges = [
-    "$5 - $9",
-    "$10 - $14",
-    "$15 - $19",
-    "$20 - $24",
-    "$25 - $29",
-    "$30 - $39",
-    "$40 - $49",
-    "$50 - $99",
-    "$99 +",
+    "$5 - $9.99",
+    "$10 - $14.99",
+    "$15 - $19.99",
+    "$20 - $24.99",
+    "$25 - $29.99",
+    "$30 - $39.99",
+    "$40 - $49.99",
+    "$50 - $99.99",
+    "$100 +",
   ];
+  useEffect(() => {
+    if (navMenuSubCategoryClicked.length !== 0) {
+      setActiveTags(navMenuSubCategoryClicked);
+      dispatch(mainStoreSliceActions.setNavMenuSubCategoryClicked([]));
+    }
+  }, [navMenuSubCategoryClicked]);
+
+  const priceButtonHandler = (e: React.MouseEvent) => {
+    const targetElement = e.target as HTMLDivElement;
+    const targetId = targetElement.id;
+    const indexOfPrice = targetId.indexOf("price");
+    const priceRange = targetId.slice(0, indexOfPrice - 1);
+
+    const copyOfActiveTags = activeTags.slice();
+
+    if (copyOfActiveTags.includes(priceRange)) {
+      const indexOfTagToRemove = copyOfActiveTags.indexOf(priceRange);
+      copyOfActiveTags.splice(indexOfTagToRemove, 1);
+    } else {
+      for (
+        let indexOfPrice = 0;
+        indexOfPrice < priceRanges.length;
+        indexOfPrice++
+      ) {
+        if (copyOfActiveTags.includes(priceRanges[indexOfPrice])) {
+          const priceRangeToRemove = priceRanges[indexOfPrice];
+          const indexOfRangeToRemove =
+            copyOfActiveTags.indexOf(priceRangeToRemove);
+          copyOfActiveTags.splice(indexOfRangeToRemove, 1);
+          break;
+        }
+      }
+      copyOfActiveTags.push(priceRange);
+    }
+
+    setActiveTags(copyOfActiveTags);
+  };
 
   const renderReadyPriceRanges = priceRanges.map((range) => {
+    let activeRange = false;
+
+    if (activeTags.includes(range)) {
+      activeRange = true;
+    }
+
     return (
-      <div className={classes.priceRangeContainer}>
-        <input
+      <div
+        className={classes.priceRangeContainer}
+        id={`${range}-price-range`}
+        onClick={priceButtonHandler}
+      >
+        <button
           aria-label={`price range ${range}`}
-          type="checkbox"
           key={`${range}`}
           name={`${range}`}
           className={classes.priceRangeCheckbox}
-        />
-        <p className={classes.priceRangeText}>{range}</p>
+          id={`${range}-price-range-input`}
+        >
+          {activeRange && <CheckIcon className={classes.priceCheckIcon} />}
+        </button>
+        <label
+          className={classes.priceRangeText}
+          htmlFor={`${range}-price-range-input`}
+        >
+          {range}
+        </label>
       </div>
     );
   });
@@ -139,10 +272,14 @@ const MarketplaceMenu = () => {
       </button>
       {activeTagsActive && (
         <div className={classes.tagBlock}>
-          <div className={classes.tagContainer}>
-            <p className={classes.tagTitles}>Clocks</p>
-            <XMarkIcon className={classes.removeTagIcon}></XMarkIcon>
-          </div>
+          {activeTags.map((title: string) => {
+            return (
+              <MarkplaceMenuTag
+                tagName={title}
+                clickHandler={tagClickedHandler}
+              ></MarkplaceMenuTag>
+            );
+          })}
         </div>
       )}
       <button
@@ -160,11 +297,111 @@ const MarketplaceMenu = () => {
 
       {productCategoriesActive && (
         <div className={classes.categoryBlock}>
-          <button className={classes.categoryButton}>Ceramics (10)</button>
-          <button className={classes.categoryButton}>Clocks (10)</button>
-          <button className={classes.categoryButton}>Tablewear (10)</button>
-          <button className={classes.categoryButton}>Paintings (10)</button>
-          <button className={classes.categoryButton}>Electronics (10)</button>
+          <div className={classes.filterButtonContainer}>
+            <button
+              className={classes.categoryButton}
+              onClick={filterDropdownHandler}
+              id="ceramics-category-filter-button"
+            >
+              Ceramics (10)
+              {activeFilterDropdown === "Ceramics" && (
+                <ChevronUpIcon className={classes.categoryButtonIcon} />
+              )}
+              {activeFilterDropdown !== "Ceramics" && (
+                <ChevronDownIcon className={classes.categoryButtonIcon} />
+              )}
+            </button>
+            {activeFilterDropdown === "Ceramics" && (
+              <CategoryFilterDropdown
+                productType="Ceramics"
+                dataRetriever={dropdownClickedButtonRetriever}
+              />
+            )}
+          </div>
+          <div className={classes.filterButtonContainer}>
+            <button
+              className={classes.categoryButton}
+              onClick={filterDropdownHandler}
+              id="clocks-category-filter-button"
+            >
+              Clocks (10)
+              {activeFilterDropdown === "Clocks" && (
+                <ChevronUpIcon className={classes.categoryButtonIcon} />
+              )}
+              {activeFilterDropdown !== "Clocks" && (
+                <ChevronDownIcon className={classes.categoryButtonIcon} />
+              )}
+            </button>
+            {activeFilterDropdown === "Clocks" && (
+              <CategoryFilterDropdown
+                productType="Clocks"
+                dataRetriever={dropdownClickedButtonRetriever}
+              />
+            )}
+          </div>
+          <div className={classes.filterButtonContainer}>
+            <button
+              className={classes.categoryButton}
+              onClick={filterDropdownHandler}
+              id="tablewear-category-filter-button"
+            >
+              Tablewear (10)
+              {activeFilterDropdown === "Tablewear" && (
+                <ChevronUpIcon className={classes.categoryButtonIcon} />
+              )}
+              {activeFilterDropdown !== "Tablewear" && (
+                <ChevronDownIcon className={classes.categoryButtonIcon} />
+              )}
+            </button>
+            {activeFilterDropdown === "Tablewear" && (
+              <CategoryFilterDropdown
+                productType="Tablewear"
+                dataRetriever={dropdownClickedButtonRetriever}
+              />
+            )}
+          </div>
+          <div className={classes.filterButtonContainer}>
+            <button
+              className={classes.categoryButton}
+              onClick={filterDropdownHandler}
+              id="paintings-category-filter-button"
+            >
+              Paintings (10)
+              {activeFilterDropdown === "Paintings" && (
+                <ChevronUpIcon className={classes.categoryButtonIcon} />
+              )}
+              {activeFilterDropdown !== "Paintings" && (
+                <ChevronDownIcon className={classes.categoryButtonIcon} />
+              )}
+            </button>
+            {activeFilterDropdown === "Paintings" && (
+              <CategoryFilterDropdown
+                productType="Paintings"
+                dataRetriever={dropdownClickedButtonRetriever}
+              />
+            )}
+          </div>
+          <div className={classes.filterButtonContainer}>
+            <button
+              className={classes.categoryButton}
+              onClick={filterDropdownHandler}
+              id="electronics-category-filter-button"
+            >
+              Electronics (10)
+              {activeFilterDropdown === "Electronics" && (
+                <ChevronUpIcon className={classes.categoryButtonIcon} />
+              )}
+              {activeFilterDropdown !== "Electronicss" && (
+                <ChevronDownIcon className={classes.categoryButtonIcon} />
+              )}
+            </button>
+            {activeFilterDropdown === "Electronics" && (
+              <CategoryFilterDropdown
+                productType="Electronics"
+                dataRetriever={dropdownClickedButtonRetriever}
+              />
+            )}
+          </div>
         </div>
       )}
       <button
@@ -172,15 +409,15 @@ const MarketplaceMenu = () => {
         onClick={recentlyViewedHandler}
       >
         Recently Viewed Products
-        {!priceRangeActive && (
+        {!recentlyViewedActive && (
           <ChevronDownIcon className={classes.buttonDownIcon} />
         )}
-        {priceRangeActive && (
+        {recentlyViewedActive && (
           <ChevronUpIcon className={classes.buttonDownIcon} />
         )}
       </button>
 
-      {priceRangeActive && (
+      {recentlyViewedActive && (
         <div className={classes.contentBlock}>
           <div className={classes.recentlyViewedItemContainer}>
             <img

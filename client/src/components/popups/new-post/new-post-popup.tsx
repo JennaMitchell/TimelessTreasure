@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import React, { useState, useEffect, useRef } from "react";
 import NewPostSelectionDropdrop from "./selection-dropdown/new-post-selection-dropdown";
-import productTypeSubSelection from "./product-type-sub-selection";
+import productTypeSubSelection from "../../../utilities/product-type-sub-selection";
 import { newProductCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
 import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
 import { priceValidator } from "../../../utilities/validation-hooks/validation-hooks";

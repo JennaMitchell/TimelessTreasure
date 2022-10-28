@@ -5,13 +5,14 @@ import React, { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 
 const TopNavBar = () => {
   const availableCurrency = ["USD", "CAN", "EUR"];
   const [searchValue, setSearchValue] = useState("Search");
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const searchBarHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -27,6 +28,10 @@ const TopNavBar = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(!lockViewPort));
   };
 
+  const homeButtonHandler = () => {
+    dispatch(mainStoreSliceActions.setNavMenuSubCategoryClicked(""));
+    navigate("/");
+  };
   const searchContainerClickHandler = () => {
     document.getElementById("searchContainerId")?.focus();
   };
@@ -52,7 +57,7 @@ const TopNavBar = () => {
   return (
     <div className={classes.backgroundContainer}>
       <div className={classes.topContainer}>
-        <div className={classes.titleContainer}>
+        <div className={classes.titleContainer} onClick={homeButtonHandler}>
           <img className={classes.icon} src={logo} alt="Company logo" />
           <h2 className={classes.title}>Timeless Treasures</h2>
         </div>

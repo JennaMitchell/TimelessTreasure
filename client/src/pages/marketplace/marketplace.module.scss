@@ -2,14 +2,14 @@
 
 .collectionTopContainer {
   width: max(1000px, 1000px);
-  min-height: calc(100vh - 410px);
+  min-height: calc(100vh - 350px);
   height: max-content;
   max-height: max-content;
   display: grid;
   position: relative;
   grid-template-columns: max-content max-content;
 
-  margin: 10px auto;
+  margin: 40px auto;
   gap: 20px;
 }
 

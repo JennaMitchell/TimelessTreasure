@@ -1,5 +1,5 @@
 import productTypeSubSelection from "../../../../utilities/product-type-sub-selection";
-import classes from "./new-post-selection-dropdown.module.scss";
+import classes from "./category-filter-dropdown.module.scss";
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -11,10 +11,14 @@ interface SelectedItem {
 }
 interface Props {
   productType: string;
-  returnFunction: (typeObject: SelectedItem) => void;
+  dataRetriever: (
+    dataArray: string,
+    remove: boolean,
+    productType: string
+  ) => void;
 }
 
-const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
+const CategoryFilterDropdown = ({ productType, dataRetriever }: Props) => {
   const [activeDropdowns, setActiveDropdowns] = useState<boolean[]>([]);
 
   const [selectedTags, setSelectedTags] = useState<SelectedItem>({});
@@ -50,38 +54,34 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
 
     if (copyOfSelectedTags[type] === selectedItem) {
       copyOfSelectedTags[type] = "";
+      dataRetriever(selectedItem, true, type);
     } else {
       copyOfSelectedTags[type] = selectedItem;
+      dataRetriever(selectedItem, false, type);
     }
     setSelectedTags(copyOfSelectedTags);
-    returnFunction(copyOfSelectedTags);
   };
 
   for (let i = 0; i < selectedDataData.length; i++) {
     const dataArray = selectedDataData[i];
     const typeTitle = selectedDataTypes[i];
+
     for (let q = 0; q < dataArray.length; q++) {
       renderReadySelectionData[i].push(
         <div
           className={classes.checkBoxContainer}
           key={`${dataArray[q]}-${q}-key`}
           onClick={checkBoxHandler}
-          id={`${dataArray[q]}-${typeTitle}-${q}`}
+          id={`${dataArray[q]}-${typeTitle}--${q}`}
         >
-          <div
-            className={classes.checkMarkContainer}
-            id={`${dataArray[q]}-${typeTitle}-${q}-checkmark-container`}
-            onClick={checkBoxHandler}
-          >
-            {selectedTags[typeTitle] === dataArray[q] && (
-              <CheckIcon
-                className={classes.checkIcon}
-                id={`${dataArray[q]}-${typeTitle}-${q}-checkmark`}
-                onClick={checkBoxHandler}
-              />
-            )}
-          </div>
           {dataArray[q]}
+          {selectedTags[typeTitle] === dataArray[q] && (
+            <CheckIcon
+              className={classes.checkIcon}
+              id={`${dataArray[q]}-${typeTitle}-${selectedDataTypes[i]}-${q}-checkmark`}
+              onClick={checkBoxHandler}
+            />
+          )}
         </div>
       );
     }
@@ -156,4 +156,4 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
     return <>{renderReadyDropDowns} </>;
   }
 };
-export default NewPostSelectionDropdrop;
+export default CategoryFilterDropdown;

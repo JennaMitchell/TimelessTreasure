@@ -1,0 +1,101 @@
+@import "../../../../utilities/variables";
+.checkBoxContainer {
+  width: max(250px, 250px);
+  max-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $main800;
+  font-family: $fontFamily;
+  margin-left: 15px;
+
+  padding-bottom: 5px;
+  box-sizing: border-box;
+  border-bottom: 1px solid $main800;
+  transition: all 0.5s;
+}
+.checkBoxContainer:hover {
+  border-bottom: 1px solid $main400;
+  color: $main400;
+}
+.checkMarkContainer {
+  background-color: $white;
+  color: $main800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 50%;
+  box-sizing: border-box;
+  padding: 3px;
+  width: max(25px, 25px);
+  height: max(25px, 25px);
+  transition: all 1s;
+}
+.checkMarkContainer:hover {
+  border: 1px solid $main800;
+  background-color: $main200;
+}
+.checkIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+  z-index: 1;
+}
+.dropDownIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+}
+
+.dropDownHeaderButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0px;
+  width: max(280px, 280px);
+  height: max-content;
+  max-height: max-content;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  text-align: left;
+  margin: 5px 0px;
+  color: $main800;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.dropdownSelectionContainer {
+  display: grid;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  width: max(100%, 100%);
+  height: max-content;
+  max-height: max-content;
+  background-color: $white;
+  color: $main800;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.buttonTitle {
+  margin: 0px;
+  padding: 5px 10px 5px 10px;
+  font-size: toRem(16);
+  width: max(100%, 100%);
+  background-color: $white;
+  border: none;
+  color: $main800;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: $fontFamily;
+  border-bottom: 1px solid $main800;
+}
+.buttonActiveIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+  padding-top: 5px;
+  color: $white;
+}
