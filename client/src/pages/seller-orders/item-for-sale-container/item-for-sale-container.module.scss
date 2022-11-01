@@ -179,3 +179,17 @@
   height: max(20px, 20px);
   color: inherit;
 }
+.tagText {
+  font-size: toRem(12);
+  font-family: $fontFamily;
+  color: $main800;
+  padding: 0px;
+  margin: 0px;
+}
+.selectedTagsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max(100%, 100%);
+  gap: 10px;
+}

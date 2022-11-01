@@ -54,6 +54,7 @@ const SellerOrdersPage = () => {
         }
       });
   };
+
   for (let i = 0; i < tempSellerOrders.length; i++) {
     if (tempSellerOrders[i].status === "Fulfilled") {
       fulfilledOrders.push(tempSellerOrders[i]);
@@ -81,6 +82,7 @@ const SellerOrdersPage = () => {
             productTitle={sellerData.foundProducts[dataIndex].title}
             productPriceType={sellerData.foundProducts[dataIndex].priceType}
             productId={sellerData.foundProducts[dataIndex].productId}
+            productTags={sellerData.foundProducts[dataIndex].productTags}
             index={dataIndex}
             key={keyId}
           />

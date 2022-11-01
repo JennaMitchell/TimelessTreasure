@@ -9,6 +9,7 @@ import MarkplaceMenuTag from "../markplace-menu-components/tags/marketplace-menu
 import CategoryFilterDropdown from "../markplace-menu-components/category-filter-dropdown/category-filter-dropdown";
 import { capitalizeFirstLetter } from "../../../utilities/generic-hooks/generic-hooks";
 import productTypeSubSelection from "../../../utilities/product-type-sub-selection";
+import { marketplaceStoreActions } from "../../../store/marketplace";
 const MarketplaceMenu = () => {
   const dispatch = useAppDispatch();
   const [searchContainerActive, setSearchContainerActive] = useState(false);
@@ -17,18 +18,21 @@ const MarketplaceMenu = () => {
   const [recentlyViewedActive, setRecentlyViewedActive] = useState(false);
   const [priceRangeActive, setPriceRangeActive] = useState(false);
 
+  const activeTags = useAppSelector((state) => state.marketStore.activeTags);
+
   const [searchLabelMoveout, setSearchLabelMoveout] = useState(false);
   const [searchInputData, setSearchInputData] = useState("");
   const [searchInputActive, setSearchInputActive] = useState(false);
-  const [activeTags, setActiveTags] = useState<string[]>([]);
+
   const [activeFilterDropdown, setActiveFilterDropdown] = useState("");
 
   const tagClickedHandler = (targetId: string) => {
-    const copyOfActiveTags = activeTags.slice();
+    const copyOfActiveTags: string[] = activeTags.slice();
 
     const indexOfTagToRemove = copyOfActiveTags.indexOf(targetId);
     copyOfActiveTags.splice(indexOfTagToRemove, 1);
-    setActiveTags(copyOfActiveTags);
+
+    dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
   };
 
   const dropdownClickedButtonRetriever = (
@@ -63,15 +67,15 @@ const MarketplaceMenu = () => {
       const indexOfItemToRemove = copyOfActiveTags.indexOf(filterClicked);
       copyOfActiveTags.splice(indexOfItemToRemove, 1);
 
-      setActiveTags(copyOfActiveTags);
+      dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
     } else {
       const indexOfItem = copyOfActiveTags.indexOf(filterClicked);
       if (indexOfItem === -1) {
         copyOfActiveTags.push(filterClicked);
-        setActiveTags(copyOfActiveTags);
+        dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
       } else {
         copyOfActiveTags.splice(indexOfItem, 1);
-        setActiveTags(copyOfActiveTags);
+        dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
       }
     }
   };
@@ -84,8 +88,8 @@ const MarketplaceMenu = () => {
     const categorySelected = capitalizeFirstLetter(
       targetId.slice(0, indexOfDash)
     );
-    setActiveTags([categorySelected]);
 
+    dispatch(marketplaceStoreActions.setActiveTags([categorySelected]));
     if (activeFilterDropdown === categorySelected) {
       setActiveFilterDropdown("");
     } else {
@@ -109,8 +113,11 @@ const MarketplaceMenu = () => {
   ];
   useEffect(() => {
     if (navMenuSubCategoryClicked.length !== 0) {
-      setActiveTags(navMenuSubCategoryClicked);
-      dispatch(mainStoreSliceActions.setNavMenuSubCategoryClicked([]));
+      dispatch(
+        mainStoreSliceActions.setNavMenuSubCategoryClicked(
+          navMenuSubCategoryClicked
+        )
+      );
     }
   }, [navMenuSubCategoryClicked]);
 
@@ -142,7 +149,7 @@ const MarketplaceMenu = () => {
       copyOfActiveTags.push(priceRange);
     }
 
-    setActiveTags(copyOfActiveTags);
+    dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
   };
 
   const renderReadyPriceRanges = priceRanges.map((range) => {
@@ -272,11 +279,12 @@ const MarketplaceMenu = () => {
       </button>
       {activeTagsActive && (
         <div className={classes.tagBlock}>
-          {activeTags.map((title: string) => {
+          {activeTags.map((title: string, index: number) => {
             return (
               <MarkplaceMenuTag
                 tagName={title}
                 clickHandler={tagClickedHandler}
+                key={`active-tags-${index}`}
               ></MarkplaceMenuTag>
             );
           })}

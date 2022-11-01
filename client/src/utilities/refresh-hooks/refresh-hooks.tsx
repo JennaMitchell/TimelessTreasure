@@ -20,4 +20,5 @@ export const clearActivePopups = (dispatch: any) => {
   dispatch(mainStoreSliceActions.setForgotPasswordPopupActive(false));
   dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
   dispatch(mainStoreSliceActions.setLoggedInDropDownActive(false));
+  dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
 };

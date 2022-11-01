@@ -153,7 +153,7 @@ const CategoryFilterDropdown = ({ productType, dataRetriever }: Props) => {
   if (renderReadyDropDowns.length === 0) {
     return <div></div>;
   } else {
-    return <>{renderReadyDropDowns} </>;
+    return <>{renderReadyDropDowns}</>;
   }
 };
 export default CategoryFilterDropdown;

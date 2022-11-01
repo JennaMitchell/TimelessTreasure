@@ -97,13 +97,6 @@ const TablewearDropDown = ({ mouseEnterHandler, mouseLeaveHandler }: Props) => {
         </button>
         <button
           className={classes.productButton}
-          id="tablewear-earthenware-nav-button"
-          onClick={navButtonHandler}
-        >
-          Earthenware
-        </button>
-        <button
-          className={classes.productButton}
           id="tablewear-porcelain-nav-button"
           onClick={navButtonHandler}
         >

@@ -13,6 +13,7 @@ interface Props {
   productQty: string;
   productId: string;
   index: number;
+  productTags: string[];
 }
 const ItemForSaleContainer = ({
   productImage,
@@ -21,6 +22,7 @@ const ItemForSaleContainer = ({
   productQty,
   productPriceType,
   productId,
+  productTags,
 }: Props) => {
   const keyId = keyIdGenerator();
   const productImageUrl = "http://localhost:5000/" + productImage;
@@ -29,9 +31,7 @@ const ItemForSaleContainer = ({
   const deletePostPopup = useAppSelector(
     (state) => state.mainStore.deletePostPopup
   );
-  const editPostPopup = useAppSelector(
-    (state) => state.mainStore.editPostPopup
-  );
+
   const activeEditPostPopupId = useAppSelector(
     (state) => state.mainStore.activeEditPostPopupId
   );
@@ -39,6 +39,17 @@ const ItemForSaleContainer = ({
   if (productPriceType === "USD" || productPriceType === "CAD") {
     tempPrice = "$" + productPrice;
   }
+
+  const renderReadyTags = productTags.map((tag: string) => {
+    return (
+      <p
+        className={classes.tagText}
+        key={`tag-${tag}-${productTitle}-${productId}`}
+      >
+        {tag}
+      </p>
+    );
+  });
 
   const deleteButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(true));
@@ -59,8 +70,11 @@ const ItemForSaleContainer = ({
         src={productImageUrl}
       />
       <p className={classes.productTitle}>{productTitle}</p>
+      <div className={classes.selectedTagsContainer}>{renderReadyTags}</div>
       <p className={classes.productPrice}>{tempPrice}</p>
+
       <p className={classes.quantity}>Qty. {productQty}</p>
+
       <div className={classes.buttonControlsContainer}>
         <button className={classes.actionButton} onClick={editButtonHandler}>
           <PencilSquareIcon className={classes.buttonIcon} />

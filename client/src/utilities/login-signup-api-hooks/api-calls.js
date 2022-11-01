@@ -38,6 +38,6 @@ export const logoutHandler = (dispatch, navigate) => {
   localStorage.removeItem("token");
   localStorage.removeItem("expiryDate");
   localStorage.removeItem("userId");
-  navigate("/");
   clearUserStateData(dispatch);
+  navigate("/");
 };

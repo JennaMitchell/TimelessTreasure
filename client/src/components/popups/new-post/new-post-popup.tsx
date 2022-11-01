@@ -10,6 +10,7 @@ import { newProductCall } from "../../../utilities/product-api-hooks/seller-prod
 import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
 import { priceValidator } from "../../../utilities/validation-hooks/validation-hooks";
 import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
+import { userStoreSliceActions } from "../../../store/user-store";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
@@ -22,17 +23,26 @@ interface SelectedTypes {
 const NewPostPopup = () => {
   const imageInputRef = useRef(null);
   const dispatch = useAppDispatch();
+  const sellerNewPostTags = useAppSelector(
+    (state) => state.userStore.sellerNewPostTags
+  );
+
   const closingIconHandler = () => {
-    setProductType("Ceramics");
-    dispatch(mainStoreSliceActions.setPostPopupType("Ceramics"));
+    dispatch(userStoreSliceActions.setSellerNewPostPriceType("USD"));
+    dispatch(userStoreSliceActions.setSellerNewPostProductCategory("Ceramics"));
+    dispatch(userStoreSliceActions.setSellerNewPostTags({}));
     dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
     dispatch(mainStoreSliceActions.setLockViewPort(false));
+    setProductQuantity(1);
   };
   const newPostPopupActive = useAppSelector(
     (state) => state.mainStore.newPostPopupActive
   );
-  const postPopupType = useAppSelector(
-    (state) => state.mainStore.postPopupType
+  const sellerNewPostProductCategory = useAppSelector(
+    (state) => state.userStore.sellerNewPostProductCategory
+  );
+  const sellerNewPostPriceType = useAppSelector(
+    (state) => state.userStore.sellerNewPostPriceType
   );
 
   const userId = useAppSelector((state) => state.userStore.userId);
@@ -47,7 +57,6 @@ const NewPostPopup = () => {
   ];
 
   const [initialRender, setInitialRender] = useState(false);
-  const [productType, setProductType] = useState("Ceramics");
 
   const [productQuantity, setProductQuantity] = useState(1);
   const maxQuantity = 99;
@@ -96,13 +105,15 @@ const NewPostPopup = () => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     e.preventDefault();
-    setProductType(e.target.value);
+    dispatch(
+      userStoreSliceActions.setSellerNewPostProductCategory(e.target.value)
+    );
   };
   const priceTypeSelectionHandler = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     e.preventDefault();
-    dispatch(mainStoreSliceActions.setPostPopupType(e.target.value));
+    dispatch(userStoreSliceActions.setSellerNewPostPriceType(e.target.value));
   };
 
   useEffect(() => {
@@ -183,7 +194,7 @@ const NewPostPopup = () => {
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const data = productTypeSubSelection[productType];
+    const data = productTypeSubSelection[sellerNewPostProductCategory];
     const dataKeys = Object.keys(data);
     const dataValues = Object.values(data);
 
@@ -222,7 +233,7 @@ const NewPostPopup = () => {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
     }
-    if (!acceptedProductTypes.includes(productType)) {
+    if (!acceptedProductTypes.includes(sellerNewPostProductCategory)) {
       dispatch(
         mainStoreSliceActions.setAPICallMessage("Invalid Product Type!")
       );
@@ -233,7 +244,7 @@ const NewPostPopup = () => {
 
     if (imageInputRef.current !== null) {
       const imageInput = imageInputRef.current as HTMLInputElement;
-      console.log(imageInput.value.length);
+
       if (imageInput?.files !== null) {
         formData.append("image", imageInput.files[0]);
       }
@@ -244,21 +255,34 @@ const NewPostPopup = () => {
       }
     }
 
-    formData.append("tags", JSON.stringify(dropDownSelectedTypes));
-
     formData.append("title", inputLogicObject.titlePostInput.inputData);
     formData.append(
       "price",
       priceInputCleaner(inputLogicObject.pricePostInput.inputData)
     );
+    console.log(productQuantity);
+    console.log(sellerNewPostProductCategory);
+    console.log(Object.values(sellerNewPostTags));
+
+    console.log(JSON.stringify(Object.values(sellerNewPostTags)));
     formData.append("quantity", JSON.stringify(productQuantity));
-    formData.append("priceType", postPopupType);
-    formData.append("productType", productType);
+    formData.append("priceType", sellerNewPostPriceType);
+    formData.append("productType", sellerNewPostProductCategory);
+    formData.append(
+      "productTags",
+      JSON.stringify(Object.values(sellerNewPostTags))
+    );
 
     const productId = keyIdGenerator();
     formData.append("productId", productId);
     formData.append("userId", userId);
     formData.append("status", "For Sale");
+    const today = new Date();
+    const utc = today.toUTCString();
+    const indexOfUtcComma = utc.indexOf(",");
+    const utcSliced = utc.slice(indexOfUtcComma + 1).trim();
+
+    formData.append("date", utcSliced);
 
     newProductCall(dispatch, formData, userToken)
       .then((data) => {
@@ -273,6 +297,10 @@ const NewPostPopup = () => {
         } else {
           dispatch(mainStoreSliceActions.setAPICallMessage("Product Uploaded"));
           dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          dispatch(userStoreSliceActions.setSellerNewPostPriceType("USD"));
+          dispatch(
+            userStoreSliceActions.setSellerNewPostProductCategory("Ceramics")
+          );
           closingIconHandler();
         }
       });
@@ -319,6 +347,7 @@ const NewPostPopup = () => {
                 onChange={inputChangeHandler}
                 onBlur={inputBlurHandler}
                 onFocus={inputFocusHandler}
+                maxLength={30}
               />
             </div>
             <div
@@ -354,6 +383,7 @@ const NewPostPopup = () => {
                 onChange={inputChangeHandler}
                 onBlur={inputBlurHandler}
                 onFocus={inputFocusHandler}
+                maxLength={6}
               />
             </div>
             <div className={classes.productContainer}>
@@ -379,9 +409,9 @@ const NewPostPopup = () => {
               </select>
             </div>
 
-            {productType.length !== 0 && (
+            {sellerNewPostProductCategory.length !== 0 && (
               <NewPostSelectionDropdrop
-                productType={productType}
+                productType={sellerNewPostProductCategory}
                 returnFunction={dropDownSelectionHandler}
               />
             )}

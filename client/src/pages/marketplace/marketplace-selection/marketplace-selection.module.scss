@@ -51,3 +51,14 @@
   margin: 0px;
   padding: 0px;
 }
+.tempButton {
+  position: fixed;
+  padding: 10px 20px;
+  top: 300px;
+  left: 10px;
+  background-color: $main800;
+  color: $white;
+  display: flex;
+  place-items: center;
+  font-size: toRem(32);
+}

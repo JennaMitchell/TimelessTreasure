@@ -1,3 +1,4 @@
+import { marketplaceStoreActions } from "../../store/marketplace";
 import { mainStoreSliceActions } from "../../store/store";
 
 export const priceInputCleaner = (price: string) => {
@@ -79,7 +80,7 @@ export const dropDownNavCategoryHandler = (
   }
 
   dispatch(
-    mainStoreSliceActions.setNavMenuSubCategoryClicked([
+    marketplaceStoreActions.setActiveTags([
       capitalizeFirstLetter(categoryType),
       productType,
     ])

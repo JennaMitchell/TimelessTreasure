@@ -1,7 +1,29 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
 import { userStoreSlice } from "./user-store";
+import { marketplaceStoreSlice } from "./marketplace";
 
-const initialState = {
+interface State {
+  activePage: string;
+  loginPopupActive: boolean;
+  signupPopupActive: boolean;
+  lockViewport: boolean;
+  userAuthenticated: boolean;
+  authenticationLoading: boolean;
+  apiCallMessage: string;
+  apiCallMessageType: string;
+  apiCallDropDownMove: boolean;
+  apiCallDropdownActive: boolean;
+  forgotPasswordPopupActive: boolean;
+  loggedInDropDownActive: boolean;
+  newPostPopupActive: boolean;
+
+  deletePostPopup: boolean;
+  editPostPopup: boolean;
+  activeEditPostPopupId: string;
+  navMenuSubCategoryClicked: string[];
+}
+
+const initialState: State = {
   activePage: "Home",
   loginPopupActive: false,
   signupPopupActive: false,
@@ -15,7 +37,7 @@ const initialState = {
   forgotPasswordPopupActive: false,
   loggedInDropDownActive: false,
   newPostPopupActive: false,
-  postPopupType: "Cermaics",
+
   deletePostPopup: false,
   editPostPopup: false,
   activeEditPostPopupId: "",
@@ -65,9 +87,7 @@ const mainStoreSlice = createSlice({
     setNewPostPopupActive(state, { payload }) {
       state.newPostPopupActive = payload;
     },
-    setPostPopupType(state, { payload }) {
-      state.postPopupType = payload;
-    },
+
     setDeletePostPopup(state, { payload }) {
       state.deletePostPopup = payload;
     },
@@ -86,6 +106,7 @@ const store = configureStore({
   reducer: {
     mainStore: mainStoreSlice.reducer,
     userStore: userStoreSlice.reducer,
+    marketStore: marketplaceStoreSlice.reducer,
   },
 });
 

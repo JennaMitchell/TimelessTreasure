@@ -7,12 +7,14 @@ const isAuth = require("../middlewear/is-auth");
 const productController = require("../controllers/product");
 const sellerController = require("../controllers/seller");
 // const loggedInAuth = require("../middlewear/loggedin-auth");
-
+const { productTypeSubSelection } = require("../utilities/product-types");
 router.get(
   "/seller-items-for-sale/:sellerId",
   isAuth,
   sellerController.getAllSellerData
 );
+
+router.get("/filter/:filter", productController.getFilteredData);
 
 router.delete("/delete", isAuth, productController.deletePost);
 router.patch(
@@ -77,49 +79,8 @@ router.post(
         }
         return true;
       }),
-    body("tags").custom((value, { req }) => {
+    body("productTags").custom((value, { req }) => {
       const productType = req.body.productType;
-      const productTypeSubSelection = {
-        Ceramics: {
-          Types: [
-            "Earthware",
-            "Stoneware",
-            "Porcelian",
-            "Bone China",
-            "Fire Bricks",
-          ],
-        },
-        Clocks: {
-          Type: ["Wall", "Pendulum", "Mantel", "Alarm", "Cuckoo"],
-          Size: ["Small", "Medium", "Large", "Oversized"],
-          Style: ["Digital", "Analog"],
-        },
-        Tablewear: {
-          Type: ["Serveware", "Dinnerware", "Silverware", "Drinkware"],
-          Sets: ["4 Sets", "6 Sets", "8 Sets"],
-          Material: [
-            "Bone China",
-            "Silver",
-            "Earthenware",
-            "Porcelain",
-            "Melamine",
-            "Stoneware",
-          ],
-        },
-        Paintings: {
-          Type: [
-            "Realism",
-            "Photorealism",
-            "Abstract",
-            "Surrealism",
-            "Pop Art",
-            "Oil",
-          ],
-        },
-        Electronics: {
-          Type: ["Cameras", "Games", "Media Players", "DvDs", "CDs"],
-        },
-      };
       const acceptedProductObject = productTypeSubSelection[productType];
       const acceptedProductTypesArray = Object.values(acceptedProductObject);
       const acceptedProductTypes = [];

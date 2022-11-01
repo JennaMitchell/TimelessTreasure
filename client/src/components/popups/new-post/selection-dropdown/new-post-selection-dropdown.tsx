@@ -6,6 +6,9 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { userStoreSliceActions } from "../../../../store/user-store";
+
 interface SelectedItem {
   [key: string]: string;
 }
@@ -17,8 +20,13 @@ interface Props {
 const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
   const [activeDropdowns, setActiveDropdowns] = useState<boolean[]>([]);
 
-  const [selectedTags, setSelectedTags] = useState<SelectedItem>({});
+  const sellerNewPostTags = useAppSelector(
+    (state) => state.userStore.sellerNewPostTags
+  );
+  const dispatch = useAppDispatch();
+
   const [savedProductType, setSavedProductType] = useState(productType);
+  const [initialRender, setInitialRender] = useState(false);
   const productTypes = Object.keys(productTypeSubSelection);
   const productData = Object.values(productTypeSubSelection);
   const indexOfProductType = productTypes.indexOf(productType);
@@ -46,14 +54,15 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
     const indexOfSecondDash = cutArray.indexOf("-");
     const type = cutArray.slice(0, indexOfSecondDash);
 
-    let copyOfSelectedTags = JSON.parse(JSON.stringify(selectedTags));
+    let copyOfSelectedTags = JSON.parse(JSON.stringify(sellerNewPostTags));
 
     if (copyOfSelectedTags[type] === selectedItem) {
       copyOfSelectedTags[type] = "";
     } else {
       copyOfSelectedTags[type] = selectedItem;
     }
-    setSelectedTags(copyOfSelectedTags);
+    dispatch(userStoreSliceActions.setSellerNewPostTags(copyOfSelectedTags));
+
     returnFunction(copyOfSelectedTags);
   };
 
@@ -73,7 +82,7 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
             id={`${dataArray[q]}-${typeTitle}-${q}-checkmark-container`}
             onClick={checkBoxHandler}
           >
-            {selectedTags[typeTitle] === dataArray[q] && (
+            {sellerNewPostTags[typeTitle] === dataArray[q] && (
               <CheckIcon
                 className={classes.checkIcon}
                 id={`${dataArray[q]}-${typeTitle}-${q}-checkmark`}
@@ -93,7 +102,13 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
 
   if (productType !== savedProductType) {
     setActiveDropdowns([]);
-    setSelectedTags({});
+
+    if (!initialRender) {
+      setInitialRender(true);
+    } else {
+      dispatch(userStoreSliceActions.setSellerNewPostTags({}));
+    }
+
     setSavedProductType(productType);
   }
 
@@ -104,7 +119,11 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
 
       if (r === selectedDataTypes.length - 1) {
         setActiveDropdowns(tempInitialLogicObject);
-        setSelectedTags(tempLogicObject);
+        if (!initialRender) {
+          setInitialRender(true);
+        } else {
+          dispatch(userStoreSliceActions.setSellerNewPostTags(tempLogicObject));
+        }
         setSavedProductType(productType);
       }
     }
