@@ -5,6 +5,12 @@ import DeletePostPopup from "../../../components/popups/delete-post/delete-post-
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import EditPostPopup from "../../../components/popups/edit-post/edit-post-popup";
+
+import {
+  imageUrlCreator,
+  priceStringCreator,
+  closeApiMessageDropDown,
+} from "../../../utilities/generic-hooks/generic-hooks";
 interface Props {
   productImage: string;
   productTitle: string;
@@ -14,6 +20,7 @@ interface Props {
   productId: string;
   index: number;
   productTags: string[];
+  productDescription: string;
 }
 const ItemForSaleContainer = ({
   productImage,
@@ -23,9 +30,10 @@ const ItemForSaleContainer = ({
   productPriceType,
   productId,
   productTags,
+  productDescription,
 }: Props) => {
   const keyId = keyIdGenerator();
-  const productImageUrl = "http://localhost:5000/" + productImage;
+  const productImageUrl = imageUrlCreator(productImage);
 
   const dispatch = useAppDispatch();
   const deletePostPopup = useAppSelector(
@@ -35,10 +43,7 @@ const ItemForSaleContainer = ({
   const activeEditPostPopupId = useAppSelector(
     (state) => state.mainStore.activeEditPostPopupId
   );
-  let tempPrice = "";
-  if (productPriceType === "USD" || productPriceType === "CAD") {
-    tempPrice = "$" + productPrice;
-  }
+  const tempPrice = priceStringCreator(productPrice, productPriceType);
 
   const renderReadyTags = productTags.map((tag: string) => {
     return (
@@ -54,12 +59,14 @@ const ItemForSaleContainer = ({
   const deleteButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(true));
     dispatch(mainStoreSliceActions.setDeletePostPopup(true));
+    closeApiMessageDropDown(dispatch);
   };
 
   const editButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(true));
     dispatch(mainStoreSliceActions.setEditPostPopup(true));
     dispatch(mainStoreSliceActions.setActiveEditPostPopupId(productId));
+    closeApiMessageDropDown(dispatch);
   };
 
   return (
@@ -93,6 +100,7 @@ const ItemForSaleContainer = ({
             productQty={productQty}
             productPriceType={productPriceType}
             productId={productId}
+            productDescription={productDescription}
           />
         )}
       </div>

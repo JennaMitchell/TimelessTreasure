@@ -7,6 +7,11 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import { priceValidator } from "../../../utilities/validation-hooks/validation-hooks";
 import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
+import {
+  imageUrlCreator,
+  priceStringCreator,
+} from "../../../utilities/generic-hooks/generic-hooks";
+import Spinner from "../../spinner/spinner";
 interface Props {
   productImage: string;
   productTitle: string;
@@ -14,6 +19,7 @@ interface Props {
   productPriceType: string;
   productQty: string;
   productId: string;
+  productDescription: string;
 }
 interface LogicObject {
   [key: string]: {
@@ -28,12 +34,11 @@ const EditPostPopup = ({
   productPriceType,
   productQty,
   productId,
+  productDescription,
 }: Props) => {
-  const productImageUrl = "http://localhost:5000/" + productImage;
-  let tempPrice = "";
-  if (productPriceType === "USD" || productPriceType === "CAD") {
-    tempPrice = "$" + productPrice;
-  }
+  const productImageUrl = imageUrlCreator(productImage);
+  let tempPrice = priceStringCreator(productPrice, productPriceType);
+
   const closeHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(false));
     dispatch(mainStoreSliceActions.setEditPostPopup(false));
@@ -42,6 +47,7 @@ const EditPostPopup = ({
   const dispatch = useAppDispatch();
   const [selectedPriceType, setSelectedPrice] = useState(productPriceType);
   const [selectedQuantity, setSelectedQuantity] = useState(productQty);
+  const [submitButtonClicked, setSubmitButtonClicked] = useState(false);
   const userId = useAppSelector((state) => state.userStore.userId);
   const newImageRef = useRef(null);
   const userToken = useAppSelector((state) => state.userStore.userToken);
@@ -79,6 +85,10 @@ const EditPostPopup = ({
     priceEditPostInput: {
       labelMoveout: false,
       inputData: tempPrice,
+    },
+    descriptionPostInput: {
+      labelMoveout: false,
+      inputData: productDescription,
     },
   });
 
@@ -174,6 +184,13 @@ const EditPostPopup = ({
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
     }
+    if (inputLogicObject.descriptionPostInput.inputData.trim().length === 0) {
+      dispatch(
+        mainStoreSliceActions.setAPICallMessage("Please enter a description!")
+      );
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      return;
+    }
 
     const newFormData = new FormData();
     newFormData.append("quantity", selectedQuantity);
@@ -185,29 +202,39 @@ const EditPostPopup = ({
     newFormData.append("productId", productId);
     newFormData.append("priceType", selectedPriceType);
     newFormData.append("userId", userId);
+    newFormData.append(
+      "description",
+      inputLogicObject.descriptionPostInput.inputData
+    );
     if (newImageRef.current !== null) {
       const imageInput = newImageRef.current as HTMLInputElement;
       if (imageInput?.files !== null && imageInput.value.length !== 0) {
         newFormData.append("image", imageInput.files[0]);
       }
     }
-
-    updateProductCall(dispatch, newFormData, userToken)
-      .then((data) => {
-        return data?.json();
-      })
-      .then((jsonData) => {
-        if ("error" in jsonData) {
-          if (jsonData.error.length !== 0) {
-            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
-            dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+    setSubmitButtonClicked(true);
+    setTimeout(() => {
+      updateProductCall(dispatch, newFormData, userToken)
+        .then((data) => {
+          return data?.json();
+        })
+        .then((jsonData) => {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              setSubmitButtonClicked(false);
+            }
+          } else {
+            dispatch(mainStoreSliceActions.setAPICallMessage("Product Edited"));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+            setSubmitButtonClicked(false);
+            closeHandler();
           }
-        } else {
-          dispatch(mainStoreSliceActions.setAPICallMessage("Product Edited"));
-          dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
-          closeHandler();
-        }
-      });
+        });
+    }, 3000);
   };
 
   return (
@@ -282,6 +309,28 @@ const EditPostPopup = ({
             onFocus={inputFocusHandler}
           />
         </div>
+        <div className={classes.descriptionContainer}>
+          <label
+            htmlFor="descriptionPostInput"
+            className={classes.descriptionLabel}
+          >
+            Description
+          </label>
+          <textarea
+            id="descriptionPostInput"
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            onFocus={inputFocusHandler}
+            maxLength={200}
+            rows={3}
+            cols={33}
+            className={classes.descriptionInput}
+            defaultValue={productDescription}
+          />
+          <p className={classes.characterRemainingText}>
+            {inputLogicObject.descriptionPostInput.inputData.length}/200
+          </p>
+        </div>
         <div className={classes.quantityInputContainer}>
           <label
             className={`${classes.quantityLabel}`}
@@ -299,17 +348,19 @@ const EditPostPopup = ({
           </select>
         </div>
 
-        <div className={classes.actionButtonsContainer}>
-          <button
-            className={classes.actionButton}
-            onClick={confirmButtonHandler}
-          >
-            Confirm
-          </button>
-          <button className={classes.actionButton} onClick={closeHandler}>
-            Return
-          </button>
-        </div>
+        <button
+          className={classes.actionButton}
+          onClick={confirmButtonHandler}
+          id="confirm-edit-post-button"
+        >
+          {submitButtonClicked && (
+            <Spinner
+              initialRender={true}
+              parentButtonId={"confirm-edit-post-button"}
+            />
+          )}
+          {!submitButtonClicked && "Confirm"}
+        </button>
       </div>
     </div>
   );

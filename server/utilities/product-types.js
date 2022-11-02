@@ -16,7 +16,7 @@ const productTypeSubSelectionObject = {
   Tablewear: {
     Type: ["Serveware", "Dinnerware", "Silverware", "Drinkware"],
     Sets: ["4 Sets", "6 Sets", "8 Sets"],
-    Material: ["Bone China", "Silver", "Porcelain", "Melamine", "Stoneware"],
+    Material: ["Bone China", "Silver", "Porcelain", "Melamine"],
   },
   Paintings: {
     Type: [

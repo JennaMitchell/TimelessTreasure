@@ -51,6 +51,7 @@
   max-height: max-content;
   position: relative;
 }
+
 .inputPriceContainer {
   width: max(332.5px, 332.5px);
   height: max-content;
@@ -101,12 +102,13 @@
 .priceInputLabel {
   left: 20%;
 }
-.userInput {
+.titleInput {
   height: max(40px, 40px);
   width: max(320px, 320px);
   padding-left: 10px;
   border-radius: 5px;
   border: 1px solid black;
+  font-family: $fontFamily;
 }
 .priceInput {
   height: max(40px, 40px);
@@ -135,7 +137,7 @@
   left: 5px;
   padding: 0px 5px;
   background-color: $white;
-  font-size: 12px;
+  font-size: toRem(12);
 }
 .tagsContainer {
   display: flex;
@@ -261,4 +263,45 @@
 .closingIcon {
   width: max(20px, 20px);
   height: max(20px, 20px);
+}
+.activeInputContainer {
+  outline: 1px solid blue;
+}
+.descriptionContainer {
+  max-height: max-content;
+  width: max-content;
+  position: relative;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.descriptionLabel {
+  top: 5px;
+  left: 15px;
+  padding: 0px 5px;
+  background-color: $white;
+  font-size: toRem(12);
+  line-height: toRem(12);
+  position: absolute;
+}
+.descriptionInput {
+  width: max(330px, 330px);
+  max-height: max-content;
+  justify-self: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: $fontFamily;
+  font-size: toRem(14);
+}
+.characterRemainingText {
+  color: grey;
+  max-width: max-content;
+  max-height: max-content;
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  bottom: 15px;
+  right: 25px;
+  font-size: toRem(12);
 }

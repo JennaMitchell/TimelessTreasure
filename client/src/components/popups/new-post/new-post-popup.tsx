@@ -27,6 +27,7 @@ const NewPostPopup = () => {
     (state) => state.userStore.sellerNewPostTags
   );
 
+  const [priceInputFocused, setPriceInputFocused] = useState(false);
   const closingIconHandler = () => {
     dispatch(userStoreSliceActions.setSellerNewPostPriceType("USD"));
     dispatch(userStoreSliceActions.setSellerNewPostProductCategory("Ceramics"));
@@ -95,6 +96,10 @@ const NewPostPopup = () => {
       labelMoveout: false,
       inputData: "",
     },
+    descriptionPostInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
   });
 
   const apiCallMessageType = useAppSelector(
@@ -151,6 +156,9 @@ const NewPostPopup = () => {
         !copyOfInputObject[targetElement.id].labelMoveout;
       setInputLogicObject(copyOfInputObject);
     }
+    if (targetElement.id === "pricePostInput") {
+      setPriceInputFocused(true);
+    }
   };
   const inputBlurHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLInputElement;
@@ -159,6 +167,9 @@ const NewPostPopup = () => {
       copyOfInputObject[targetElement.id].labelMoveout =
         !copyOfInputObject[targetElement.id].labelMoveout;
       setInputLogicObject(copyOfInputObject);
+    }
+    if (targetElement.id === "pricePostInput") {
+      setPriceInputFocused(false);
     }
   };
 
@@ -254,17 +265,20 @@ const NewPostPopup = () => {
         return;
       }
     }
+    if (inputLogicObject.descriptionPostInput.inputData.trim().length === 0) {
+      dispatch(
+        mainStoreSliceActions.setAPICallMessage("Please add a description.")
+      );
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      return;
+    }
 
     formData.append("title", inputLogicObject.titlePostInput.inputData);
     formData.append(
       "price",
       priceInputCleaner(inputLogicObject.pricePostInput.inputData)
     );
-    console.log(productQuantity);
-    console.log(sellerNewPostProductCategory);
-    console.log(Object.values(sellerNewPostTags));
 
-    console.log(JSON.stringify(Object.values(sellerNewPostTags)));
     formData.append("quantity", JSON.stringify(productQuantity));
     formData.append("priceType", sellerNewPostPriceType);
     formData.append("productType", sellerNewPostProductCategory);
@@ -277,6 +291,10 @@ const NewPostPopup = () => {
     formData.append("productId", productId);
     formData.append("userId", userId);
     formData.append("status", "For Sale");
+    formData.append(
+      "description",
+      inputLogicObject.descriptionPostInput.inputData
+    );
     const today = new Date();
     const utc = today.toUTCString();
     const indexOfUtcComma = utc.indexOf(",");
@@ -340,7 +358,7 @@ const NewPostPopup = () => {
                 Title
               </label>
               <input
-                className={`${classes.userInput} ${
+                className={`${classes.titleInput} ${
                   apiCallMessageType === "ERROR" && classes.inputError
                 }`}
                 id="titlePostInput"
@@ -353,7 +371,7 @@ const NewPostPopup = () => {
             <div
               className={`${classes.inputPriceContainer} ${
                 apiCallMessageType === "ERROR" && classes.inputError
-              }`}
+              } ${priceInputFocused && classes.activeInputContainer}`}
             >
               <select
                 className={`${classes.priceSelectContainer} ${
@@ -385,6 +403,27 @@ const NewPostPopup = () => {
                 onFocus={inputFocusHandler}
                 maxLength={6}
               />
+            </div>
+            <div className={classes.descriptionContainer}>
+              <label
+                htmlFor="descriptionPostInput"
+                className={classes.descriptionLabel}
+              >
+                Description
+              </label>
+              <textarea
+                id="descriptionPostInput"
+                onChange={inputChangeHandler}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
+                maxLength={200}
+                rows={3}
+                cols={33}
+                className={classes.descriptionInput}
+              />
+              <p className={classes.characterRemainingText}>
+                {inputLogicObject.descriptionPostInput.inputData.length}/200
+              </p>
             </div>
             <div className={classes.productContainer}>
               Product Type:

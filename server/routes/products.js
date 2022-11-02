@@ -8,6 +8,8 @@ const productController = require("../controllers/product");
 const sellerController = require("../controllers/seller");
 // const loggedInAuth = require("../middlewear/loggedin-auth");
 const { productTypeSubSelection } = require("../utilities/product-types");
+
+router.get("/get-all", productController.getAllProduct);
 router.get(
   "/seller-items-for-sale/:sellerId",
   isAuth,
@@ -23,6 +25,7 @@ router.patch(
   [
     body("title").trim().not().isEmpty(),
     body("price").trim().not().isEmpty(),
+    body("description").trim().not().isEmpty(),
     body("productId")
       .trim()
       .not()
@@ -49,6 +52,7 @@ router.post(
     body("priceType").trim().not().isEmpty(),
     body("userId").trim().not().isEmpty(),
     body("quantity").trim().not().isEmpty(),
+    body("description").trim().not().isEmpty(),
     body("productId")
       .trim()
       .not()

@@ -16,11 +16,11 @@ interface State {
   forgotPasswordPopupActive: boolean;
   loggedInDropDownActive: boolean;
   newPostPopupActive: boolean;
-
   deletePostPopup: boolean;
   editPostPopup: boolean;
   activeEditPostPopupId: string;
   navMenuSubCategoryClicked: string[];
+  productPopupActive: boolean;
 }
 
 const initialState: State = {
@@ -37,11 +37,11 @@ const initialState: State = {
   forgotPasswordPopupActive: false,
   loggedInDropDownActive: false,
   newPostPopupActive: false,
-
   deletePostPopup: false,
   editPostPopup: false,
   activeEditPostPopupId: "",
   navMenuSubCategoryClicked: [],
+  productPopupActive: false,
 };
 
 const mainStoreSlice = createSlice({
@@ -87,7 +87,6 @@ const mainStoreSlice = createSlice({
     setNewPostPopupActive(state, { payload }) {
       state.newPostPopupActive = payload;
     },
-
     setDeletePostPopup(state, { payload }) {
       state.deletePostPopup = payload;
     },
@@ -99,6 +98,9 @@ const mainStoreSlice = createSlice({
     },
     setNavMenuSubCategoryClicked(state, { payload }) {
       state.navMenuSubCategoryClicked = payload;
+    },
+    setProductPopupActive(state, { payload }) {
+      state.productPopupActive = payload;
     },
   },
 });

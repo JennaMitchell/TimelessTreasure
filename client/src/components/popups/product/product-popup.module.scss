@@ -1,0 +1,139 @@
+@import "../../../utilities/variables";
+.popupBackground {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: $popupBackdropZIndex;
+  position: fixed;
+  width: max(100vw, 100vw);
+  height: max(100vh, 100vh);
+  display: grid;
+  place-items: center;
+  top: 0px;
+  left: 0px;
+  border: 0px;
+}
+.popupMainContainer {
+  width: max(400px, 400px);
+  max-height: max-content;
+  background-color: white;
+  position: relative;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  z-index: $popupZIndex;
+  gap: 10px;
+  padding-left: 10px;
+}
+.priceText {
+  width: max-content;
+  max-width: max-content;
+  max-height: max-content;
+  padding: 0px;
+  margin: 0px;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  color: $main800;
+}
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
+  width: max(100%, 100%);
+  box-sizing: border-box;
+  padding: 5px;
+  height: max(100%, 100%);
+}
+.productTitle {
+  max-width: 100%;
+  padding: 0px;
+  margin: 0px;
+  font-size: toRem(32);
+  color: $main800;
+  font-family: $fontFamily;
+  text-align: center;
+  line-height: toRem(32);
+  padding-top: 10px;
+}
+.decorImage {
+  width: max(160px, 160px);
+  object-fit: contain;
+  height: max(20px, 20px);
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+.descriptionText {
+  font-size: toRem(16);
+  color: $main800;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  width: max(100%, 100%);
+}
+
+.optionsContainer {
+  display: flex;
+  width: max(100%, 100%);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+  box-sizing: border-box;
+}
+.quantityContainer {
+  width: max-content;
+  max-width: max-content;
+
+  max-height: max-content;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.quantityText {
+  width: max-content;
+  max-width: max-content;
+  max-height: max-content;
+  font-size: toRem(16);
+  color: $main800;
+  font-family: $fontFamily;
+  padding: 0px;
+  margin: 0px;
+}
+.quantityDropDown {
+  font-family: $fontFamily;
+  font-size: toRem(16);
+  color: $main800;
+  background-color: $white;
+  border: 0px;
+}
+.buyButton {
+  box-sizing: border-box;
+  padding: 10px 30px;
+  background-color: $main800;
+  color: $white;
+  font-size: toRem(20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 0px;
+  margin-bottom: 10px;
+  transition: all 1s;
+}
+.buyButton:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.productImage {
+  width: max(100%, 100%);
+  object-fit: cover;
+  height: max(100%, 100%);
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}

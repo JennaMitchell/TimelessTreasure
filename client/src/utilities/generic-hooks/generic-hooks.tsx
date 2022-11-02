@@ -88,3 +88,24 @@ export const dropDownNavCategoryHandler = (
 
   navigate("/marketplace");
 };
+
+export const imageUrlCreator = (url: string) => {
+  return "http://localhost:5000/" + url;
+};
+
+export const priceStringCreator = (price: string, priceType: string) => {
+  let tempPrice = "";
+  if (priceType === "USD" || priceType === "CAD") {
+    tempPrice = "$" + price;
+  } else {
+    tempPrice = "€" + price;
+  }
+  return tempPrice;
+};
+
+export const closeApiMessageDropDown = (dispatch: any) => {
+  dispatch(mainStoreSliceActions.setAPICallMessage(""));
+  dispatch(mainStoreSliceActions.setAPICallMessageType(""));
+  dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
+  dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
+};

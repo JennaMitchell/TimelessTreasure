@@ -109,13 +109,6 @@ const TablewearDropDown = ({ mouseEnterHandler, mouseLeaveHandler }: Props) => {
         >
           Melamine
         </button>
-        <button
-          className={classes.productButton}
-          id="tablewear-stoneware-nav-button"
-          onClick={navButtonHandler}
-        >
-          Stoneware
-        </button>
       </div>
       <img
         className={classes.imageContainer}

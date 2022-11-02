@@ -1,6 +1,6 @@
 @import "../../../utilities/variables";
 .backdrop {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: $popupBackdropZIndex;
   position: fixed;
   width: max(100vw, 100vw);
@@ -12,7 +12,7 @@
 }
 
 .popupContainer {
-  width: max(330px, 330px);
+  width: max(400px, 400px);
   height: max-content;
   min-height: max-content;
   max-height: max-content;
@@ -27,7 +27,7 @@
   padding: 20px 0px 20px 0px;
 }
 .textDecor {
-  width: max(200px, 200px);
+  width: max(300px, 300px);
   height: max(30px, 30px);
   object-fit: contain;
   padding-right: 2.5px;
@@ -71,15 +71,9 @@
   width: max(240px, 240px);
   text-align: center;
 }
-.actionButtonsContainer {
-  width: max(240px, 240px);
-  max-height: max-content;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 .actionButton {
-  width: max(90px, 90px);
+  width: max(180px, 180px);
   height: max(50px, 50px);
   font-size: toRem(16);
   font-family: $fontFamily;
@@ -93,6 +87,7 @@
   background-color: $main800;
   border-radius: 5px;
   transition: all 1s;
+  position: relative;
 }
 .actionButton:hover {
   color: $main800;
@@ -100,8 +95,8 @@
 }
 
 .productImage {
-  width: max(200px, 200px);
-  height: max(200px, 200px);
+  width: max(300px, 300px);
+  height: max(300px, 300px);
   object-fit: cover;
 }
 
@@ -117,7 +112,7 @@
 }
 
 .imageInputContainer {
-  width: max(280px, 280px);
+  width: max(300px, 300px);
   height: max-content;
   max-height: max-content;
   display: flex;
@@ -175,7 +170,7 @@
   padding: 0px;
   box-sizing: border-box;
   font-size: toRem(16);
-  width: max(220px, 220px);
+  width: max(300px, 300px);
   position: relative;
 
   font-family: $fontFamily;
@@ -199,7 +194,7 @@
   color: $main800;
 
   text-align: left;
-  width: max(145px, 145px);
+  width: max(220px, 220px);
   border: 0px;
   outline: 0px;
 }
@@ -223,7 +218,7 @@
   font-family: $fontFamily;
 }
 .quantityInputContainer {
-  width: max(220px, 220px);
+  width: max(290px, 290px);
   position: relative;
   font-family: $fontFamily;
   height: max(45px, 45px);
@@ -254,4 +249,44 @@
 .quantitySelect {
   background-color: $white;
   border: 0px;
+}
+.descriptionContainer {
+  max-height: max-content;
+  width: max-content;
+  position: relative;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.descriptionLabel {
+  top: 5px;
+  left: 15px;
+  padding: 0px 5px;
+  background-color: $white;
+  font-size: toRem(12);
+  line-height: toRem(12);
+  position: absolute;
+  color: $main800;
+}
+.descriptionInput {
+  width: max(295px, 295px);
+  max-height: max-content;
+  justify-self: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: $fontFamily;
+  font-size: toRem(14);
+  color: $main800;
+}
+.characterRemainingText {
+  color: grey;
+  max-width: max-content;
+  max-height: max-content;
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  bottom: 15px;
+  right: 25px;
+  font-size: toRem(12);
 }

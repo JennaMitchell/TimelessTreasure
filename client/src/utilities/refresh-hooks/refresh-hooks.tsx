@@ -21,4 +21,5 @@ export const clearActivePopups = (dispatch: any) => {
   dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
   dispatch(mainStoreSliceActions.setLoggedInDropDownActive(false));
   dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
+  dispatch(mainStoreSliceActions.setProductPopupActive(false));
 };

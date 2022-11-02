@@ -6,6 +6,23 @@ const {
 } = require("../utilities/product-types");
 const ProductSchema = require("../models/product-schema");
 
+exports.getAllProduct = async (req, res, next) => {
+  try {
+    const result = await ProductSchema.find({}, { userId: 0 });
+
+    return res.status(201).json({
+      message: "Product Added!",
+      result: result,
+      status: 201,
+    });
+  } catch (err) {
+    return res.status(401).json({
+      message: `Server Error!`,
+      error: [{ error: "Server Error" }],
+    });
+  }
+};
+
 exports.createNewProduct = async (req, res, next) => {
   const errors = validationResult(req);
 
@@ -31,6 +48,7 @@ exports.createNewProduct = async (req, res, next) => {
   const quantity = req.body.quantity;
   const productType = req.body.productType;
   const date = req.body.date;
+  const description = req.body.description;
 
   if (!image) {
     return res.status(401).json({
@@ -52,6 +70,7 @@ exports.createNewProduct = async (req, res, next) => {
       productType: productType,
       date: date,
       productTags: productTags,
+      description: description,
     });
 
     await newProduct.save();
@@ -87,6 +106,7 @@ exports.updateProduct = async (req, res, next) => {
     const priceType = req.body.priceType;
     const image = req.file;
     const userId = req.body.userId;
+    const description = req.body.description;
 
     if (userId !== foundProduct.userId) {
       return res.status(401).json({
@@ -105,6 +125,7 @@ exports.updateProduct = async (req, res, next) => {
             price: price,
             priceType: priceType,
             imageUrl: image.path,
+            description: description,
           },
         }
       );
@@ -237,9 +258,8 @@ exports.getFilteredData = async (req, res, next) => {
               filterToCheck
             )
           ) {
-            arraysOfProductTypes.push(
-              productTypeSubSelectionCategories[indexOfSubType]
-            );
+            arraysOfProductTypes[indexOfFoundType] =
+              productTypeSubSelectionCategories[indexOfSubType];
           }
         }
       }
@@ -264,9 +284,8 @@ exports.getFilteredData = async (req, res, next) => {
               filterToCheck
             )
           ) {
-            arraysOfProductTypes.push(
-              productTypeSubSelectionCategories[indexOfSubType]
-            );
+            arraysOfProductTypes[indexOfSubType] =
+              productTypeSubSelectionCategories[indexOfSubType];
           }
         }
       }
@@ -293,39 +312,19 @@ exports.getFilteredData = async (req, res, next) => {
 
     // getting the data
 
-    const foundProducts = await ProductSchema.find({
-      productType: productTypeToRetrieve,
-    });
-
-    // filtering the data
-    const filteredData = [];
-    for (let b = 0; b < filterArray.length + 1; b++) {
-      filteredData.push([]);
-    }
-
-    filteredData[0] = foundProducts.slice();
-    for (let filterIndex = 0; filterIndex < filterArray.length; filterIndex++) {
-      const dataToBeFiltered = filteredData[filterIndex];
-      for (
-        let foundProductsIndex = 0;
-        foundProductsIndex < dataToBeFiltered.length;
-        foundProductsIndex++
-      ) {
-        const entry = dataToBeFiltered[foundProductsIndex];
-        const entryTags = entry.productTags;
-        if (entryTags.includes(filterArray[filterIndex])) {
-          dataToBeFiltered[filterIndex + 1].push(entry);
-        }
-      }
-    }
+    const foundProducts = await ProductSchema.find(
+      {
+        productTags: { $all: filterArray },
+      },
+      { userId: 0 }
+    );
 
     return res.status(201).json({
       message: "Data Retrieved!",
-      foundProducts: filteredData[filterArray.length],
+      foundProducts: foundProducts,
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],

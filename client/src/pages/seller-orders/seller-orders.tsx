@@ -12,6 +12,7 @@ import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
 import { getSellersItemsForSaleCall } from "../../utilities/product-api-hooks/seller-product-hooks";
 import { useAppSelector } from "../../store/hooks";
 import { userStoreSliceActions } from "../../store/user-store";
+import { closeApiMessageDropDown } from "../../utilities/generic-hooks/generic-hooks";
 const SellerOrdersPage = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.userStore.userId);
@@ -22,6 +23,7 @@ const SellerOrdersPage = () => {
   const newPostHandler = () => {
     dispatch(mainStoreSliceActions.setNewPostPopupActive(true));
     dispatch(mainStoreSliceActions.setLockViewPort(true));
+    closeApiMessageDropDown(dispatch);
   };
 
   const tempHandler = () => {
@@ -83,6 +85,7 @@ const SellerOrdersPage = () => {
             productPriceType={sellerData.foundProducts[dataIndex].priceType}
             productId={sellerData.foundProducts[dataIndex].productId}
             productTags={sellerData.foundProducts[dataIndex].productTags}
+            productDescription={sellerData.foundProducts[dataIndex].description}
             index={dataIndex}
             key={keyId}
           />
