@@ -40,6 +40,7 @@ exports.createNewProduct = async (req, res, next) => {
   const jsonedTags = JSON.parse(temptags);
 
   const productTags = Object.values(jsonedTags);
+  productTags[productTags.length] = req.body.productType;
   const userId = req.body.userId;
   const productId = req.body.productId;
   const image = req.file;
@@ -188,129 +189,16 @@ exports.deletePost = async (req, res, next) => {
 
 exports.getFilteredData = async (req, res, next) => {
   const filterString = req.params.filter;
-  console.log(filterString);
+
   try {
     if (!filterString) {
       res.status(401).json({
-        message: `No filter String Sent!`,
-        error: [{ error: "No filter String Sent!" }],
+        message: `No filter string sent!`,
+        error: [{ error: "No filter string sent!" }],
       });
       return;
     }
-
     const filterArray = filterString.split("-");
-
-    // checking to see if entered filter array has valid types
-    for (
-      let filterTypeIndex = 0;
-      filterTypeIndex < filterArray.length;
-      filterTypeIndex++
-    ) {
-      if (!acceptedFilterTypes.includes(filterArray[filterTypeIndex])) {
-        res.status(401).json({
-          message: `Invalid Filter!`,
-          error: [{ error: "Invalid Filter!" }],
-        });
-        return;
-      }
-    }
-    // check to find the product type to search for
-    let foundProductType = "";
-
-    for (
-      let foundProductIndex = 0;
-      foundProductIndex < filterArray.length;
-      foundProductIndex++
-    ) {
-      if (
-        productTypeSubSelectionCategories.includes(
-          filterArray[foundProductIndex]
-        )
-      ) {
-        if (foundProductType.length === 0) {
-          foundProductType = filterArray[foundProductIndex];
-          console.log(filterArray[foundProductIndex]);
-        } else {
-          res.status(401).json({
-            message: `Conflicting Product Types!`,
-            error: [{ error: `Conflicting Product Types!` }],
-          });
-          return;
-        }
-      }
-    }
-
-    const arraysOfProductTypes = [];
-    if (foundProductType.length === 0) {
-      for (
-        let indexOfFoundType = 0;
-        indexOfFoundType < filterArray.length;
-        indexOfFoundType++
-      ) {
-        const filterToCheck = filterArray[indexOfFoundType];
-        for (
-          let indexOfSubType = 0;
-          indexOfSubType < combinedTypeArraysSortedByType;
-          indexOfSubType++
-        ) {
-          if (
-            combinedTypeArraysSortedByType[indexOfSubType].includes(
-              filterToCheck
-            )
-          ) {
-            arraysOfProductTypes[indexOfFoundType] =
-              productTypeSubSelectionCategories[indexOfSubType];
-          }
-        }
-      }
-    } else {
-      const indexOfFoundType = filterArray.indexOf(foundProductType);
-      filterArray.splice(indexOfFoundType, 1);
-
-      for (
-        let indexOfFoundType = 0;
-        indexOfFoundType < filterArray.length;
-        indexOfFoundType++
-      ) {
-        const filterToCheck = filterArray[indexOfFoundType];
-
-        for (
-          let indexOfSubType = 0;
-          indexOfSubType < combinedTypeArraysSortedByType.length;
-          indexOfSubType++
-        ) {
-          if (
-            combinedTypeArraysSortedByType[indexOfSubType].includes(
-              filterToCheck
-            )
-          ) {
-            arraysOfProductTypes[indexOfSubType] =
-              productTypeSubSelectionCategories[indexOfSubType];
-          }
-        }
-      }
-    }
-
-    // productTypeSubSelection;
-    // unique check
-    let productTypeToRetrieve = "";
-
-    for (
-      let indexOfUniqueEntry = 0;
-      indexOfUniqueEntry < arraysOfProductTypes.length;
-      indexOfUniqueEntry++
-    ) {
-      if (productTypeToRetrieve.length === 0) {
-        productTypeToRetrieve = arraysOfProductTypes[indexOfUniqueEntry];
-      } else {
-        return res.status(401).json({
-          message: `Conflicting Active Tags!`,
-          error: [{ error: `Conflicting Active Tags!` }],
-        });
-      }
-    }
-
-    // getting the data
 
     const foundProducts = await ProductSchema.find(
       {

@@ -16,6 +16,7 @@ const MarketplaceSelection = () => {
   const [popupDescription, setPopupDescription] = useState<string>("");
   const [popupPrice, setPopupPrice] = useState<string>("");
   const [popupQuantity, setPopupQuantity] = useState(0);
+  const [popupProductId, setPopupProductId] = useState("");
   const dispatch = useAppDispatch();
   let renderReadyProductData: any[] = [];
 
@@ -31,6 +32,7 @@ const MarketplaceSelection = () => {
         setPopupTitle(itemData.title);
         setPopupDescription(itemData.description);
         setPopupQuantity(itemData.quantity);
+        setPopupProductId(itemData.productId);
         setPopupPrice(tempPrice);
       };
       return (
@@ -94,6 +96,7 @@ const MarketplaceSelection = () => {
         description={popupDescription}
         quantity={popupQuantity}
         price={popupPrice}
+        productId={popupProductId}
       />
       <div className={classes.tempButton} onClick={getDataHandler}>
         Get Data

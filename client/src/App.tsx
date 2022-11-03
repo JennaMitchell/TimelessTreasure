@@ -13,8 +13,9 @@ import Cart from "./pages/cart/cart";
 import UserSettingsPage from "./pages/user-settings/user-settings-page";
 import ForgotPasswordPopup from "./components/popups/forgot-password/forgot-password-popup";
 import LoggedInDropdown from "./components/logged-in-dropdown/logged-in-dropdown";
-import SellerOrdersPage from "./pages/seller-orders/seller-orders";
+import SellerOrdersPage from "./pages/seller-orders-page/seller-orders";
 import NewPostPopup from "./components/popups/new-post/new-post-popup";
+import OrderPlacedPage from "./pages/order-placed/order-placed";
 function App() {
   const lockViewport = useAppSelector((state) => state.mainStore.lockViewport);
   const loadingPageActive = useAppSelector(
@@ -87,6 +88,16 @@ function App() {
             <>
               <Nav />
               <SellerOrdersPage />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/order-placed"
+          element={
+            <>
+              <Nav />
+              <OrderPlacedPage />
               <Footer />
             </>
           }

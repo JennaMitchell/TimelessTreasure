@@ -13,6 +13,7 @@ const TopNavBar = () => {
   const [searchValue, setSearchValue] = useState("Search");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const cartData = useAppSelector((state) => state.cartStore.cartData);
 
   const searchBarHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -95,7 +96,7 @@ const TopNavBar = () => {
           </select>
           <NavLink className={classes.cartContainer} to="/cart">
             <img className={classes.cartIcon} src={bagIcon} alt="Cart Icon" />
-            <div className={classes.cartItemsTrackers}>0</div>
+            <div className={classes.cartItemsTrackers}>{cartData.length}</div>
           </NavLink>
         </div>
       </div>
