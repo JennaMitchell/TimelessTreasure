@@ -1,3 +1,4 @@
+import { sellerStoreActions } from "../../store/seller";
 import { mainStoreSliceActions } from "../../store/store";
 import { userStoreSliceActions } from "../../store/user-store";
 
@@ -9,7 +10,7 @@ export const clearUserStateData = (dispatch: any) => {
   dispatch(userStoreSliceActions.setUserEmail(""));
   dispatch(userStoreSliceActions.setUsername(""));
   dispatch(userStoreSliceActions.setAutoLogoutTime(""));
-  dispatch(userStoreSliceActions.setIsSeller(false));
+  dispatch(sellerStoreActions.setIsSeller(false));
 };
 
 export const clearActivePopups = (dispatch: any) => {

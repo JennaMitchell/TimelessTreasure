@@ -16,6 +16,7 @@ import LoggedInDropdown from "./components/logged-in-dropdown/logged-in-dropdown
 import SellerOrdersPage from "./pages/seller-orders-page/seller-orders";
 import NewPostPopup from "./components/popups/new-post/new-post-popup";
 import OrderPlacedPage from "./pages/order-placed/order-placed";
+import BuyerOrdersPage from "./pages/buyer-order-page/buyer-orders";
 function App() {
   const lockViewport = useAppSelector((state) => state.mainStore.lockViewport);
   const loadingPageActive = useAppSelector(
@@ -98,6 +99,17 @@ function App() {
             <>
               <Nav />
               <OrderPlacedPage />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/buyer-orders"
+          element={
+            <>
+              <Nav />
+              <BuyerOrdersPage />
+
               <Footer />
             </>
           }

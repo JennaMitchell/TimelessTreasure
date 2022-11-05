@@ -71,7 +71,9 @@
   padding: 0px;
   margin: 0px;
   text-align: center;
-  width: max(100%, 100%);
+  width: max(200px, 200px);
+  max-height: max-content;
+  word-break: break-all;
 }
 
 .optionsContainer {

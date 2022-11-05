@@ -57,7 +57,6 @@
 }
 .productPrice {
   width: max(290px, 290px);
-
   box-sizing: content-box;
   height: max-content;
   min-height: max-content;
@@ -79,24 +78,23 @@
   max-width: max-content;
   min-width: max-content;
   height: max-content;
-  gap: 20px;
+  gap: 10px;
 }
 .numberOfItemsDropDown {
-  width: max(50px, 50px);
+  width: max(40px, 40px);
   height: max(40px, 40px);
-  color: $white;
-  background-color: $navbarColor;
-  padding-left: 10px;
-  padding-right: 10px;
+  color: $main800;
+  background-color: $white;
+
+  text-align: right;
   border: 0px;
   border-radius: 5px;
   font-size: toRem(14);
   font-family: $fontFamily;
-  text-align: right;
 }
-.numberOfItemsNumber {
-  width: max(100%, 100%);
-  height: max(100%, 100%);
+.numberOfItemsOption {
+  width: max-content;
+  max-height: max-content;
   color: $white;
   background-color: $navbarColor;
   font-size: toRem(14);
@@ -113,5 +111,5 @@
 }
 .trashIcon:hover {
   color: $main100;
-  background-color: $main1000;
+  background-color: $main800;
 }

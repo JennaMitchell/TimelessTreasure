@@ -13,18 +13,18 @@ const CartItemSection = () => {
       const renderReadyQuantityDropDown = [];
 
       for (
-        let quantityAvail = 1;
+        let quantityAvail = 0;
         quantityAvail < cartDataObject.quantityAvailable;
         quantityAvail++
       ) {
-        renderReadyQuantityDropDown.push(quantityAvail);
+        renderReadyQuantityDropDown.push(quantityAvail + 1);
       }
 
       const renderReadyQuantitySelections = renderReadyQuantityDropDown.map(
         (quantity: number) => {
           return (
             <option
-              className={classes.numberOfItemsNumber}
+              className={classes.numberOfItemsOption}
               key={`${quantity}-${cartDataObject.title}`}
             >
               {quantity}

@@ -12,6 +12,7 @@
   border-radius: 10px;
   padding: 20px;
   position: relative;
+  gap: 2px;
 }
 .actionButtonsContainer {
   display: flex;
@@ -190,6 +191,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: max(100%, 100%);
-  gap: 10px;
+  width: max(200px, 200px);
+  max-height: max-content;
+  column-gap: 10px;
+  row-gap: 0px;
+  flex-wrap: wrap;
 }

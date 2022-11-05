@@ -20,6 +20,7 @@ import {
   clearActivePopups,
 } from "../../../utilities/refresh-hooks/refresh-hooks";
 import { useNavigate } from "react-router-dom";
+import { sellerStoreActions } from "../../../store/seller";
 
 interface LogicObject {
   [key: string]: {
@@ -207,7 +208,7 @@ const LoginPopup = () => {
             dispatch(userStoreSliceActions.setUserToken(jsonData.token));
             dispatch(userStoreSliceActions.setUserId(jsonData.userId));
             dispatch(userStoreSliceActions.setSessionId(jsonData.sessionId));
-            dispatch(userStoreSliceActions.setIsSeller(jsonData.isSeller));
+            dispatch(sellerStoreActions.setIsSeller(jsonData.isSeller));
             localStorage.setItem("token", jsonData.token);
             localStorage.setItem("userId", jsonData.userId);
             localStorage.setItem("expiryDate", expiryDate.toISOString());

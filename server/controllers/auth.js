@@ -61,7 +61,6 @@ exports.login = async (req, res, next) => {
     const user = await UserSchema.findOne({ email: email });
 
     loadedUser = user;
-    console.log(user);
 
     const isEqual = await bcrypt.compare(password, user.password);
 

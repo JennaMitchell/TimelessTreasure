@@ -52,7 +52,7 @@
 .checkoutButton {
   width: max(100%, 100%);
   border: 0px;
-  background-color: $navbarColor;
+  background-color: $main800;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,16 +60,23 @@
   padding: 10px 20px;
   box-sizing: border-box;
   border-radius: 10px;
+  transition: all 1s;
+  color: $white;
+  z-index: 2;
+}
+.checkoutButton:hover {
+  background-color: $main200;
+  color: $main800;
 }
 .checkoutText {
   font-size: toRem(20);
   margin: 0px;
   padding: 0px;
   font-family: $fontFamily;
-  color: $white;
+  color: inherit;
 }
 .checkoutIcon {
   width: max(25px, 25px);
   height: max(25px, 25px);
-  color: $white;
+  color: inherit;
 }

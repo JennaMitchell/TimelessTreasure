@@ -11,6 +11,7 @@ import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator
 import { priceValidator } from "../../../utilities/validation-hooks/validation-hooks";
 import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
 import { userStoreSliceActions } from "../../../store/user-store";
+import { sellerStoreActions } from "../../../store/seller";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
@@ -24,14 +25,14 @@ const NewPostPopup = () => {
   const imageInputRef = useRef(null);
   const dispatch = useAppDispatch();
   const sellerNewPostTags = useAppSelector(
-    (state) => state.userStore.sellerNewPostTags
+    (state) => state.sellerStore.sellerNewPostTags
   );
 
   const [priceInputFocused, setPriceInputFocused] = useState(false);
   const closingIconHandler = () => {
-    dispatch(userStoreSliceActions.setSellerNewPostPriceType("USD"));
-    dispatch(userStoreSliceActions.setSellerNewPostProductCategory("Ceramics"));
-    dispatch(userStoreSliceActions.setSellerNewPostTags({}));
+    dispatch(sellerStoreActions.setSellerNewPostPriceType("USD"));
+    dispatch(sellerStoreActions.setSellerNewPostProductCategory("Ceramics"));
+    dispatch(sellerStoreActions.setSellerNewPostTags({}));
     dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
     dispatch(mainStoreSliceActions.setLockViewPort(false));
     setProductQuantity(1);
@@ -40,10 +41,10 @@ const NewPostPopup = () => {
     (state) => state.mainStore.newPostPopupActive
   );
   const sellerNewPostProductCategory = useAppSelector(
-    (state) => state.userStore.sellerNewPostProductCategory
+    (state) => state.sellerStore.sellerNewPostProductCategory
   );
   const sellerNewPostPriceType = useAppSelector(
-    (state) => state.userStore.sellerNewPostPriceType
+    (state) => state.sellerStore.sellerNewPostPriceType
   );
 
   const userId = useAppSelector((state) => state.userStore.userId);
@@ -111,14 +112,14 @@ const NewPostPopup = () => {
   ) => {
     e.preventDefault();
     dispatch(
-      userStoreSliceActions.setSellerNewPostProductCategory(e.target.value)
+      sellerStoreActions.setSellerNewPostProductCategory(e.target.value)
     );
   };
   const priceTypeSelectionHandler = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     e.preventDefault();
-    dispatch(userStoreSliceActions.setSellerNewPostPriceType(e.target.value));
+    dispatch(sellerStoreActions.setSellerNewPostPriceType(e.target.value));
   };
 
   useEffect(() => {
@@ -315,9 +316,9 @@ const NewPostPopup = () => {
         } else {
           dispatch(mainStoreSliceActions.setAPICallMessage("Product Uploaded"));
           dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
-          dispatch(userStoreSliceActions.setSellerNewPostPriceType("USD"));
+          dispatch(sellerStoreActions.setSellerNewPostPriceType("USD"));
           dispatch(
-            userStoreSliceActions.setSellerNewPostProductCategory("Ceramics")
+            sellerStoreActions.setSellerNewPostProductCategory("Ceramics")
           );
           closingIconHandler();
         }

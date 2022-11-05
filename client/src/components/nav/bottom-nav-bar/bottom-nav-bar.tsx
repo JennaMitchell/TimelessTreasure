@@ -19,6 +19,8 @@ const BottomNavBar = () => {
     key: string,
     state: boolean
   ) => {
+    console.log(activeButtonTitle);
+
     if (activeButtonTitle !== undefined && activeButtonTitle.length !== 0) {
       const resetButtonLogic = clearOtherPopups(activeButtonTitle);
       resetButtonLogic[activeButtonTitle][key] = state;

@@ -104,7 +104,7 @@ const SignupPopup = () => {
     const targetElement = e.target as HTMLElement;
     if (targetElement.id === "dialogContainer") {
       dispatch(mainStoreSliceActions.setLockViewPort(false));
-      dispatch(mainStoreSliceActions.setLoginPopupActive(false));
+      dispatch(mainStoreSliceActions.setSignupPopupActive(false));
     }
   };
   const inputCopyObjectHandler = () =>

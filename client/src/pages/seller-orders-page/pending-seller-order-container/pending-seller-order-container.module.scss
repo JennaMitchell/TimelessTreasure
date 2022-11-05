@@ -144,21 +144,28 @@
   padding: 0px;
   color: $darkgrey;
 }
-.orderStatusContainer {
+.shipButton {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: $sucessLight;
-  color: $successMain;
-  border: 1px solid $successDark;
+  background-color: $main800;
+  color: $white;
+  border: 0px;
   border-radius: 10px;
   height: max(50px, 50px);
-  width: max(90px, 90px);
-  padding: 0px 5px;
+  max-width: max-content;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  gap: 10px;
+  transition: all 0.5s;
+}
+.shipButton:hover {
+  background-color: $main200;
+  color: $main800;
 }
 .orderStatusIcon {
-  width: max(25px, 25px);
-  height: max(25px, 25px);
+  width: max(20px, 20px);
+  height: max(20px, 20px);
   color: inherit;
 }
 .orderStatusText {
@@ -167,8 +174,8 @@
   padding: 0px;
   margin: 0px;
   font-size: toRem(14);
-  width: max(60px, 60px);
-  text-align: center;
+  max-width: max-content;
+  text-align: right;
 }
 
 .moreInfoContainer {

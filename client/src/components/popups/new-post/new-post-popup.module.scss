@@ -271,12 +271,11 @@
   max-height: max-content;
   width: max-content;
   position: relative;
-  padding: 10px;
   box-sizing: border-box;
 }
 .descriptionLabel {
-  top: 5px;
-  left: 15px;
+  top: -5px;
+  left: 5px;
   padding: 0px 5px;
   background-color: $white;
   font-size: toRem(12);
@@ -285,6 +284,7 @@
 }
 .descriptionInput {
   width: max(330px, 330px);
+  height: max(150px, 150px);
   max-height: max-content;
   justify-self: center;
   border: 1px solid black;
@@ -301,7 +301,7 @@
   padding: 0px;
   margin: 0px;
   position: absolute;
-  bottom: 15px;
+  bottom: 7.5px;
   right: 25px;
   font-size: toRem(12);
 }

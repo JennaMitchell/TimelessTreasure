@@ -2,6 +2,7 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 import { userStoreSlice } from "./user-store";
 import { marketplaceStoreSlice } from "./marketplace";
 import { cartStoreSlice } from "./cart";
+import { sellerStoreSlice } from "./seller";
 interface State {
   activePage: string;
   loginPopupActive: boolean;
@@ -110,6 +111,7 @@ const store = configureStore({
     userStore: userStoreSlice.reducer,
     marketStore: marketplaceStoreSlice.reducer,
     cartStore: cartStoreSlice.reducer,
+    sellerStore: sellerStoreSlice.reducer,
   },
 });
 

@@ -218,10 +218,11 @@
   font-family: $fontFamily;
 }
 .quantityInputContainer {
-  width: max(290px, 290px);
+  width: max(285px, 285px);
+  max-height: max-content;
   position: relative;
   font-family: $fontFamily;
-  height: max(45px, 45px);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -254,12 +255,12 @@
   max-height: max-content;
   width: max-content;
   position: relative;
-  padding: 10px;
+  padding: 0px;
   box-sizing: border-box;
 }
 .descriptionLabel {
-  top: 5px;
-  left: 15px;
+  top: -2.5px;
+  left: 5px;
   padding: 0px 5px;
   background-color: $white;
   font-size: toRem(12);

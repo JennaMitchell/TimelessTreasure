@@ -7,6 +7,7 @@ const multer = require("multer");
 const authRoute = require("./routes/auth");
 const updateUserSettingsRoute = require("./routes/update-user-settings");
 const productRoute = require("./routes/products");
+const orderRoute = require("./routes/order");
 const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -85,6 +86,7 @@ app.use("/auth", authRoute);
 
 app.use("/update", updateUserSettingsRoute);
 app.use("/product", productRoute);
+app.use("/order", orderRoute);
 
 app.listen(5000, () => {
   console.log("Backend server is running!");

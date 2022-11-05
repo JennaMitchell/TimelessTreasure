@@ -91,7 +91,7 @@ const ProductPopup = ({
   };
 
   for (
-    let productQuantityIndex = 1;
+    let productQuantityIndex = 0;
     productQuantityIndex < quantity;
     productQuantityIndex++
   ) {
@@ -100,7 +100,7 @@ const ProductPopup = ({
         className={classes.quantityOption}
         key={`${productQuantityIndex}-product-available-quantity`}
       >
-        {productQuantityIndex}
+        {productQuantityIndex + 1}
       </option>
     );
   }

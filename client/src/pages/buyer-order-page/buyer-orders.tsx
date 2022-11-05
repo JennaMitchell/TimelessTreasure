@@ -8,53 +8,18 @@ import { tempSellerOrders } from "./temp-seller-orders";
 import { useAppDispatch } from "../../store/hooks";
 import { mainStoreSliceActions } from "../../store/store";
 import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
-
-import { getSellersItemsForSaleCall } from "../../utilities/product-api-hooks/seller-product-hooks";
 import { useAppSelector } from "../../store/hooks";
 import { userStoreSliceActions } from "../../store/user-store";
 import { closeApiMessageDropDown } from "../../utilities/generic-hooks/generic-hooks";
+import { updateSellersWithOrder } from "../../utilities/order-api-hooks/order-api-hooks";
 const BuyerOrdersPage = () => {
   const dispatch = useAppDispatch();
-  const userId = useAppSelector((state) => state.userStore.userId);
-  const userToken = useAppSelector((state) => state.userStore.userToken);
-
   const pendingOrders = [];
   const fulfilledOrders = [];
   const newPostHandler = () => {
     dispatch(mainStoreSliceActions.setNewPostPopupActive(true));
     dispatch(mainStoreSliceActions.setLockViewPort(true));
     closeApiMessageDropDown(dispatch);
-  };
-
-  const tempHandler = () => {
-    getSellersItemsForSaleCall(dispatch, userId, userToken)
-      .then((response) => {
-        return response?.json();
-      })
-      .then((jsonData) => {
-        if (jsonData !== undefined) {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-            }
-          } else {
-            dispatch(
-              mainStoreSliceActions.setAPICallMessage("Data Retrieved!")
-            );
-            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
-
-            dispatch(userStoreSliceActions.setSellerData(jsonData));
-          }
-        } else {
-          dispatch(
-            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
-          );
-          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-        }
-      });
   };
 
   for (let i = 0; i < tempSellerOrders.length; i++) {
@@ -92,9 +57,7 @@ const BuyerOrdersPage = () => {
 
   return (
     <div className={classes.topContainer}>
-      <div className={classes.tempButton} onClick={tempHandler}>
-        Temp
-      </div>
+      <div className={classes.tempButton}>Temp</div>
       <button className={classes.newProductButton} onClick={newPostHandler}>
         New Post
       </button>

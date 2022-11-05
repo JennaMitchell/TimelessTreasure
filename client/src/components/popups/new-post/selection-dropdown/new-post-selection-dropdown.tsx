@@ -8,6 +8,7 @@ import {
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { userStoreSliceActions } from "../../../../store/user-store";
+import { sellerStoreActions } from "../../../../store/seller";
 
 interface SelectedItem {
   [key: string]: string;
@@ -21,7 +22,7 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
   const [activeDropdowns, setActiveDropdowns] = useState<boolean[]>([]);
 
   const sellerNewPostTags = useAppSelector(
-    (state) => state.userStore.sellerNewPostTags
+    (state) => state.sellerStore.sellerNewPostTags
   );
   const dispatch = useAppDispatch();
 
@@ -61,7 +62,7 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
     } else {
       copyOfSelectedTags[type] = selectedItem;
     }
-    dispatch(userStoreSliceActions.setSellerNewPostTags(copyOfSelectedTags));
+    dispatch(sellerStoreActions.setSellerNewPostTags(copyOfSelectedTags));
 
     returnFunction(copyOfSelectedTags);
   };
@@ -106,7 +107,7 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
     if (!initialRender) {
       setInitialRender(true);
     } else {
-      dispatch(userStoreSliceActions.setSellerNewPostTags({}));
+      dispatch(sellerStoreActions.setSellerNewPostTags({}));
     }
 
     setSavedProductType(productType);
@@ -122,7 +123,7 @@ const NewPostSelectionDropdrop = ({ productType, returnFunction }: Props) => {
         if (!initialRender) {
           setInitialRender(true);
         } else {
-          dispatch(userStoreSliceActions.setSellerNewPostTags(tempLogicObject));
+          dispatch(sellerStoreActions.setSellerNewPostTags(tempLogicObject));
         }
         setSavedProductType(productType);
       }

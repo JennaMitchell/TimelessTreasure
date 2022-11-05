@@ -1,74 +1,106 @@
 import classes from "./pending-seller-order-container.module.scss";
 
-import {
-  UserCircleIcon,
-  CheckIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-export interface OrderDetails {
-  productImage: string;
-  productTitle: string;
-  productPrice: string;
-  productQty: string;
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { imageUrlCreator } from "../../../utilities/generic-hooks/generic-hooks";
+import { shipProductCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { mainStoreSliceActions } from "../../../store/store";
+import { sellerStoreActions } from "../../../store/seller";
+interface ItemsPlaced {
+  productInfo: {};
+  quantity: number;
 }
-
 interface Props {
+  itemsPlaced: ItemsPlaced[];
   orderNumber: string;
-  orderTimePlaced: string;
-  order: OrderDetails[];
   status: string;
+  date: string;
 }
 const PendingSellerOrderContainer = ({
+  itemsPlaced,
   orderNumber,
-  orderTimePlaced,
-  order,
   status,
+  date,
 }: Props) => {
   let totalNumberOfItems = 0;
   let totalBeforeTax = 0;
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.userStore.userId);
+  const userToken = useAppSelector((state) => state.userStore.userToken);
 
-  const renderReadyOrderDetails = order.map((order, index) => {
-    totalNumberOfItems = totalNumberOfItems + +order.productQty;
-    const priceWithoutCurrencySymbol = order.productPrice.slice(1);
-    totalBeforeTax =
-      totalBeforeTax + +priceWithoutCurrencySymbol * +order.productQty;
+  const shipButtonHandler = () => {
+    console.log(userId);
+    const apiOrderData = {
+      sellerId: userId,
+      orderNumber: orderNumber,
+    };
+    shipProductCall(dispatch, apiOrderData, userToken)
+      .then((response) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+            }
+          } else {
+            dispatch(mainStoreSliceActions.setAPICallMessage("Item Shipped"));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+        }
+      });
+  };
 
-    return (
-      <div
-        className={classes.itemOrdered}
-        key={`${orderNumber}-${order.productPrice}-${index}-${orderTimePlaced}-${status}`}
-      >
-        <img
-          className={classes.productImage}
-          alt="product"
-          src={order.productImage}
-        />
-        <div className={classes.productDescriptionBlock}>
-          <p className={classes.productTitle}>{order.productTitle}</p>
-          <div className={classes.priceContainer}>
-            <p className={classes.productPrice}>{order.productPrice}</p>
-            <p className={classes.quantity}>Qty. {order.productQty}</p>
+  const renderReadyOrderDetails = itemsPlaced.map(
+    (itemData: any, index: number) => {
+      totalNumberOfItems = totalNumberOfItems + +itemData.quantity;
+      const priceWithoutCurrencySymbol = itemData.productInfo.price;
+      totalBeforeTax =
+        totalBeforeTax + +priceWithoutCurrencySymbol * +itemData.quantity;
+      const finalImageUrl = imageUrlCreator(itemData.productInfo.imageUrl);
+      return (
+        <div
+          className={classes.itemOrdered}
+          key={`${orderNumber}-${itemData.productInfo.price}-${index}-${itemData.productInfo.date}`}
+        >
+          <img
+            className={classes.productImage}
+            alt="product"
+            src={finalImageUrl}
+          />
+          <div className={classes.productDescriptionBlock}>
+            <p className={classes.productTitle}>{itemData.productInfo.title}</p>
+            <div className={classes.priceContainer}>
+              <p className={classes.productPrice}>
+                {itemData.productInfo.price}
+              </p>
+              <p className={classes.quantity}>Qty. {itemData.quantity}</p>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  });
+      );
+    }
+  );
 
   return (
     <div
       className={classes.orderContainer}
-      key={`${orderNumber}-${orderTimePlaced}-${status}-top-container`}
+      key={`${orderNumber}-${status}-top-container`}
     >
-      <div className={classes.moreInfoContainer}>
-        <PlusIcon className={classes.moreInfoIcon} />
-      </div>
       <div className={classes.orderTitleContainer}>
         <div className={classes.orderInfoBlock}>
           <h6 className={classes.orderNumber}>#{orderNumber}</h6>
-          <p className={classes.orderDate}>{orderTimePlaced}</p>
+          <p className={classes.orderDate}>{date}</p>
         </div>
-        <UserCircleIcon className={classes.userImage} />
       </div>
       <div className={classes.itemsOrderedContainer}>
         {renderReadyOrderDetails}
@@ -80,19 +112,10 @@ const PendingSellerOrderContainer = ({
           </p>
           <p className={classes.orderTotal}>${totalBeforeTax.toFixed(2)}</p>
         </div>
-        <div
-          className={`${classes.orderStatusContainer} ${
-            status === "Ship" && classes.warningContainer
-          }`}
-        >
-          {status === "Shipped" && (
-            <CheckIcon className={classes.orderStatusIcon} />
-          )}
-          {status === "Ship" && (
-            <XMarkIcon className={classes.orderStatusIcon} />
-          )}
+        <button className={classes.shipButton} onClick={shipButtonHandler}>
+          <PaperAirplaneIcon className={classes.orderStatusIcon} />
           <p className={classes.orderStatusText}>{status}</p>
-        </div>
+        </button>
       </div>
     </div>
   );

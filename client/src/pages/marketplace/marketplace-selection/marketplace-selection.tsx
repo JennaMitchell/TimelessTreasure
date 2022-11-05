@@ -73,10 +73,10 @@ const MarketplaceSelection = () => {
             );
             dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
 
-            if (`${typeof jsonData.foundProducts}` === "undefined") {
+            if (`${typeof jsonData.foundProduct}` === "undefined") {
               setRetrievedData([]);
             } else {
-              setRetrievedData(jsonData.foundProducts);
+              setRetrievedData(jsonData.foundProduct);
             }
           }
         } else {

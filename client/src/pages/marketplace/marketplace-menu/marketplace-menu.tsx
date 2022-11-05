@@ -311,7 +311,7 @@ const MarketplaceMenu = () => {
               onClick={filterDropdownHandler}
               id="ceramics-category-filter-button"
             >
-              Ceramics (10)
+              Ceramics
               {activeFilterDropdown === "Ceramics" && (
                 <ChevronUpIcon className={classes.categoryButtonIcon} />
               )}
@@ -332,7 +332,7 @@ const MarketplaceMenu = () => {
               onClick={filterDropdownHandler}
               id="clocks-category-filter-button"
             >
-              Clocks (10)
+              Clocks
               {activeFilterDropdown === "Clocks" && (
                 <ChevronUpIcon className={classes.categoryButtonIcon} />
               )}
@@ -353,7 +353,7 @@ const MarketplaceMenu = () => {
               onClick={filterDropdownHandler}
               id="tablewear-category-filter-button"
             >
-              Tablewear (10)
+              Tablewear
               {activeFilterDropdown === "Tablewear" && (
                 <ChevronUpIcon className={classes.categoryButtonIcon} />
               )}
@@ -374,7 +374,7 @@ const MarketplaceMenu = () => {
               onClick={filterDropdownHandler}
               id="paintings-category-filter-button"
             >
-              Paintings (10)
+              Paintings
               {activeFilterDropdown === "Paintings" && (
                 <ChevronUpIcon className={classes.categoryButtonIcon} />
               )}
@@ -395,7 +395,7 @@ const MarketplaceMenu = () => {
               onClick={filterDropdownHandler}
               id="electronics-category-filter-button"
             >
-              Electronics (10)
+              Electronics
               {activeFilterDropdown === "Electronics" && (
                 <ChevronUpIcon className={classes.categoryButtonIcon} />
               )}

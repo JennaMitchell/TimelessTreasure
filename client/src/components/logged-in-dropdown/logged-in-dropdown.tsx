@@ -6,7 +6,7 @@ import { logoutHandler } from "../../utilities/login-signup-api-hooks/api-calls"
 import classes from "./logged-in-dropdown.module.scss";
 
 const LoggedInDropdown = () => {
-  const isSeller = useAppSelector((state) => state.userStore.isSeller);
+  const isSeller = useAppSelector((state) => state.sellerStore.isSeller);
   const loggedInDropDownActive = useAppSelector(
     (state) => state.mainStore.loggedInDropDownActive
   );
@@ -40,6 +40,15 @@ const LoggedInDropdown = () => {
           onClick={dropdownButtonHandler}
         >
           Posts
+        </NavLink>
+      )}
+      {!isSeller && (
+        <NavLink
+          className={classes.userOptionButton}
+          to="/buyer-orders"
+          onClick={dropdownButtonHandler}
+        >
+          Orders
         </NavLink>
       )}
       <button

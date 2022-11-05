@@ -1,18 +1,13 @@
 const { validationResult } = require("express-validator");
-const {
-  productTypeSubSelectionCategories,
-  acceptedFilterTypes,
-  combinedTypeArraysSortedByType,
-} = require("../utilities/product-types");
+
 const ProductSchema = require("../models/product-schema");
 
 exports.getAllProduct = async (req, res, next) => {
   try {
-    const result = await ProductSchema.find({}, { userId: 0 });
-
+    const result = await ProductSchema.find({}, { sellerId: 0 });
     return res.status(201).json({
       message: "Product Added!",
-      result: result,
+      foundProduct: result,
       status: 201,
     });
   } catch (err) {
@@ -41,7 +36,7 @@ exports.createNewProduct = async (req, res, next) => {
 
   const productTags = Object.values(jsonedTags);
   productTags[productTags.length] = req.body.productType;
-  const userId = req.body.userId;
+  const sellerId = req.body.userId;
   const productId = req.body.productId;
   const image = req.file;
   const imageUrl = image.path;
@@ -64,7 +59,7 @@ exports.createNewProduct = async (req, res, next) => {
       price: price,
       priceType: priceType,
       imageUrl: imageUrl,
-      userId: userId,
+      sellerId: sellerId,
       productId: productId,
       status: status,
       quantity: quantity,
@@ -78,7 +73,6 @@ exports.createNewProduct = async (req, res, next) => {
 
     return res.status(201).json({
       message: "Product Added!",
-      userId: userId,
       status: 201,
     });
   } catch (err) {
@@ -106,10 +100,10 @@ exports.updateProduct = async (req, res, next) => {
     const price = req.body.price;
     const priceType = req.body.priceType;
     const image = req.file;
-    const userId = req.body.userId;
+    const sellerId = req.body.userId;
     const description = req.body.description;
 
-    if (userId !== foundProduct.userId) {
+    if (sellerId !== foundProduct.sellerId) {
       return res.status(401).json({
         message: `Not Authorized!`,
         error: [{ error: `Not Authorized!` }],
@@ -165,17 +159,16 @@ exports.deletePost = async (req, res, next) => {
       return;
     }
 
-    if (foundProduct.userId !== sentUserId) {
+    if (foundProduct.sellerId !== sentUserId) {
       return res.status(401).json({
         message: `Not Authorized!`,
         error: [{ error: `Not Authorized!` }],
       });
     }
 
-    const result = await ProductSchema.deleteOne({ productId: sentProductId });
+    await ProductSchema.deleteOne({ productId: sentProductId });
     return res.status(201).json({
       message: "Product Deleted!",
-      userId: result._id,
       status: 201,
     });
   } catch (err) {
@@ -204,7 +197,7 @@ exports.getFilteredData = async (req, res, next) => {
       {
         productTags: { $all: filterArray },
       },
-      { userId: 0 }
+      { sellerId: 0 }
     );
 
     return res.status(201).json({

@@ -1,6 +1,5 @@
 const keyIdGenerator = () => {
   const lengthOfId = 20;
-
   const lowerCaseLetters = [
     "a",
     "b",

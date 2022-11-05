@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-interface SelectedItem {
-  [key: string]: string;
-}
+
 interface State {
   userToken: string;
   userId: string;
@@ -10,11 +8,6 @@ interface State {
   username: string;
   autoLogoutTime: string;
   sessionId: string;
-  isSeller: boolean;
-  sellerData: string[];
-  sellerNewPostTags: SelectedItem;
-  sellerNewPostPriceType: string;
-  sellerNewPostProductCategory: string;
 }
 
 const initialState: State = {
@@ -25,11 +18,6 @@ const initialState: State = {
   username: "",
   autoLogoutTime: "",
   sessionId: "",
-  isSeller: false,
-  sellerData: [],
-  sellerNewPostTags: {},
-  sellerNewPostPriceType: "USD",
-  sellerNewPostProductCategory: "Ceramics",
 };
 
 export const userStoreSlice = createSlice({
@@ -56,21 +44,6 @@ export const userStoreSlice = createSlice({
     },
     setSessionId(state, { payload }) {
       state.sessionId = payload;
-    },
-    setIsSeller(state, { payload }) {
-      state.isSeller = payload;
-    },
-    setSellerData(state, { payload }) {
-      state.sellerData = payload;
-    },
-    setSellerNewPostTags(state, { payload }) {
-      state.sellerNewPostTags = payload;
-    },
-    setSellerNewPostPriceType(state, { payload }) {
-      state.sellerNewPostPriceType = payload;
-    },
-    setSellerNewPostProductCategory(state, { payload }) {
-      state.sellerNewPostProductCategory = payload;
     },
   },
 });
