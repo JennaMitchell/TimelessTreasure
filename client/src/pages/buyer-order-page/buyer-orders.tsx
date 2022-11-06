@@ -1,26 +1,32 @@
 import classes from "./buyer-orders.module.scss";
 
-import PendingSellerOrderContainer from "./pending-buyer-order-container/pending-buyer-order-container";
-import FulfilledSellerOrders from "./fulfilled-buyer-orders/fulfilled-buyer-orders";
+import BuyerOrderContainer from "./buyer-order-container/buyer-order-container";
+
 import decor from "../../images/homepage/decor/decor.png";
 import { tempSellerOrders } from "./temp-seller-orders";
 
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { mainStoreSliceActions } from "../../store/store";
 import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
-import { useAppSelector } from "../../store/hooks";
+
+import {
+  getBuyersPendingItemsCall,
+  getBuyersFulfilledItemsCall,
+} from "../../utilities/product-api-hooks/buyer-product-hooks";
 import { userStoreSliceActions } from "../../store/user-store";
-import { closeApiMessageDropDown } from "../../utilities/generic-hooks/generic-hooks";
-import { updateSellersWithOrder } from "../../utilities/order-api-hooks/order-api-hooks";
 const BuyerOrdersPage = () => {
   const dispatch = useAppDispatch();
   const pendingOrders = [];
   const fulfilledOrders = [];
-  const newPostHandler = () => {
-    dispatch(mainStoreSliceActions.setNewPostPopupActive(true));
-    dispatch(mainStoreSliceActions.setLockViewPort(true));
-    closeApiMessageDropDown(dispatch);
-  };
+  const userId = useAppSelector((state) => state.userStore.userId);
+  const userToken = useAppSelector((state) => state.userStore.userToken);
+
+  const buyerFulfilledOrders = useAppSelector(
+    (state) => state.userStore.buyerFulfilledOrders
+  );
+  const buyerPendingOrders = useAppSelector(
+    (state) => state.userStore.buyerPendingOrders
+  );
 
   for (let i = 0; i < tempSellerOrders.length; i++) {
     if (tempSellerOrders[i].status === "Fulfilled") {
@@ -30,44 +36,118 @@ const BuyerOrdersPage = () => {
     }
   }
 
-  const renderReadyPendingOrders = pendingOrders.map((data) => {
+  const renderReadyPendingOrders = buyerPendingOrders.map((data) => {
     const keyId = keyIdGenerator();
     return (
-      <PendingSellerOrderContainer
-        order={data.order}
-        orderNumber={data.orderNumber}
-        orderTimePlaced={data.orderTimePlaced}
-        status={data.status}
+      <BuyerOrderContainer
+        itemsPlaced={data.itemsPlacedData}
+        orderNumber={data.orderId}
+        status={data.overallStatus}
+        quantityArray={data.quantityArray}
+        date={data.date}
         key={keyId}
       />
     );
   });
-  const renderReadyFullfilledOrders = fulfilledOrders.map((data) => {
+  const renderReadyFullfilledOrders = buyerFulfilledOrders.map((data) => {
     const keyId = keyIdGenerator();
     return (
-      <FulfilledSellerOrders
-        order={data.order}
-        orderNumber={data.orderNumber}
-        orderTimePlaced={data.orderTimePlaced}
-        status={data.status}
+      <BuyerOrderContainer
+        itemsPlaced={data.itemsPlacedData}
+        orderNumber={data.orderId}
+        status={data.overallStatus}
+        quantityArray={data.quantityArray}
+        date={data.date}
         key={keyId}
       />
     );
   });
 
+  const tempHandler = () => {
+    getBuyersPendingItemsCall(dispatch, userId, userToken)
+      .then((response: Response | void) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              return Promise.reject();
+            }
+          } else {
+            dispatch(
+              userStoreSliceActions.setBuyerPendingOrders(
+                jsonData.foundProducts
+              )
+            );
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          return Promise.reject();
+        }
+      })
+      .then(() => {
+        return getBuyersFulfilledItemsCall(dispatch, userId, userToken);
+      })
+      .then((response: Response | void) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              return Promise.reject();
+            }
+          } else {
+            dispatch(
+              userStoreSliceActions.setBuyerFulfilledOrders(
+                jsonData.foundProducts
+              )
+            );
+            dispatch(mainStoreSliceActions.setAPICallMessage("Data Retrieved"));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          return Promise.reject();
+        }
+      });
+  };
+
   return (
     <div className={classes.topContainer}>
-      <div className={classes.tempButton}>Temp</div>
-      <button className={classes.newProductButton} onClick={newPostHandler}>
-        New Post
-      </button>
+      <div className={classes.tempButton} onClick={tempHandler}>
+        Temp
+      </div>
       <h6 className={classes.sectionTitle}>Pending Orders</h6>
       <img src={decor} alt="text-decor" className={classes.textDecor} />
-      <div className={classes.ordersContainer}>{renderReadyPendingOrders}</div>
+      <div className={classes.ordersContainer}>
+        {buyerPendingOrders.length === 0 && (
+          <p className={classes.noDataText}> No Pending Orders</p>
+        )}
+        {buyerPendingOrders.length !== 0 && renderReadyPendingOrders}
+      </div>
       <h6 className={classes.sectionTitle}>Fulfilled Orders</h6>
       <img src={decor} alt="text-decor" className={classes.textDecor} />
       <div className={classes.ordersContainer}>
-        {renderReadyFullfilledOrders}
+        {buyerFulfilledOrders.length === 0 && (
+          <p className={classes.noDataText}> No Fulfilled Orders</p>
+        )}
+        {buyerFulfilledOrders.length !== 0 && renderReadyFullfilledOrders}
       </div>
     </div>
   );

@@ -62,6 +62,29 @@ export const getSellersPendingItemsCall = async (
     dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
   }
 };
+///seller-fulfilled-orders/:sellerId"
+export const getSellersFulfilledItemsCall = async (
+  dispatch: any,
+  sellerId: any,
+  token: string
+) => {
+  try {
+    const fetchedResponse = await fetch(
+      `http://localhost:5000/order/seller-fulfilled-orders/${sellerId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    return fetchedResponse;
+  } catch (error) {
+    dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
+    dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+  }
+};
+
 export const deleteItemForSaleCall = async (
   dispatch: any,
   deleteData: any,

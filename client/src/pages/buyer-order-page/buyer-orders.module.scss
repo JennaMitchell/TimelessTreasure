@@ -60,8 +60,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding: 20px 0px;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
 }
 .newProductButton {
   position: absolute;
@@ -98,14 +98,13 @@
 .tempButton:hover {
   background-color: $main100;
 }
-.noDataFoundText {
-  font-size: toRem(22);
-  font-family: $fontFamily;
+.noDataText {
   color: $main800;
+  font-family: $fontFamily;
+  font-size: toRem(22);
+  line-height: toRem(22);
   text-align: center;
+  grid-column: 1 / span 3;
   padding: 0px;
   margin: 0px;
-  justify-self: center;
-  align-self: center;
-  grid-column: 1 / span 3;
 }

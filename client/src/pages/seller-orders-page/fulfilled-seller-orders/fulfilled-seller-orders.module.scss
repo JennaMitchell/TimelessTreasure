@@ -20,7 +20,7 @@
 .orderNumber {
   font-size: toRem(18);
   font-family: $fontFamily;
-  color: $black;
+  color: $main800;
   margin: 0px;
   padding: 0px;
   font-weight: bold;
@@ -69,6 +69,7 @@
   gap: 10px;
   width: max(120px, 120px);
   height: max(80px, 80px);
+  color: $black;
 }
 .productTitle {
   margin: 0px;
@@ -97,6 +98,7 @@
 .quantity {
   margin: 0px;
   padding: 0px;
+  color: $black;
 }
 .moreOptionsContainer {
   display: flex;
@@ -138,7 +140,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-color: $sucessLight;
+  background-color: $successLight;
   color: $successMain;
   border: 1px solid $successDark;
   border-radius: 10px;
@@ -173,15 +175,7 @@
   border-radius: 50%;
   transition: all 0.5s;
 }
-.moreInfoIcon {
-  color: inherit;
-  width: max(15px, 15px);
-  height: max(15px, 15px);
-}
-.moreInfoContainer:hover {
-  background-color: $main200;
-  color: $black;
-}
+
 .orderContainer {
   width: max(300px, 300px);
   height: max(350px, 350px);
@@ -194,4 +188,20 @@
   padding: 20px;
   box-sizing: border-box;
   position: relative;
+}
+.fulfilledSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $successLight;
+  color: $successDark;
+  border: 1px solid $successMain;
+  border-radius: 10px;
+  height: max(50px, 50px);
+  max-width: max-content;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  gap: 10px;
+  transition: all 0.5s;
+  margin-top: 5px;
 }

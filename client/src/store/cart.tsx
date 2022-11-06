@@ -11,13 +11,9 @@ export interface CartDataInterface {
 }
 interface State {
   cartData: CartDataInterface[];
-  orderedProductStatusArray: string[];
-  orderedArrayOfProductIds: string[];
 }
 const initialState: State = {
   cartData: [],
-  orderedProductStatusArray: [],
-  orderedArrayOfProductIds: [],
 };
 
 export const cartStoreSlice = createSlice({
@@ -26,12 +22,6 @@ export const cartStoreSlice = createSlice({
   reducers: {
     setCartData(state, { payload }) {
       state.cartData = payload;
-    },
-    setOrderedProductStatusArray(state, { payload }) {
-      state.orderedProductStatusArray = payload;
-    },
-    setOrderedArrayOfProductIds(state, { payload }) {
-      state.orderedArrayOfProductIds = payload;
     },
   },
 });

@@ -8,6 +8,8 @@ interface State {
   username: string;
   autoLogoutTime: string;
   sessionId: string;
+  buyerPendingOrders: any[];
+  buyerFulfilledOrders: any[];
 }
 
 const initialState: State = {
@@ -18,6 +20,8 @@ const initialState: State = {
   username: "",
   autoLogoutTime: "",
   sessionId: "",
+  buyerPendingOrders: [],
+  buyerFulfilledOrders: [],
 };
 
 export const userStoreSlice = createSlice({
@@ -44,6 +48,12 @@ export const userStoreSlice = createSlice({
     },
     setSessionId(state, { payload }) {
       state.sessionId = payload;
+    },
+    setBuyerPendingOrders(state, { payload }) {
+      state.buyerPendingOrders = payload;
+    },
+    setBuyerFulfilledOrders(state, { payload }) {
+      state.buyerFulfilledOrders = payload;
     },
   },
 });

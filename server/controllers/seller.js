@@ -24,7 +24,7 @@ exports.getAllSellerData = async (req, res, next) => {
 };
 exports.getAllPendingOrderSellerData = async (req, res, next) => {
   const sellerId = req.params.sellerId;
-  console.log(sellerId);
+
   try {
     console.log(27);
     const foundOrders = await SellerPlacedOrderSchema.find({
@@ -39,7 +39,6 @@ exports.getAllPendingOrderSellerData = async (req, res, next) => {
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],
@@ -116,7 +115,6 @@ exports.shipItem = async (req, res, next) => {
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],
@@ -126,7 +124,10 @@ exports.shipItem = async (req, res, next) => {
 exports.getFullfilledSellerOrders = async (req, res, next) => {
   const sellerId = req.params.sellerId;
   try {
-    const foundProducts = await SellerPlacedOrder.find({ sellerId: sellerId });
+    const foundProducts = await SellerPlacedOrder.find({
+      sellerId: sellerId,
+      status: "Fulfilled",
+    });
 
     return res.status(201).json({
       message: "Product Found!",

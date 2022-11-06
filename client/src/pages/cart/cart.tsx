@@ -1,6 +1,6 @@
 //MAke sure to add a if empty clause
 import classes from "./cart.module.scss";
-import CartCheckoutMenu from "./cart-check-menu/cart-checkout-menu";
+import CartCheckoutMenu from "./cart-checkout-menu/cart-checkout-menu";
 import CartItemSection from "./cart-items-section/cart-items-section";
 const Cart = () => {
   return (

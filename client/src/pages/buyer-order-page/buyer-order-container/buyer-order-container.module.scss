@@ -1,5 +1,16 @@
 @import "../../../utilities/variables";
-
+.pendingSellerTopContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  gap: 10px;
+  max-height: max-content;
+  box-shadow: 0 0 10px black;
+  padding: 20px;
+  border-radius: 10px;
+}
 .orderTitleContainer {
   display: flex;
   width: max(100%, 100%);
@@ -136,52 +147,26 @@
 .orderStatusContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background-color: $sucessLight;
+  justify-content: space-between;
+  background-color: $successLight;
   color: $successMain;
   border: 1px solid $successDark;
   border-radius: 10px;
   height: max(50px, 50px);
-  width: max(110px, 110px);
+  width: max(90px, 90px);
   padding: 0px 5px;
 }
-.orderStatusIcon {
+.statusIcon {
   width: max(25px, 25px);
   height: max(25px, 25px);
   color: inherit;
 }
 .orderStatusText {
-  font-family: $fontFamily;
   color: inherit;
-  padding: 0px;
-  margin: 0px;
-  font-size: toRem(14);
+  font-size: toRem(16);
+  font-family: $fontFamily;
 }
 
-.moreInfoContainer {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: $main1000;
-  color: $white;
-  width: max(25px, 25px);
-  height: max(25px, 25px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.5s;
-}
-.moreInfoIcon {
-  color: inherit;
-  width: max(15px, 15px);
-  height: max(15px, 15px);
-}
-.moreInfoContainer:hover {
-  background-color: $main200;
-  color: $black;
-}
 .orderContainer {
   width: max(300px, 300px);
   height: max(350px, 350px);

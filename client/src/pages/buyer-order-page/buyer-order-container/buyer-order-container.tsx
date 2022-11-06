@@ -1,8 +1,7 @@
-import classes from "./fulfilled-seller-orders.module.scss";
+import classes from "./buyer-order-container.module.scss";
 
-import { CheckIcon } from "@heroicons/react/24/outline";
 import { imageUrlCreator } from "../../../utilities/generic-hooks/generic-hooks";
-
+import { CheckIcon } from "@heroicons/react/24/outline";
 import { priceStringCreator } from "../../../utilities/generic-hooks/generic-hooks";
 interface ItemsPlaced {
   productInfo: {};
@@ -13,27 +12,29 @@ interface Props {
   orderNumber: string;
   status: string;
   date: string;
+  quantityArray: number[];
 }
-const FulfilledSellerOrders = ({
+const BuyerOrderContainer = ({
   itemsPlaced,
   orderNumber,
   status,
   date,
+  quantityArray,
 }: Props) => {
   let totalNumberOfItems = 0;
   let totalBeforeTax = 0;
 
   const renderReadyOrderDetails = itemsPlaced.map(
     (itemData: any, index: number) => {
-      totalNumberOfItems = totalNumberOfItems + +itemData.quantity;
-      const priceWithoutCurrencySymbol = itemData.productInfo.price;
+      totalNumberOfItems = totalNumberOfItems + +quantityArray[index];
+      const priceWithoutCurrencySymbol = itemData.price;
       totalBeforeTax =
-        totalBeforeTax + +priceWithoutCurrencySymbol * +itemData.quantity;
-      const finalImageUrl = imageUrlCreator(itemData.productInfo.imageUrl);
+        totalBeforeTax + +priceWithoutCurrencySymbol * +quantityArray[index];
+      const finalImageUrl = imageUrlCreator(itemData.imageUrl);
       return (
         <div
           className={classes.itemOrdered}
-          key={`${orderNumber}-${itemData.productInfo.price}-${index}-${itemData.productInfo.date}`}
+          key={`${orderNumber}-${itemData.price}-${index}-${itemData.date}`}
         >
           <img
             className={classes.productImage}
@@ -41,12 +42,12 @@ const FulfilledSellerOrders = ({
             src={finalImageUrl}
           />
           <div className={classes.productDescriptionBlock}>
-            <p className={classes.productTitle}>{itemData.productInfo.title}</p>
+            <p className={classes.productTitle}>{itemData.title}</p>
             <div className={classes.priceContainer}>
               <p className={classes.productPrice}>
-                {priceStringCreator(itemData.productInfo.price, "USD")}
+                {priceStringCreator(itemData.price, "USD")}
               </p>
-              <p className={classes.quantity}>Qty. {itemData.quantity}</p>
+              <p className={classes.quantity}>Qty. {quantityArray[index]}</p>
             </div>
           </div>
         </div>
@@ -75,12 +76,17 @@ const FulfilledSellerOrders = ({
           </p>
           <p className={classes.orderTotal}>${totalBeforeTax.toFixed(2)}</p>
         </div>
-        <div className={classes.fulfilledSection}>
-          <CheckIcon className={classes.orderStatusIcon} />
-          <p className={classes.orderStatusText}>{status}</p>
+        <div className={classes.orderStatusContainer}>
+          <CheckIcon className={classes.statusIcon} />
+          {status === "Ship" && (
+            <p className={classes.orderStatusText}>{"Packing"}</p>
+          )}
+          {status === "Fulfilled" && (
+            <p className={classes.orderStatusText}>{"Fulfilled"}</p>
+          )}
         </div>
       </div>
     </div>
   );
 };
-export default FulfilledSellerOrders;
+export default BuyerOrderContainer;

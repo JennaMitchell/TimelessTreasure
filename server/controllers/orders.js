@@ -5,6 +5,7 @@ exports.addOrderDataToSeller = async (req, res, next) => {
   const orderId = req.body.orderId;
   const itemIdsPlaced = req.body.itemIdsPlaced;
   const orderQuantityArray = req.body.orderQuantityArray;
+  const userId = req.body.userId;
 
   try {
     const arrayOfSellerIds = [];
@@ -105,9 +106,10 @@ exports.addOrderDataToSeller = async (req, res, next) => {
       quantityArray: orderQuantityArray,
       uniqueSellers: arrayOfUniqueSellers,
       sellerOrderStatusArray: sellerOrderStatusArray,
-      overAllStatus: "Ship",
+      overallStatus: "Ship",
       date: utcSliced,
       orderId: orderId,
+      buyerId: userId,
     });
     await newPlacedOrderObject.save();
 

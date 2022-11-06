@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const SellerPlacedOrderSchema = new mongoose.Schema({
-  itemsPlacedData: { type: Array, required: true, unique: true },
-  status: { type: String, required: true, unique: true },
+  itemsPlacedData: { type: Array, required: true },
+  status: { type: String, required: true },
   orderId: { type: String, require: true },
-  sellerId: { type: String, required: true, unique: true },
+  sellerId: { type: String, required: true },
   date: { type: String, required: true },
 });
 

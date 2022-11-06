@@ -8,12 +8,18 @@ import ItemForSaleContainer from "./item-for-sale-container/item-for-sale-contai
 import { useAppDispatch } from "../../store/hooks";
 import { mainStoreSliceActions } from "../../store/store";
 import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
-
+import BuyerOrderContainer from "../buyer-order-page/buyer-order-container/buyer-order-container";
+import {
+  getBuyersPendingItemsCall,
+  getBuyersFulfilledItemsCall,
+} from "../../utilities/product-api-hooks/buyer-product-hooks";
 import {
   getSellersItemsForSaleCall,
   getSellersPendingItemsCall,
+  getSellersFulfilledItemsCall,
 } from "../../utilities/product-api-hooks/seller-product-hooks";
 import { useAppSelector } from "../../store/hooks";
+import { userStoreSliceActions } from "../../store/user-store";
 
 import { closeApiMessageDropDown } from "../../utilities/generic-hooks/generic-hooks";
 import { sellerStoreActions } from "../../store/seller";
@@ -27,8 +33,16 @@ const SellerOrdersPage = () => {
   const sellerPendingOrderData = useAppSelector(
     (state) => state.sellerStore.sellerPendingOrderData
   );
-  const pendingOrders = [];
-  const fulfilledOrders = [];
+  const sellerFulfilledOrderData = useAppSelector(
+    (state) => state.sellerStore.sellerFulfilledOrderData
+  );
+  const buyerFulfilledOrders = useAppSelector(
+    (state) => state.userStore.buyerFulfilledOrders
+  );
+  const buyerPendingOrders = useAppSelector(
+    (state) => state.userStore.buyerPendingOrders
+  );
+
   const newPostHandler = () => {
     dispatch(mainStoreSliceActions.setNewPostPopupActive(true));
     dispatch(mainStoreSliceActions.setLockViewPort(true));
@@ -51,7 +65,6 @@ const SellerOrdersPage = () => {
               Promise.reject();
             }
           } else {
-            console.log(54);
             dispatch(sellerStoreActions.setSellerData(jsonData));
           }
         } else {
@@ -63,7 +76,6 @@ const SellerOrdersPage = () => {
         }
       })
       .then(() => {
-        console.log(66);
         return getSellersPendingItemsCall(dispatch, userId, userToken);
       })
       .then((response: Response | void) => {
@@ -80,9 +92,101 @@ const SellerOrdersPage = () => {
               return Promise.reject();
             }
           } else {
-            console.log(jsonData);
             dispatch(
               sellerStoreActions.setSellerPendingOrderData(
+                jsonData.foundProducts
+              )
+            );
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          return Promise.reject();
+        }
+      })
+      .then(() => {
+        return getSellersFulfilledItemsCall(dispatch, userId, userToken);
+      })
+      .then((response: Response | void) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              return Promise.reject();
+            }
+          } else {
+            dispatch(
+              sellerStoreActions.setSellerFulfilledOrderData(
+                jsonData.foundProducts
+              )
+            );
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          return Promise.reject();
+        }
+      })
+      .then(() => {
+        return getBuyersPendingItemsCall(dispatch, userId, userToken);
+      })
+      .then((response: Response | void) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              return Promise.reject();
+            }
+          } else {
+            dispatch(
+              userStoreSliceActions.setBuyerPendingOrders(
+                jsonData.foundProducts
+              )
+            );
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          return Promise.reject();
+        }
+      })
+      .then(() => {
+        return getBuyersFulfilledItemsCall(dispatch, userId, userToken);
+      })
+      .then((response: Response | void) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              return Promise.reject();
+            }
+          } else {
+            dispatch(
+              userStoreSliceActions.setBuyerFulfilledOrders(
                 jsonData.foundProducts
               )
             );
@@ -98,14 +202,6 @@ const SellerOrdersPage = () => {
         }
       });
   };
-
-  for (let i = 0; i < tempSellerOrders.length; i++) {
-    if (tempSellerOrders[i].status === "Fulfilled") {
-      fulfilledOrders.push(tempSellerOrders[i]);
-    } else {
-      pendingOrders.push(tempSellerOrders[i]);
-    }
-  }
 
   const renderReadySellerDataItemsForSale = [];
 
@@ -150,14 +246,41 @@ const SellerOrdersPage = () => {
       />
     );
   });
-  const renderReadyFullfilledOrders = fulfilledOrders.map((data) => {
+  const renderReadyFullfilledOrders = sellerFulfilledOrderData.map((data) => {
     const keyId = keyIdGenerator();
     return (
       <FulfilledSellerOrders
-        order={data.order}
-        orderNumber={data.orderNumber}
-        orderTimePlaced={data.orderTimePlaced}
+        itemsPlaced={data.itemsPlacedData}
+        orderNumber={data.orderId}
         status={data.status}
+        date={data.date}
+        key={keyId}
+      />
+    );
+  });
+
+  const renderReadyBuyerPendingOrders = buyerPendingOrders.map((data) => {
+    const keyId = keyIdGenerator();
+    return (
+      <BuyerOrderContainer
+        itemsPlaced={data.itemsPlacedData}
+        orderNumber={data.orderId}
+        status={data.overallStatus}
+        quantityArray={data.quantityArray}
+        date={data.date}
+        key={keyId}
+      />
+    );
+  });
+  const renderReadyBuyerFullfilledOrders = buyerFulfilledOrders.map((data) => {
+    const keyId = keyIdGenerator();
+    return (
+      <BuyerOrderContainer
+        itemsPlaced={data.itemsPlacedData}
+        orderNumber={data.orderId}
+        status={data.overallStatus}
+        quantityArray={data.quantityArray}
+        date={data.date}
         key={keyId}
       />
     );
@@ -177,21 +300,41 @@ const SellerOrdersPage = () => {
       <div className={classes.ordersContainer}>
         {renderReadySellerDataItemsForSale}
         {renderReadySellerDataItemsForSale.length === 0 && (
-          <h6 className={classes.noDataFoundText}>No Data Found</h6>
+          <h6 className={classes.noDataFoundText}>No Orders For Sale</h6>
         )}
       </div>
       <h6 className={classes.sectionTitle}>Pending Orders</h6>
       <img src={decor} alt="text-decor" className={classes.textDecor} />
       <div className={classes.ordersContainer}>
         {sellerPendingOrderData.length === 0 && (
-          <h6 className={classes.noDataFoundText}>No Data Found</h6>
+          <h6 className={classes.noDataFoundText}>No Pending Orders</h6>
         )}
         {sellerPendingOrderData.length !== 0 && renderReadyPendingOrders}
       </div>
       <h6 className={classes.sectionTitle}>Fulfilled Orders</h6>
       <img src={decor} alt="text-decor" className={classes.textDecor} />
       <div className={classes.ordersContainer}>
-        {renderReadyFullfilledOrders}
+        {sellerFulfilledOrderData.length === 0 && (
+          <h6 className={classes.noDataFoundText}>No Orders Fulfilled</h6>
+        )}
+        {sellerFulfilledOrderData.length !== 0 && renderReadyFullfilledOrders}
+      </div>
+
+      <h6 className={classes.sectionTitle}>Pending Buy Orders</h6>
+      <img src={decor} alt="text-decor" className={classes.textDecor} />
+      <div className={classes.ordersContainer}>
+        {buyerPendingOrders.length === 0 && (
+          <h6 className={classes.noDataFoundText}>No Orders Fulfilled</h6>
+        )}
+        {buyerPendingOrders.length !== 0 && renderReadyBuyerPendingOrders}
+      </div>
+      <h6 className={classes.sectionTitle}>Fulfilled Buy Orders</h6>
+      <img src={decor} alt="text-decor" className={classes.textDecor} />
+      <div className={classes.ordersContainer}>
+        {buyerFulfilledOrders.length === 0 && (
+          <h6 className={classes.noDataFoundText}>No Orders Fulfilled</h6>
+        )}
+        {buyerFulfilledOrders.length !== 0 && renderReadyBuyerFullfilledOrders}
       </div>
     </div>
   );

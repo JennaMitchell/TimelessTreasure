@@ -10,6 +10,14 @@ export const clearUserStateData = (dispatch: any) => {
   dispatch(userStoreSliceActions.setUserEmail(""));
   dispatch(userStoreSliceActions.setUsername(""));
   dispatch(userStoreSliceActions.setAutoLogoutTime(""));
+  dispatch(userStoreSliceActions.setBuyerFulfilledOrders([]));
+  dispatch(userStoreSliceActions.setBuyerPendingOrders([]));
+  dispatch(sellerStoreActions.setSellerData([]));
+  dispatch(sellerStoreActions.setSellerFulfilledOrderData([]));
+  dispatch(sellerStoreActions.setSellerPendingOrderData([]));
+  dispatch(sellerStoreActions.setSellerNewPostPriceType("USD"));
+  dispatch(sellerStoreActions.setSellerNewPostProductCategory("Ceramics"));
+  dispatch(sellerStoreActions.setSellerNewPostTags({}));
   dispatch(sellerStoreActions.setIsSeller(false));
 };
 

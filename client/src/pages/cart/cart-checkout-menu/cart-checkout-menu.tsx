@@ -7,12 +7,15 @@ import { useNavigate } from "react-router-dom";
 import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
 import { updateSellersWithOrder } from "../../../utilities/order-api-hooks/order-api-hooks";
 import { mainStoreSliceActions } from "../../../store/store";
+import { useId } from "react";
+import { cartStoreActions } from "../../../store/cart";
 const CartCheckoutMenu = () => {
   const cartData = useAppSelector((state) => state.cartStore.cartData);
   let calculatedSubTotal = 0;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const orderQuantityArray: number[] = [];
+  let userId = useAppSelector((state) => state.userStore.userId);
 
   for (
     let indexOfCartData = 0;
@@ -69,11 +72,16 @@ const CartCheckoutMenu = () => {
 
       // Making request to the sellers coorsponding with the product Ids
 
+      if (userId.length === 0) {
+        userId = keyIdGenerator();
+      }
+
       const orderData = {
         status: "Ship",
         orderId: orderId,
         itemIdsPlaced: arrayOfProductIds,
         orderQuantityArray: orderQuantityArray,
+        userId: userId,
       };
 
       updateSellersWithOrder(dispatch, orderData)
@@ -94,6 +102,8 @@ const CartCheckoutMenu = () => {
                 mainStoreSliceActions.setAPICallMessage("Data Retrieved!")
               );
               dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+              dispatch(cartStoreActions.setCartData([]));
+              navigate("/order-placed");
             }
           } else {
             dispatch(
@@ -102,8 +112,6 @@ const CartCheckoutMenu = () => {
             dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
           }
         });
-
-      navigate("/order-placed");
     }
   };
 

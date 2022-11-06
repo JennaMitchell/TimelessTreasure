@@ -31,7 +31,7 @@
 .orderNumber {
   font-size: toRem(18);
   font-family: $fontFamily;
-  color: $black;
+  color: $main800;
   margin: 0px;
   padding: 0px;
   font-weight: bold;
@@ -134,7 +134,7 @@
   font-family: $fontFamily;
   margin: 0px;
   padding: 0px;
-  color: $black;
+  color: $main800;
 }
 .orderTotal {
   font-size: toRem(12);
@@ -192,15 +192,7 @@
   border-radius: 50%;
   transition: all 0.5s;
 }
-.moreInfoIcon {
-  color: inherit;
-  width: max(15px, 15px);
-  height: max(15px, 15px);
-}
-.moreInfoContainer:hover {
-  background-color: $main200;
-  color: $black;
-}
+
 .orderContainer {
   width: max(300px, 300px);
   height: max(350px, 350px);
