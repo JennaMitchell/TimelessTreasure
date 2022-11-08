@@ -5,7 +5,10 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from "@heroicons/react/24/outline";
+import { getTagDataHandler } from "../../../../utilities/product-react-hooks/product-react-hooks";
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
 import React, { useState } from "react";
+
 interface SelectedItem {
   [key: string]: string;
 }
@@ -19,6 +22,7 @@ interface Props {
 }
 
 const CategoryFilterDropdown = ({ productType, dataRetriever }: Props) => {
+  const dispatch = useAppDispatch();
   const [activeDropdowns, setActiveDropdowns] = useState<boolean[]>([]);
 
   const [selectedTags, setSelectedTags] = useState<SelectedItem>({});
@@ -33,7 +37,7 @@ const CategoryFilterDropdown = ({ productType, dataRetriever }: Props) => {
   const selectedDataData = Object.values(selectedProductData);
 
   const renderReadySelectionData: any[] = [[], [], [], [], []];
-
+  const activeTags = useAppSelector((state) => state.marketStore.activeTags);
   const checkBoxHandler = (
     e: React.MouseEvent<HTMLElement | SVGSVGElement>
   ) => {
@@ -60,6 +64,8 @@ const CategoryFilterDropdown = ({ productType, dataRetriever }: Props) => {
       dataRetriever(selectedItem, false, type);
     }
     setSelectedTags(copyOfSelectedTags);
+
+    getTagDataHandler(dispatch, activeTags);
   };
 
   for (let i = 0; i < selectedDataData.length; i++) {

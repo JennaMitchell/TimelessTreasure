@@ -1,8 +1,7 @@
 import classes from "./marketplace-menu.module.scss";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { CheckIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
-import blueVase from "../../../images/homepage/photo-carousel/antique-vase.jpg";
+import React, { useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import MarkplaceMenuTag from "../markplace-menu-components/tags/marketplace-menu-tag";
@@ -10,6 +9,18 @@ import CategoryFilterDropdown from "../markplace-menu-components/category-filter
 import { capitalizeFirstLetter } from "../../../utilities/generic-hooks/generic-hooks";
 import productTypeSubSelection from "../../../utilities/product-type-sub-selection";
 import { marketplaceStoreActions } from "../../../store/marketplace";
+import { getSearchedProduct } from "../../../utilities/product-api-hooks/marketplace-product-hooks";
+import RecentlyViewedProduct from "../recently-viewed-product/recently-viewed-product";
+import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
+import { getTagDataHandler } from "../../../utilities/product-react-hooks/product-react-hooks";
+interface RecentlyViewedProduct {
+  imageUrl: string;
+  title: string;
+  price: string;
+  description: string;
+  quantity: number;
+  productId: string;
+}
 const MarketplaceMenu = () => {
   const dispatch = useAppDispatch();
   const [searchContainerActive, setSearchContainerActive] = useState(false);
@@ -17,7 +28,10 @@ const MarketplaceMenu = () => {
   const [productCategoriesActive, setProductCategoriesActive] = useState(false);
   const [recentlyViewedActive, setRecentlyViewedActive] = useState(false);
   const [priceRangeActive, setPriceRangeActive] = useState(false);
-
+  const marketplaceMenuSearchRef = useRef(null);
+  const recentlyViewedProduct = useAppSelector(
+    (state) => state.marketStore.recentlyViewedProduct
+  );
   const activeTags = useAppSelector((state) => state.marketStore.activeTags);
 
   const [searchLabelMoveout, setSearchLabelMoveout] = useState(false);
@@ -28,11 +42,37 @@ const MarketplaceMenu = () => {
 
   const tagClickedHandler = (targetId: string) => {
     const copyOfActiveTags: string[] = activeTags.slice();
-
     const indexOfTagToRemove = copyOfActiveTags.indexOf(targetId);
     copyOfActiveTags.splice(indexOfTagToRemove, 1);
-
+    getTagDataHandler(dispatch, copyOfActiveTags);
     dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
+  };
+
+  const searchBarApiCallHandler = () => {
+    getSearchedProduct(dispatch, searchInputData)
+      .then((data) => {
+        return data?.json();
+      })
+      .then((jsonData) => {
+        if ("error" in jsonData) {
+          if (jsonData.error.length !== 0) {
+            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          }
+        } else {
+          dispatch(mainStoreSliceActions.setAPICallMessage("Product Found"));
+          dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          dispatch(
+            marketplaceStoreActions.setRetrievedData(jsonData.foundProduct)
+          );
+          setSearchInputData("");
+          if (marketplaceMenuSearchRef.current != null) {
+            const currentElement =
+              marketplaceMenuSearchRef.current as HTMLInputElement;
+            currentElement.value = "";
+          }
+        }
+      });
   };
 
   const dropdownClickedButtonRetriever = (
@@ -149,6 +189,8 @@ const MarketplaceMenu = () => {
       copyOfActiveTags.push(priceRange);
     }
 
+    getTagDataHandler(dispatch, copyOfActiveTags);
+
     dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
   };
 
@@ -164,6 +206,7 @@ const MarketplaceMenu = () => {
         className={classes.priceRangeContainer}
         id={`${range}-price-range`}
         onClick={priceButtonHandler}
+        key={`${range}-price-range-dropdown`}
       >
         <button
           aria-label={`price range ${range}`}
@@ -208,12 +251,35 @@ const MarketplaceMenu = () => {
     setSearchInputData(targetElement.value);
   };
   const searchInputFocusHandler = () => {
+    if (marketplaceMenuSearchRef.current != null) {
+      const currentElement =
+        marketplaceMenuSearchRef.current as HTMLInputElement;
+      currentElement.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          console.log("ENTER");
+
+          searchBarApiCallHandler();
+        }
+      });
+    }
     if (searchInputData.length === 0) {
       setSearchLabelMoveout(!searchLabelMoveout);
     }
     setSearchInputActive(true);
   };
   const searchInputBlurHandler = () => {
+    if (marketplaceMenuSearchRef.current != null) {
+      const currentElement =
+        marketplaceMenuSearchRef.current as HTMLInputElement;
+      currentElement.removeEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+
+          searchBarApiCallHandler();
+        }
+      });
+    }
     if (searchInputData.length === 0) {
       setSearchLabelMoveout(false);
     }
@@ -256,6 +322,7 @@ const MarketplaceMenu = () => {
               Search
             </div>
             <input
+              ref={marketplaceMenuSearchRef}
               className={classes.searchBarInput}
               onBlur={searchInputBlurHandler}
               onFocus={searchInputFocusHandler}
@@ -427,17 +494,22 @@ const MarketplaceMenu = () => {
 
       {recentlyViewedActive && (
         <div className={classes.contentBlock}>
-          <div className={classes.recentlyViewedItemContainer}>
-            <img
-              className={classes.recentlyViewedProductPhoto}
-              src={blueVase}
-              alt="vase"
-            />
-            <div className={classes.priceTitleContainer}>
-              <h6 className={classes.productTitles}>Blue Antique Vase</h6>
-              <p className={classes.productPrice}>$65.00</p>
-            </div>
-          </div>
+          {recentlyViewedProduct.map(
+            (data: RecentlyViewedProduct, index: number) => {
+              const key = keyIdGenerator();
+              return (
+                <RecentlyViewedProduct
+                  imageUrl={data.imageUrl}
+                  title={data.title}
+                  quantity={data.quantity}
+                  price={data.price}
+                  description={data.description}
+                  productId={data.productId}
+                  key={key}
+                />
+              );
+            }
+          )}
         </div>
       )}
       <button

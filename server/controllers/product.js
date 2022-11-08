@@ -1,10 +1,14 @@
 const { validationResult } = require("express-validator");
 
 const ProductSchema = require("../models/product-schema");
-
+const io = require("../socket/socket");
+// io.getIo to use it
 exports.getAllProduct = async (req, res, next) => {
   try {
-    const result = await ProductSchema.find({}, { sellerId: 0 });
+    const result = await ProductSchema.find(
+      { status: "For Sale" },
+      { sellerId: 0 }
+    );
     return res.status(201).json({
       message: "Product Added!",
       foundProduct: result,
@@ -28,7 +32,7 @@ exports.createNewProduct = async (req, res, next) => {
     });
   }
   const title = req.body.title;
-  const price = req.body.price;
+  const price = +req.body.price;
   const priceType = req.body.priceType;
   const temptags = req.body.productTags;
 
@@ -70,6 +74,12 @@ exports.createNewProduct = async (req, res, next) => {
     });
 
     await newProduct.save();
+    // once done we use websocket to update it
+    io.getIo().emit("new-product", {
+      action: "create-new-product",
+      productCreated: newProduct,
+    });
+    // emit everyone broadcast only one
 
     return res.status(201).json({
       message: "Product Added!",
@@ -97,7 +107,7 @@ exports.updateProduct = async (req, res, next) => {
     const productId = req.body.productId;
     const foundProduct = await ProductSchema.findOne({ productId: productId });
     const title = req.body.title;
-    const price = req.body.price;
+    const price = +req.body.price;
     const priceType = req.body.priceType;
     const image = req.file;
     const sellerId = req.body.userId;
@@ -127,8 +137,26 @@ exports.updateProduct = async (req, res, next) => {
     } else {
       await ProductSchema.updateOne(
         { productId: productId },
-        { $set: { title: title, price: price, priceType: priceType } }
+        {
+          $set: {
+            title: title,
+            price: price,
+            priceType: priceType,
+            description: description,
+          },
+        }
       );
+      const productToUpdate = {
+        productId: productId,
+        title: title,
+        price: price,
+        priceType: priceType,
+        description: description,
+      };
+      io.getIo().emit("update-product", {
+        action: "update-product",
+        productUpdated: productToUpdate,
+      });
     }
 
     res.status(201).json({
@@ -172,7 +200,6 @@ exports.deletePost = async (req, res, next) => {
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],
@@ -193,9 +220,128 @@ exports.getFilteredData = async (req, res, next) => {
     }
     const filterArray = filterString.split("-");
 
+    // check for price Ranges
+    const priceRangeArray = [];
+    const priceRangeIndexArray = [];
+
+    for (
+      let indexOfFilterArray = 0;
+      indexOfFilterArray < filterArray.length;
+      indexOfFilterArray++
+    ) {
+      if (
+        filterArray[indexOfFilterArray].trim()[0] === "$" ||
+        filterArray[indexOfFilterArray].trim()[0] === "€"
+      ) {
+        priceRangeArray[priceRangeArray.length] = +filterArray[
+          indexOfFilterArray
+        ]
+          .trim()
+          .slice(1);
+        priceRangeIndexArray[priceRangeIndexArray.length] = indexOfFilterArray;
+      }
+    }
+
+    // removing the price range from the filter tags
+    const finalFilterArray = [];
+    for (
+      let finalFilterArrayIndex = 0;
+      finalFilterArrayIndex < filterArray.length;
+      finalFilterArrayIndex++
+    ) {
+      if (!priceRangeIndexArray.includes(finalFilterArrayIndex)) {
+        finalFilterArray[finalFilterArray.length] =
+          filterArray[finalFilterArrayIndex];
+      }
+    }
+
+    let foundProducts = [];
+    if (priceRangeArray.length === 2) {
+      // order the numbers into max pars
+      let maxPrice = priceRangeArray[1];
+      let minPrice = priceRangeArray[0];
+      if (priceRangeArray[0] > priceRangeArray[1]) {
+        maxPrice = priceRangeArray[1];
+        minPrice = priceRangeArray[0];
+      }
+
+      if (finalFilterArray.length === 0) {
+        foundProducts = await ProductSchema.find(
+          {
+            price: { $gte: minPrice, $lte: maxPrice },
+            status: "For Sale",
+          },
+          { sellerId: 0 }
+        );
+      } else {
+        foundProducts = await ProductSchema.find(
+          {
+            productTags: { $all: finalFilterArray },
+            price: { $gte: minPrice, $lte: maxPrice },
+            status: "For Sale",
+          },
+          { sellerId: 0 }
+        );
+      }
+    } else if (priceRangeArray.length === 1) {
+      if (finalFilterArray.length === 0) {
+        foundProducts = await ProductSchema.find(
+          {
+            price: { $gte: maxPrice },
+            status: "For Sale",
+          },
+          { sellerId: 0 }
+        );
+      } else {
+        foundProducts = await ProductSchema.find(
+          {
+            productTags: { $all: finalFilterArray },
+            price: { $gte: priceRangeArray[0] },
+            status: "For Sale",
+          },
+          { sellerId: 0 }
+        );
+      }
+    } else {
+      foundProducts = await ProductSchema.find(
+        {
+          productTags: { $all: filterArray },
+          status: "For Sale",
+        },
+        { sellerId: 0 }
+      );
+    }
+
+    return res.status(201).json({
+      message: "Data Retrieved!",
+      foundProducts: foundProducts,
+      status: 201,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(401).json({
+      message: `Server Error!`,
+      error: [{ error: "Server Error" }],
+    });
+  }
+};
+
+exports.getFilteredSearchData = async (req, res, next) => {
+  const filterString = req.params.filter;
+
+  try {
+    if (!filterString) {
+      res.status(401).json({
+        message: `No filter string sent!`,
+        error: [{ error: "No filter string sent!" }],
+      });
+      return;
+    }
+
     const foundProducts = await ProductSchema.find(
       {
-        productTags: { $all: filterArray },
+        title: { $regex: filterString, $options: "i" },
+        status: "For Sale",
       },
       { sellerId: 0 }
     );

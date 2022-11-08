@@ -8,9 +8,8 @@ export const getFilteredProduct = async (dispatch: any, tagData: any) => {
       filterString = filterString + "-" + tagData[indexOfTag];
     }
   }
-  console.log(filterString);
+
   if (filterString.length === 0) {
-    console.log(13);
     try {
       const fetchedResponse = await fetch(
         `http://localhost:5000/product/get-all`,
@@ -27,6 +26,36 @@ export const getFilteredProduct = async (dispatch: any, tagData: any) => {
     try {
       const fetchedResponse = await fetch(
         `http://localhost:5000/product/filter/${filterString}`,
+        {
+          method: "GET",
+        }
+      );
+      return fetchedResponse;
+    } catch (error) {
+      dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+    }
+  }
+};
+
+export const getSearchedProduct = async (dispatch: any, filterString: any) => {
+  if (filterString.trim().length === 0) {
+    try {
+      const fetchedResponse = await fetch(
+        `http://localhost:5000/product/get-all`,
+        {
+          method: "GET",
+        }
+      );
+      return fetchedResponse;
+    } catch (error) {
+      dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+    }
+  } else {
+    try {
+      const fetchedResponse = await fetch(
+        `http://localhost:5000/product/filter-search/${filterString}`,
         {
           method: "GET",
         }

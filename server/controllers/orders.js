@@ -113,12 +113,43 @@ exports.addOrderDataToSeller = async (req, res, next) => {
     });
     await newPlacedOrderObject.save();
 
+    for (
+      let indexOfComparison = 0;
+      indexOfComparison < orderQuantityArray.length;
+      indexOfComparison++
+    ) {
+      if (
+        +orderQuantityArray[indexOfComparison] ===
+        +foundProductArray[indexOfComparison].quantity
+      ) {
+        await ProductSchema.updateOne(
+          { productId: foundProductArray[indexOfComparison].productId },
+          {
+            $set: {
+              status: "Sold",
+            },
+          }
+        );
+      } else {
+        await ProductSchema.updateOne(
+          { productId: foundProductArray[indexOfComparison].productId },
+          {
+            $set: {
+              quantity: `${
+                +foundProductArray[indexOfComparison].quantity -
+                +orderQuantityArray[indexOfComparison]
+              }`,
+            },
+          }
+        );
+      }
+    }
+
     return res.status(201).json({
       message: "Product Found!",
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],

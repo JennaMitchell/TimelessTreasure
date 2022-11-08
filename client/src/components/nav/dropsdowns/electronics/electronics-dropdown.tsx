@@ -3,6 +3,10 @@ import cameraPhoto from "../../../../images/nav-dropdowns/antique-camera.jpg";
 import { dropDownNavCategoryHandler } from "../../../../utilities/generic-hooks/generic-hooks";
 import { useAppDispatch } from "../../../../store/hooks";
 import { useNavigate } from "react-router-dom";
+import {
+  getTagDataHandler,
+  dropdownIdSpliter,
+} from "../../../../utilities/product-react-hooks/product-react-hooks";
 
 interface Props {
   mouseEnterHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -19,6 +23,8 @@ const ElectronicsDropDown = ({
   const navButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetElement = e.target as HTMLButtonElement;
     dropDownNavCategoryHandler(targetElement.id, dispatch, navigate);
+    const activeTags = dropdownIdSpliter(targetElement.id);
+    getTagDataHandler(dispatch, activeTags);
   };
   return (
     <div

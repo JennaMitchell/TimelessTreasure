@@ -9,12 +9,13 @@ const sellerController = require("../controllers/seller");
 // const loggedInAuth = require("../middlewear/loggedin-auth");
 const { productTypeSubSelection } = require("../utilities/product-types");
 
-router.get("/get-all", productController.getAllProduct);
+router.get("/get-all/:pageNumber", productController.getAllProduct);
 router.get(
   "/seller-items-for-sale/:sellerId",
   isAuth,
   sellerController.getAllSellerData
 );
+router.get("/filter-search/:filter", productController.getFilteredSearchData);
 
 router.get("/filter/:filter", productController.getFilteredData);
 
@@ -121,4 +122,5 @@ router.post(
   ],
   productController.createNewProduct
 );
+
 module.exports = router;

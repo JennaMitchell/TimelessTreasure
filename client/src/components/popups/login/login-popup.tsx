@@ -170,7 +170,6 @@ const LoginPopup = () => {
     }
 
     setTimeout(() => {
-      console.log("login Call");
       loginCall(dispatch, {
         email: inputLogicObject.emailLoginInput.inputData.toLowerCase(),
         password: inputLogicObject.passwordLoginInput.inputData,

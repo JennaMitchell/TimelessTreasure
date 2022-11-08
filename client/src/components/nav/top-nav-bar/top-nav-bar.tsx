@@ -1,25 +1,128 @@
 import classes from "./top-nav-bar.module.scss";
 import logo from "../../../images/logo/logo.png";
 import bagIcon from "../../../images/icons/bag-icon.png";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import { NavLink, useNavigate } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-
+import { getSearchedProduct } from "../../../utilities/product-api-hooks/marketplace-product-hooks";
+import { marketplaceStoreActions } from "../../../store/marketplace";
+interface LogicObject {
+  [key: string]: {
+    labelMoveout: boolean;
+    inputData: "";
+  };
+}
 const TopNavBar = () => {
   const availableCurrency = ["USD", "CAN", "EUR"];
-  const [searchValue, setSearchValue] = useState("Search");
+  const [searchBarActive, setSearchBarActive] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const searchBarRef = useRef(null);
   const cartData = useAppSelector((state) => state.cartStore.cartData);
+  const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
+    searchBarNavInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+  });
 
-  const searchBarHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    if (e.target.value.length === 0) {
-    }
+  const searchBarApiCallHandler = () => {
+    getSearchedProduct(dispatch, inputLogicObject.searchBarNavInput.inputData)
+      .then((data) => {
+        return data?.json();
+      })
+      .then((jsonData) => {
+        if ("error" in jsonData) {
+          if (jsonData.error.length !== 0) {
+            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          }
+        } else {
+          dispatch(mainStoreSliceActions.setAPICallMessage("Product Found"));
+          dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          dispatch(
+            marketplaceStoreActions.setRetrievedData(jsonData.foundProduct)
+          );
+          setInputLogicObject({
+            searchBarNavInput: {
+              labelMoveout: false,
+              inputData: "",
+            },
+          });
+          if (searchBarRef.current != null) {
+            const currentElement = searchBarRef.current as HTMLInputElement;
+            currentElement.value = "";
+          }
+        }
+        navigate("/marketplace");
+      });
   };
+  const inputCopyObjectHandler = () =>
+    JSON.parse(JSON.stringify(inputLogicObject));
+
+  const inputChangeHandler = (e: React.ChangeEvent) => {
+    const targetElement = e.target as HTMLInputElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+
+    if (!copyOfInputObject[targetElement.id].labelMoveout) {
+      copyOfInputObject[targetElement.id].labelMoveout = true;
+    }
+    copyOfInputObject[targetElement.id].inputData = targetElement.value;
+    setInputLogicObject(copyOfInputObject);
+  };
+  const inputFocusHandler = (e: React.ChangeEvent) => {
+    const targetElement = e.target as HTMLInputElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+
+    if (searchBarRef.current != null) {
+      const currentElement = searchBarRef.current as HTMLInputElement;
+      currentElement.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+
+          searchBarApiCallHandler();
+        }
+      });
+    }
+    if (copyOfInputObject[targetElement.id].inputData.length === 0) {
+      copyOfInputObject[targetElement.id].labelMoveout = true;
+      setInputLogicObject(copyOfInputObject);
+    }
+    setSearchBarActive(true);
+  };
+  const inputBlurHandler = (e: React.ChangeEvent) => {
+    const targetElement = e.target as HTMLInputElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+
+    if (searchBarRef.current != null) {
+      const currentElement = searchBarRef.current as HTMLInputElement;
+      currentElement.removeEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          searchBarApiCallHandler();
+        }
+      });
+    }
+    if (copyOfInputObject[targetElement.id].inputData.length === 0) {
+      copyOfInputObject[targetElement.id].labelMoveout = false;
+      setInputLogicObject(copyOfInputObject);
+    }
+    setSearchBarActive(false);
+  };
+
+  const inputLabelClickHandler = (e: React.MouseEvent) => {
+    const targetElement = e.target as HTMLLabelElement;
+    const copyOfInputObject = inputCopyObjectHandler();
+    document.getElementById(`${targetElement.htmlFor}`)?.focus();
+    copyOfInputObject[targetElement.htmlFor].labelMoveout =
+      !copyOfInputObject[targetElement.htmlFor].labelMoveout;
+    setInputLogicObject(copyOfInputObject);
+    setSearchBarActive(true);
+  };
+
   const loginPopupActive = useAppSelector(
     (state) => state.mainStore.loginPopupActive
   );
@@ -33,6 +136,7 @@ const TopNavBar = () => {
     dispatch(mainStoreSliceActions.setNavMenuSubCategoryClicked(""));
     navigate("/");
   };
+
   const searchContainerClickHandler = () => {
     document.getElementById("searchContainerId")?.focus();
   };
@@ -76,18 +180,33 @@ const TopNavBar = () => {
           )}
 
           <div
-            className={classes.searchContainer}
+            className={`${classes.searchContainer} ${
+              searchBarActive && classes.searchContainerActive
+            }`}
             onClick={searchContainerClickHandler}
           >
+            <label
+              className={`${classes.searchInputLabel} ${
+                inputLogicObject.searchBarNavInput.labelMoveout &&
+                classes.searchInputLabelMoveOut
+              }`}
+              onClick={inputLabelClickHandler}
+              htmlFor="searchBarNavInput"
+            >
+              Search
+            </label>
             <MagnifyingGlassIcon
               className={classes.searchIcon}
               onClick={searchContainerClickHandler}
             />
             <input
               className={classes.searchInput}
-              value={searchValue}
-              onChange={searchBarHandler}
-              id="searchContainerId"
+              id="searchBarNavInput"
+              ref={searchBarRef}
+              onBlur={inputBlurHandler}
+              onFocus={inputFocusHandler}
+              onChange={inputChangeHandler}
+              maxLength={100}
             />
           </div>
 

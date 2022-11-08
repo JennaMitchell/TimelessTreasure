@@ -1,0 +1,50 @@
+@import "../../../utilities/variables";
+.recentlyViewedItemContainer {
+  width: max(100%, 100%);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: center;
+  transition: background-color 0.5s;
+}
+.recentlyViewedItemContainer:hover {
+  background-color: $main300;
+}
+.recentlyViewedProductPhoto {
+  object-fit: cover;
+  width: max(60px, 60px);
+  height: max(60px, 60px);
+
+  background-color: $white;
+
+  border-bottom: 5px;
+}
+.priceTitleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-items: flex-start;
+  width: max(200px, 200px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  gap: 10px;
+  position: relative;
+}
+.productTitles {
+  padding: 0px;
+  margin: 0px;
+  font-size: 16px;
+  font-family: $fontFamily;
+  color: $main800;
+}
+.productPrice {
+  padding: 0px;
+  margin: 0px;
+  font-size: 12px;
+  font-family: $fontFamily;
+  color: $main800;
+}

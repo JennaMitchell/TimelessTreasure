@@ -1,32 +1,18 @@
 import classes from "./seller-orders.module.scss";
-
 import PendingSellerOrderContainer from "./pending-seller-order-container/pending-seller-order-container";
 import FulfilledSellerOrders from "./fulfilled-seller-orders/fulfilled-seller-orders";
 import decor from "../../images/homepage/decor/decor.png";
-import { tempSellerOrders } from "./temp-seller-orders";
 import ItemForSaleContainer from "./item-for-sale-container/item-for-sale-container";
 import { useAppDispatch } from "../../store/hooks";
 import { mainStoreSliceActions } from "../../store/store";
 import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
 import BuyerOrderContainer from "../buyer-order-page/buyer-order-container/buyer-order-container";
-import {
-  getBuyersPendingItemsCall,
-  getBuyersFulfilledItemsCall,
-} from "../../utilities/product-api-hooks/buyer-product-hooks";
-import {
-  getSellersItemsForSaleCall,
-  getSellersPendingItemsCall,
-  getSellersFulfilledItemsCall,
-} from "../../utilities/product-api-hooks/seller-product-hooks";
 import { useAppSelector } from "../../store/hooks";
-import { userStoreSliceActions } from "../../store/user-store";
-
 import { closeApiMessageDropDown } from "../../utilities/generic-hooks/generic-hooks";
-import { sellerStoreActions } from "../../store/seller";
+
 const SellerOrdersPage = () => {
   const dispatch = useAppDispatch();
-  const userId = useAppSelector((state) => state.userStore.userId);
-  const userToken = useAppSelector((state) => state.userStore.userToken);
+
   const sellerData: any = useAppSelector(
     (state) => state.sellerStore.sellerData
   );
@@ -47,160 +33,6 @@ const SellerOrdersPage = () => {
     dispatch(mainStoreSliceActions.setNewPostPopupActive(true));
     dispatch(mainStoreSliceActions.setLockViewPort(true));
     closeApiMessageDropDown(dispatch);
-  };
-
-  const tempHandler = () => {
-    getSellersItemsForSaleCall(dispatch, userId, userToken)
-      .then((response) => {
-        return response?.json();
-      })
-      .then((jsonData) => {
-        if (jsonData !== undefined) {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-              Promise.reject();
-            }
-          } else {
-            dispatch(sellerStoreActions.setSellerData(jsonData));
-          }
-        } else {
-          dispatch(
-            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
-          );
-          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-          Promise.reject();
-        }
-      })
-      .then(() => {
-        return getSellersPendingItemsCall(dispatch, userId, userToken);
-      })
-      .then((response: Response | void) => {
-        return response?.json();
-      })
-      .then((jsonData) => {
-        if (jsonData !== undefined) {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-              return Promise.reject();
-            }
-          } else {
-            dispatch(
-              sellerStoreActions.setSellerPendingOrderData(
-                jsonData.foundProducts
-              )
-            );
-          }
-        } else {
-          dispatch(
-            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
-          );
-          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-          return Promise.reject();
-        }
-      })
-      .then(() => {
-        return getSellersFulfilledItemsCall(dispatch, userId, userToken);
-      })
-      .then((response: Response | void) => {
-        return response?.json();
-      })
-      .then((jsonData) => {
-        if (jsonData !== undefined) {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-              return Promise.reject();
-            }
-          } else {
-            dispatch(
-              sellerStoreActions.setSellerFulfilledOrderData(
-                jsonData.foundProducts
-              )
-            );
-          }
-        } else {
-          dispatch(
-            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
-          );
-          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-          return Promise.reject();
-        }
-      })
-      .then(() => {
-        return getBuyersPendingItemsCall(dispatch, userId, userToken);
-      })
-      .then((response: Response | void) => {
-        return response?.json();
-      })
-      .then((jsonData) => {
-        if (jsonData !== undefined) {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-              return Promise.reject();
-            }
-          } else {
-            dispatch(
-              userStoreSliceActions.setBuyerPendingOrders(
-                jsonData.foundProducts
-              )
-            );
-          }
-        } else {
-          dispatch(
-            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
-          );
-          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-          return Promise.reject();
-        }
-      })
-      .then(() => {
-        return getBuyersFulfilledItemsCall(dispatch, userId, userToken);
-      })
-      .then((response: Response | void) => {
-        return response?.json();
-      })
-      .then((jsonData) => {
-        if (jsonData !== undefined) {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-              return Promise.reject();
-            }
-          } else {
-            dispatch(
-              userStoreSliceActions.setBuyerFulfilledOrders(
-                jsonData.foundProducts
-              )
-            );
-            dispatch(mainStoreSliceActions.setAPICallMessage("Data Retrieved"));
-            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
-          }
-        } else {
-          dispatch(
-            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
-          );
-          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-          return Promise.reject();
-        }
-      });
   };
 
   const renderReadySellerDataItemsForSale = [];
@@ -234,8 +66,6 @@ const SellerOrdersPage = () => {
 
   const renderReadyPendingOrders = sellerPendingOrderData.map((data) => {
     const keyId = keyIdGenerator();
-    console.log(data);
-
     return (
       <PendingSellerOrderContainer
         itemsPlaced={data.itemsPlacedData}
@@ -288,9 +118,6 @@ const SellerOrdersPage = () => {
 
   return (
     <div className={classes.topContainer}>
-      <div className={classes.tempButton} onClick={tempHandler}>
-        Temp
-      </div>
       <button className={classes.newProductButton} onClick={newPostHandler}>
         New Post
       </button>

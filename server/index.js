@@ -13,6 +13,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -43,13 +44,16 @@ const store = new MongoDBStore({
 });
 mongoose
   .connect(process.env.MONGO_URL)
-  .then(() => console.log("DB Connection Successfull!"))
+  .then(() => {
+    console.log("DB Connection Successfull!");
+  })
   .catch((err) => {
     res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Not Connected" }],
     });
   });
+
 app.use(
   session({
     secret: process.env.SESSION_PASS,
@@ -88,6 +92,11 @@ app.use("/update", updateUserSettingsRoute);
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
 
-app.listen(5000, () => {
+const server = app.listen(5000, () => {
   console.log("Backend server is running!");
+});
+const io = require("./socket/socket").init(server);
+
+io.on("connection", (socket) => {
+  console.log("User Connected");
 });

@@ -1,10 +1,13 @@
 @import "../../../utilities/variables";
-.markplaceSelection {
+.marketplaceSelection {
   width: max(800px, 800px);
   height: max(100%, 100%);
   display: grid;
   grid-template-columns: max-content max-content max-content;
   grid-auto-rows: max-content;
+  box-sizing: border-box;
+  padding: 40px 0px;
+  position: relative;
 }
 .itemContainer {
   width: max(200px, 200px);
@@ -70,4 +73,33 @@
   width: max(800px, 800px);
   columns: 1 / span 3;
   text-align: center;
+}
+
+.pageButtonContainer {
+  max-width: max-content;
+  box-sizing: border-box;
+  max-height: max-content;
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  bottom: -50px;
+  right: 10px;
+}
+
+.pageButton {
+  max-width: max-content;
+  box-sizing: border-box;
+  max-height: max-content;
+  padding: 10px;
+  border: 1px solid $main800;
+  border-radius: 2px;
+  background-color: $white;
+  font-size: toRem(12);
+  font-family: $fontFamily;
+  transition: all 0.5s;
+  position: relative;
+}
+.pageButton:hover {
+  background-color: $main200;
+  color: $main800;
 }

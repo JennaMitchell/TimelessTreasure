@@ -117,15 +117,13 @@
   color: $white;
 }
 .searchContainer {
-  min-width: 200px;
-  width: max-content;
-  max-width: max-content;
+  max-width: 200px;
   height: 100%;
   max-height: 100%;
   min-height: 100%;
-  display: grid;
-  grid-template-columns: 20px 140px;
-  grid-template-rows: 100%;
+  display: flex;
+  gap: 10px;
+
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
@@ -133,12 +131,16 @@
   padding-left: 10px;
   padding-right: 10px;
   box-sizing: border-box;
-  transition: all 1s;
+
+  position: relative;
 }
 .searchContainer:hover {
-  background-color: $main100;
-  border: 1px solid grey;
-  color: grey;
+  border: 1px solid blue;
+  outline: 1px solid lightblue;
+}
+.searchContainerActive {
+  border: 1px solid blue;
+  outline: 1px solid lightblue;
 }
 .searchIcon {
   width: max(20px, 20px);
@@ -152,6 +154,7 @@
   border: none;
   background-color: inherit;
   font-family: $fontFamily;
+  position: relative;
 }
 .searchInput:focus,
 .searchInput:active {
@@ -220,4 +223,20 @@
   border-radius: 50%;
   font-family: $fontFamily;
   font-size: toRem(12);
+}
+.searchInputLabel {
+  font-family: $fontFamily;
+  color: inherit;
+  font-size: toRem(14);
+  position: absolute;
+  top: 8px;
+  left: 35px;
+  transition: all 1s;
+  padding: 0px 4px;
+}
+.searchInputLabelMoveOut {
+  top: -8px;
+  left: 10px;
+  font-size: toRem(10);
+  background-color: white;
 }

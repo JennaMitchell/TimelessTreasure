@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import classes from "./api-call-dropdown.module.scss";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { XMarkIcon } from "@heroicons/react/24/solid";

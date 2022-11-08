@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import classes from "./marketplace-selection.module.scss";
-import { getFilteredProduct } from "../../../utilities/product-api-hooks/marketplace-product-hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import ProductPopup from "../../../components/popups/product/product-popup";
 import { useState } from "react";
@@ -8,9 +7,17 @@ import {
   imageUrlCreator,
   priceStringCreator,
 } from "../../../utilities/generic-hooks/generic-hooks";
+import { marketplaceStoreActions } from "../../../store/marketplace";
+import { recentlyViewedHook } from "../../../utilities/recently-viewed-hook/recently-viewed-hook";
+import openSocket from "socket.io-client";
+
 const MarketplaceSelection = () => {
-  const activeTags = useAppSelector((state) => state.marketStore.activeTags);
-  const [retrievedData, setRetrievedData] = useState<any[]>([]);
+  const socket = openSocket("http://localhost:5000");
+
+  const retrievedData = useAppSelector(
+    (state) => state.marketStore.retrievedData
+  );
+
   const [popupImageUrl, setPopupImageUrl] = useState<string>("");
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [popupDescription, setPopupDescription] = useState<string>("");
@@ -18,7 +25,29 @@ const MarketplaceSelection = () => {
   const [popupQuantity, setPopupQuantity] = useState(0);
   const [popupProductId, setPopupProductId] = useState("");
   const dispatch = useAppDispatch();
+  const numberOfItemsPerPage = 9;
   let renderReadyProductData: any[] = [];
+  const recentlyViewedProduct = useAppSelector(
+    (state) => state.marketStore.recentlyViewedProduct
+  );
+  socket.on("new-product", (data) => {
+    if (data.action === "create-new-product") {
+      console.log("Product Created");
+      // once data is recieved need to check if the users selected tags match with what is
+      // the user is looking at
+      const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
+      copyOfRetrievedData.push(data.productCreated);
+      dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
+    }
+  });
+  socket.on("update-product", (data) => {
+    if (data.action === "update-product") {
+      console.log("Product Created");
+      const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
+      copyOfRetrievedData.push(data.productCreated);
+      dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
+    }
+  });
 
   if (retrievedData.length !== 0) {
     renderReadyProductData = retrievedData.map((itemData, index) => {
@@ -34,6 +63,14 @@ const MarketplaceSelection = () => {
         setPopupQuantity(itemData.quantity);
         setPopupProductId(itemData.productId);
         setPopupPrice(tempPrice);
+        recentlyViewedHook(dispatch, recentlyViewedProduct, {
+          imageUrl: productImageUrl,
+          title: itemData.title,
+          description: itemData.description,
+          quantity: itemData.quantity,
+          price: tempPrice,
+          productId: itemData.productId,
+        });
       };
       return (
         <div
@@ -53,40 +90,19 @@ const MarketplaceSelection = () => {
     });
   }
 
-  const getDataHandler = () => {
-    getFilteredProduct(dispatch, activeTags)
-      .then((response) => {
-        return response?.json();
-      })
-      .then((jsonData) => {
-        if (jsonData !== undefined) {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-            }
-          } else {
-            dispatch(
-              mainStoreSliceActions.setAPICallMessage("Data Retrieved!")
-            );
-            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+  const renderReadyItemPageButtons: any[] = [];
 
-            if (`${typeof jsonData.foundProduct}` === "undefined") {
-              setRetrievedData([]);
-            } else {
-              setRetrievedData(jsonData.foundProduct);
-            }
-          }
-        } else {
-          dispatch(
-            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
-          );
-          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-        }
-      });
-  };
+  const numberOfPages = Math.ceil(retrievedData.length / numberOfItemsPerPage);
+
+  for (
+    let pageButtonIndex = 0;
+    pageButtonIndex < numberOfPages;
+    pageButtonIndex++
+  ) {
+    renderReadyItemPageButtons.push(
+      <button className={classes.pageButton}>{pageButtonIndex}</button>
+    );
+  }
 
   return (
     <>
@@ -98,14 +114,16 @@ const MarketplaceSelection = () => {
         price={popupPrice}
         productId={popupProductId}
       />
-      <div className={classes.tempButton} onClick={getDataHandler}>
-        Get Data
-      </div>
-      <div className={classes.markplaceSelection}>
+
+      <div className={classes.marketplaceSelection}>
         {renderReadyProductData.length === 0 && (
           <p className={classes.noProductFoundText}>No products found!</p>
         )}
         {renderReadyProductData}
+
+        <div className={classes.pageButtonContainer}>
+          {renderReadyItemPageButtons}
+        </div>
       </div>
     </>
   );

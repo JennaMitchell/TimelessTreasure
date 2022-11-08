@@ -38,6 +38,7 @@ const CartCheckoutMenu = () => {
       priceType = "EUR";
     }
     cartDataPrice = cartDataPrice.join("");
+    console.log(cartData[indexOfCartData]);
     const totalOfItem = +cartDataPrice * cartData[indexOfCartData].quantity;
     calculatedSubTotal = calculatedSubTotal + totalOfItem;
   }
