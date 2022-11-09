@@ -10,8 +10,8 @@ import { newProductCall } from "../../../utilities/product-api-hooks/seller-prod
 import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
 import { priceValidator } from "../../../utilities/validation-hooks/validation-hooks";
 import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
-import { userStoreSliceActions } from "../../../store/user-store";
 import { sellerStoreActions } from "../../../store/seller";
+import { getSellersItemsForSaleCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
@@ -320,7 +320,34 @@ const NewPostPopup = () => {
           dispatch(
             sellerStoreActions.setSellerNewPostProductCategory("Ceramics")
           );
-          closingIconHandler();
+        }
+      })
+      .then(() => {
+        return getSellersItemsForSaleCall(dispatch, userId, userToken);
+      })
+      .then((response) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              Promise.reject();
+            }
+          } else {
+            dispatch(sellerStoreActions.setSellerData(jsonData));
+            closingIconHandler();
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          Promise.reject();
         }
       });
   };

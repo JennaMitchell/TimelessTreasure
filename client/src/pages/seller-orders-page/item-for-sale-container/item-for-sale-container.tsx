@@ -9,6 +9,7 @@ import EditPostPopup from "../../../components/popups/edit-post/edit-post-popup"
 import {
   imageUrlCreator,
   priceStringCreator,
+  priceInputCleaner,
   closeApiMessageDropDown,
 } from "../../../utilities/generic-hooks/generic-hooks";
 interface Props {
@@ -43,7 +44,10 @@ const ItemForSaleContainer = ({
   const activeEditPostPopupId = useAppSelector(
     (state) => state.mainStore.activeEditPostPopupId
   );
-  const tempPrice = priceStringCreator(productPrice, productPriceType);
+  let tempPrice = priceStringCreator(
+    priceInputCleaner(`${productPrice}`),
+    productPriceType
+  );
 
   const renderReadyTags = productTags.map((tag: string) => {
     return (

@@ -1,6 +1,9 @@
 import classes from "./buyer-order-container.module.scss";
 
-import { imageUrlCreator } from "../../../utilities/generic-hooks/generic-hooks";
+import {
+  imageUrlCreator,
+  priceInputCleaner,
+} from "../../../utilities/generic-hooks/generic-hooks";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { priceStringCreator } from "../../../utilities/generic-hooks/generic-hooks";
 interface ItemsPlaced {
@@ -45,7 +48,10 @@ const BuyerOrderContainer = ({
             <p className={classes.productTitle}>{itemData.title}</p>
             <div className={classes.priceContainer}>
               <p className={classes.productPrice}>
-                {priceStringCreator(itemData.price, "USD")}
+                {priceStringCreator(
+                  priceInputCleaner(`${itemData.price}`),
+                  "USD"
+                )}
               </p>
               <p className={classes.quantity}>Qty. {quantityArray[index]}</p>
             </div>

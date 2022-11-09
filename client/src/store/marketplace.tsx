@@ -3,11 +3,15 @@ interface State {
   activeTags: string[];
   retrievedData: any[];
   recentlyViewedProduct: any[];
+  numberOfItemsPerPage: number;
+  activePageNumber: number;
 }
 const initialState: State = {
   activeTags: [],
   retrievedData: [],
   recentlyViewedProduct: [],
+  numberOfItemsPerPage: 2,
+  activePageNumber: 1,
 };
 
 export const marketplaceStoreSlice = createSlice({
@@ -22,6 +26,12 @@ export const marketplaceStoreSlice = createSlice({
     },
     setRecentlyViewedProduct(state, { payload }) {
       state.recentlyViewedProduct = payload;
+    },
+    setNumberOfItemsPerPage(state, { payload }) {
+      state.numberOfItemsPerPage = payload;
+    },
+    setActivePageNumber(state, { payload }) {
+      state.activePageNumber = payload;
     },
   },
 });

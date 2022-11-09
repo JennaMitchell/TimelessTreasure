@@ -3,7 +3,10 @@ import classes from "./fulfilled-seller-orders.module.scss";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { imageUrlCreator } from "../../../utilities/generic-hooks/generic-hooks";
 
-import { priceStringCreator } from "../../../utilities/generic-hooks/generic-hooks";
+import {
+  priceStringCreator,
+  priceInputCleaner,
+} from "../../../utilities/generic-hooks/generic-hooks";
 interface ItemsPlaced {
   productInfo: {};
   quantity: number;
@@ -44,7 +47,10 @@ const FulfilledSellerOrders = ({
             <p className={classes.productTitle}>{itemData.productInfo.title}</p>
             <div className={classes.priceContainer}>
               <p className={classes.productPrice}>
-                {priceStringCreator(itemData.productInfo.price, "USD")}
+                {priceStringCreator(
+                  priceInputCleaner(itemData.productInfo.price),
+                  "USD"
+                )}
               </p>
               <p className={classes.quantity}>Qty. {itemData.quantity}</p>
             </div>

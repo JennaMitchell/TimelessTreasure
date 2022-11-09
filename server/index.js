@@ -97,6 +97,4 @@ const server = app.listen(5000, () => {
 });
 const io = require("./socket/socket").init(server);
 
-io.on("connection", (socket) => {
-  console.log("User Connected");
-});
+io.on("connection", (socket) => {});

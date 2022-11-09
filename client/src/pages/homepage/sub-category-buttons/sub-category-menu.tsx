@@ -3,7 +3,10 @@ import antiqueVase from "../../../images/homepage/photo-carousel/antique-vase.jp
 import antiqueClock from "../../../images/homepage/photo-carousel/antique-clock.jpg";
 import antiquePainting from "../../../images/homepage/photo-carousel/antique-painting.jpg";
 import antiqueTablewear from "../../../images/homepage/photo-carousel/antique-tablewear.jpg";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../../store/hooks";
+import { getTagDataHandler } from "../../../utilities/product-react-hooks/product-react-hooks";
 const SubCategoryMenu = () => {
   const [buttonHover, setButtonHover] = useState("");
   const buttonMouseEnterHandler = (e: React.MouseEvent) => {
@@ -11,6 +14,7 @@ const SubCategoryMenu = () => {
     const elementId = targetElement.id;
     setButtonHover(elementId);
   };
+  const dispatch = useAppDispatch();
 
   const buttonMouseLeaveHandler = () => {
     setButtonHover("");
@@ -25,9 +29,24 @@ const SubCategoryMenu = () => {
     setButtonHover(splitElementId[0]);
   };
 
+  const navigate = useNavigate();
+  const subCategoryButtonHandler = (e: React.MouseEvent) => {
+    const clickedElement = e.target as HTMLDivElement;
+    const clickedId = clickedElement.id;
+    const indexOfFirstDash = clickedId.indexOf("-");
+    const categoryClicked = clickedId.slice(0, indexOfFirstDash);
+
+    getTagDataHandler(dispatch, [categoryClicked]);
+    navigate("/marketplace");
+  };
+
   return (
     <div className={classes.mainContainer}>
-      <div className={classes.subCategoryButton}>
+      <div
+        className={classes.subCategoryButton}
+        onClick={subCategoryButtonHandler}
+        id={"Ceramics-sub-cat-button"}
+      >
         <img
           className={`${classes.buttonImage} ${
             buttonHover === "ceramics" && classes.activeButtonHover
@@ -37,7 +56,7 @@ const SubCategoryMenu = () => {
         />
         <div
           className={classes.blurBackground}
-          id="ceramics"
+          id="Ceramics-blur-background-sub-cat"
           onMouseEnter={buttonMouseEnterHandler}
           onMouseLeave={buttonMouseLeaveHandler}
         />
@@ -46,7 +65,7 @@ const SubCategoryMenu = () => {
             buttonHover === "ceramics" && classes.activeText
           }`}
           onMouseEnter={buttonTextEnterHandler}
-          id="ceramics-title-text"
+          id="Ceramics-sub-cat-title-text"
         >
           Ceramics
         </h6>
@@ -55,7 +74,7 @@ const SubCategoryMenu = () => {
             buttonHover === "ceramics" && classes.activeText
           }`}
           onMouseEnter={buttonTextEnterHandler}
-          id="ceramics-button-subtext"
+          id="Ceramics-sub-cat-button-subtext"
         >
           Find a new family hierloom for yourself and generations after
         </p>
@@ -63,13 +82,17 @@ const SubCategoryMenu = () => {
           className={`${classes.actionButton} ${
             buttonHover === "ceramics" && classes.activeActionButton
           }`}
-          id="ceramics-button"
+          id="Ceramics-sub-cat-discover-button"
           onMouseEnter={buttonTextEnterHandler}
         >
           Discover
         </button>
       </div>
-      <div className={classes.subCategoryButton}>
+      <div
+        className={classes.subCategoryButton}
+        onClick={subCategoryButtonHandler}
+        id={"Clocks-sub-cat-button"}
+      >
         <img
           className={`${classes.buttonImage} ${
             buttonHover === "antiqueClock" && classes.activeButtonHover
@@ -79,7 +102,7 @@ const SubCategoryMenu = () => {
         />
         <div
           className={classes.blurBackground}
-          id="antiqueClock"
+          id="Clocks-sub-cat-blurred-background"
           onMouseEnter={buttonMouseEnterHandler}
           onMouseLeave={buttonMouseLeaveHandler}
         />
@@ -87,7 +110,7 @@ const SubCategoryMenu = () => {
           className={`${classes.categoryTitle} ${
             buttonHover === "antiqueClock" && classes.activeText
           }`}
-          id="antiqueClock-title"
+          id="Clocks-sub-cat-button-title"
           onMouseEnter={buttonTextEnterHandler}
         >
           Clocks
@@ -96,7 +119,7 @@ const SubCategoryMenu = () => {
           className={`${classes.categorySubText} ${
             buttonHover === "antiqueClock" && classes.activeText
           }`}
-          id="antiqueClock-sub-title"
+          id="Clocks-sub-cat-button-title"
           onMouseEnter={buttonTextEnterHandler}
         >
           Keep yourself and your family on time with a new clock
@@ -105,13 +128,17 @@ const SubCategoryMenu = () => {
           className={`${classes.actionButton} ${
             buttonHover === "antiqueClock" && classes.activeActionButton
           }`}
-          id="antiqueClock-button"
+          id="Clocks-sub-cat-shop-button"
           onMouseEnter={buttonTextEnterHandler}
         >
           Show Now
         </button>
       </div>
-      <div className={classes.subCategoryButton}>
+      <div
+        className={classes.subCategoryButton}
+        onClick={subCategoryButtonHandler}
+        id={"Tablewear-sub-cat-button"}
+      >
         <img
           className={`${classes.buttonImage} ${
             buttonHover === "antiqueTablewear" && classes.activeButtonHover
@@ -121,7 +148,7 @@ const SubCategoryMenu = () => {
         />
         <div
           className={classes.blurBackground}
-          id="antiqueTablewear"
+          id="Tablewear-sub-cat-blur-background"
           onMouseEnter={buttonMouseEnterHandler}
           onMouseLeave={buttonMouseLeaveHandler}
         />
@@ -129,7 +156,7 @@ const SubCategoryMenu = () => {
           className={`${classes.categoryTitle} ${
             buttonHover === "antiqueTablewear" && classes.activeText
           }`}
-          id="antiqueTablewear-title"
+          id="Tablewear-sub-cat-button-title-text"
           onMouseEnter={buttonTextEnterHandler}
         >
           Tablewear
@@ -138,7 +165,7 @@ const SubCategoryMenu = () => {
           className={`${classes.categorySubText} ${
             buttonHover === "antiqueTablewear" && classes.activeText
           }`}
-          id="antiqueTablewear-subtext"
+          id="Tablewear-sub-description-text"
           onMouseEnter={buttonTextEnterHandler}
         >
           Share a new dining exprience with friends and loved ones today
@@ -147,13 +174,17 @@ const SubCategoryMenu = () => {
           className={`${classes.actionButton} ${
             buttonHover === "antiqueTablewear" && classes.activeActionButton
           }`}
-          id="antiqueTablewear-shop-now-button"
+          id="Tablewear-sub-cat-shop-now-button"
           onMouseEnter={buttonTextEnterHandler}
         >
           Shop Now
         </button>
       </div>
-      <div className={classes.subCategoryButton}>
+      <div
+        className={classes.subCategoryButton}
+        onClick={subCategoryButtonHandler}
+        id={"Paintings-sub-cat-button"}
+      >
         <img
           className={`${classes.buttonImage} ${
             buttonHover === "antiquePainting" && classes.activeButtonHover
@@ -164,7 +195,7 @@ const SubCategoryMenu = () => {
 
         <div
           className={classes.blurBackground}
-          id="antiquePainting"
+          id="Paintings-sub-cat-blur-background"
           onMouseEnter={buttonMouseEnterHandler}
           onMouseLeave={buttonMouseLeaveHandler}
         />
@@ -172,7 +203,7 @@ const SubCategoryMenu = () => {
           className={`${classes.categoryTitle} ${
             buttonHover === "antiquePainting" && classes.activeText
           }`}
-          id="antiquePainting-title"
+          id="Paintings-sub-cat-title-text"
           onMouseEnter={buttonTextEnterHandler}
         >
           Paintings
@@ -181,7 +212,7 @@ const SubCategoryMenu = () => {
           className={`${classes.categorySubText} ${
             buttonHover === "antiquePainting" && classes.activeText
           }`}
-          id="antiquePainting-subtitle"
+          id="Paintings-sub-cat-description-text"
           onMouseEnter={buttonTextEnterHandler}
         >
           Discover new acclaimed paintings and find timeless classics
@@ -190,7 +221,7 @@ const SubCategoryMenu = () => {
           className={`${classes.actionButton} ${
             buttonHover === "antiquePainting" && classes.activeActionButton
           }`}
-          id="antiquePainting-button"
+          id="Paintings-sub-cat-discovery-button"
           onMouseEnter={buttonTextEnterHandler}
         >
           Discover

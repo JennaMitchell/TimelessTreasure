@@ -44,6 +44,7 @@ const MarketplaceMenu = () => {
     const copyOfActiveTags: string[] = activeTags.slice();
     const indexOfTagToRemove = copyOfActiveTags.indexOf(targetId);
     copyOfActiveTags.splice(indexOfTagToRemove, 1);
+    console.log(copyOfActiveTags);
     getTagDataHandler(dispatch, copyOfActiveTags);
     dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
   };
@@ -63,7 +64,7 @@ const MarketplaceMenu = () => {
           dispatch(mainStoreSliceActions.setAPICallMessage("Product Found"));
           dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
           dispatch(
-            marketplaceStoreActions.setRetrievedData(jsonData.foundProduct)
+            marketplaceStoreActions.setRetrievedData(jsonData.foundProducts)
           );
           setSearchInputData("");
           if (marketplaceMenuSearchRef.current != null) {
@@ -81,16 +82,17 @@ const MarketplaceMenu = () => {
     productType: string
   ) => {
     const copyOfActiveTags = activeTags.slice();
-    const type = copyOfActiveTags[0];
+
+    const type = activeFilterDropdown;
     const typeKeys = Object.keys(productTypeSubSelection[type]);
     const typeValues = Object.values(productTypeSubSelection[type]);
     const indexOfClickedKey = typeKeys.indexOf(productType);
     const valuesToCheckArray = typeValues[indexOfClickedKey];
+
     let valueOfSubCatToRemove = "";
 
     for (let j = 0; j < valuesToCheckArray.length; j++) {
       if (copyOfActiveTags.includes(valuesToCheckArray[j])) {
-        console.log(copyOfActiveTags.includes(valuesToCheckArray[j]));
         valueOfSubCatToRemove = valuesToCheckArray[j];
         break;
       }
@@ -108,14 +110,17 @@ const MarketplaceMenu = () => {
       copyOfActiveTags.splice(indexOfItemToRemove, 1);
 
       dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
+      getTagDataHandler(dispatch, copyOfActiveTags);
     } else {
       const indexOfItem = copyOfActiveTags.indexOf(filterClicked);
       if (indexOfItem === -1) {
         copyOfActiveTags.push(filterClicked);
         dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
+        getTagDataHandler(dispatch, copyOfActiveTags);
       } else {
         copyOfActiveTags.splice(indexOfItem, 1);
         dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
+        getTagDataHandler(dispatch, copyOfActiveTags);
       }
     }
   };
@@ -130,6 +135,7 @@ const MarketplaceMenu = () => {
     );
 
     dispatch(marketplaceStoreActions.setActiveTags([categorySelected]));
+
     if (activeFilterDropdown === categorySelected) {
       setActiveFilterDropdown("");
     } else {

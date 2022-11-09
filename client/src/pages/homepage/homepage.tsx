@@ -6,6 +6,7 @@ import BestSellers from "./best-sellers/best-sellers";
 import Reviews from "./reviews/review";
 import classes from "./homepage.module.scss";
 import decor from "../../images/homepage/decor/decor.png";
+
 const Homepage = () => {
   return (
     <div className={classes.homepageMainContainer}>

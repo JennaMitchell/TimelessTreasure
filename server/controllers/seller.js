@@ -4,10 +4,14 @@ const ProductSchema = require("../models/product-schema");
 const SellerPlacedOrderSchema = require("../models/seller-placed-order");
 const PlacedOrderSchema = require("../models/placed-order");
 const SellerPlacedOrder = require("../models/seller-placed-order");
-exports.getAllSellerData = async (req, res, next) => {
+exports.getAllSellerDataItemsForSale = async (req, res, next) => {
   const sellerId = req.params.sellerId;
   try {
-    const foundProducts = await ProductSchema.find({ sellerId: sellerId });
+    const foundProducts = await ProductSchema.find({
+      sellerId: sellerId,
+      status: "For Sale",
+    });
+    console.log(foundProducts);
 
     return res.status(201).json({
       message: "Product Found!",

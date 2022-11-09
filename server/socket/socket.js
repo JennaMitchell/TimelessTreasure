@@ -5,6 +5,7 @@ module.exports = {
     io = new Server(httpServer, {
       cors: {
         origin: "*",
+        methods: ["OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"],
       },
     });
     return io;

@@ -8,8 +8,10 @@ export const getFilteredProduct = async (dispatch: any, tagData: any) => {
       filterString = filterString + "-" + tagData[indexOfTag];
     }
   }
+  console.log(filterString);
 
   if (filterString.length === 0) {
+    console.log("GET ALL");
     try {
       const fetchedResponse = await fetch(
         `http://localhost:5000/product/get-all`,

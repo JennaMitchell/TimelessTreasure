@@ -2,6 +2,97 @@ const { validationResult } = require("express-validator");
 
 const ProductSchema = require("../models/product-schema");
 const io = require("../socket/socket");
+
+exports.getLatestItemsFiltered = async (req, res, next) => {
+  const tagFilter = req.params.filter;
+
+  try {
+    const result = await ProductSchema.find(
+      { status: "For Sale", productTags: { $all: tagFilter } },
+      { sellerId: 0 }
+    )
+      .sort({ date: -1 })
+      .limit(8);
+
+    return res.status(201).json({
+      message: "Product Added!",
+      foundProducts: result,
+      status: 201,
+    });
+  } catch (err) {
+    return res.status(401).json({
+      message: `Server Error!`,
+      error: [{ error: "Server Error" }],
+    });
+  }
+};
+
+exports.getLatestItems = async (req, res, next) => {
+  try {
+    const result = await ProductSchema.find(
+      { status: "For Sale" },
+      { sellerId: 0 }
+    )
+      .sort({ date: -1 })
+      .limit(8);
+
+    return res.status(201).json({
+      message: "Product Added!",
+      foundProducts: result,
+      status: 201,
+    });
+  } catch (err) {
+    return res.status(401).json({
+      message: `Server Error!`,
+      error: [{ error: "Server Error" }],
+    });
+  }
+};
+exports.getHotestItemsFiltered = async (req, res, next) => {
+  const tagFilter = req.params.filter;
+
+  try {
+    const result = await ProductSchema.find(
+      { status: "For Sale", productTags: { $all: tagFilter } },
+      { sellerId: 0 }
+    )
+    .limit(8);
+
+    return res.status(201).json({
+      message: "Product Added!",
+      foundProducts: result,
+      status: 201,
+    });
+  } catch (err) {
+    return res.status(401).json({
+      message: `Server Error!`,
+      error: [{ error: "Server Error" }],
+    });
+  }
+};
+
+exports.getHotestItems = async (req, res, next) => {
+  try {
+    const result = await ProductSchema.find(
+      { status: "For Sale" },
+      { sellerId: 0 }
+    ).limit(8);
+
+    return res.status(201).json({
+      message: "Product Added!",
+      foundProducts: result,
+      status: 201,
+    });
+  } catch (err) {
+    return res.status(401).json({
+      message: `Server Error!`,
+      error: [{ error: "Server Error" }],
+    });
+  }
+};
+
+//getHotestItems getHotestItemsFiltered
+
 // io.getIo to use it
 exports.getAllProduct = async (req, res, next) => {
   try {
@@ -11,7 +102,7 @@ exports.getAllProduct = async (req, res, next) => {
     );
     return res.status(201).json({
       message: "Product Added!",
-      foundProduct: result,
+      foundProducts: result,
       status: 201,
     });
   } catch (err) {

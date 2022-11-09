@@ -9,13 +9,24 @@ const sellerController = require("../controllers/seller");
 // const loggedInAuth = require("../middlewear/loggedin-auth");
 const { productTypeSubSelection } = require("../utilities/product-types");
 
-router.get("/get-all/:pageNumber", productController.getAllProduct);
+router.get("/get-all", productController.getAllProduct);
 router.get(
   "/seller-items-for-sale/:sellerId",
   isAuth,
-  sellerController.getAllSellerData
+  sellerController.getAllSellerDataItemsForSale
 );
 router.get("/filter-search/:filter", productController.getFilteredSearchData);
+
+router.get("/get-ten-latest", productController.getLatestItems);
+router.get(
+  "/get-ten-latest-filtered/:filter",
+  productController.getLatestItemsFiltered
+);
+router.get("/get-ten-hotest", productController.getHotestItems);
+router.get(
+  "/get-ten-hotest-filtered/:filter",
+  productController.getHotestItemsFiltered
+);
 
 router.get("/filter/:filter", productController.getFilteredData);
 

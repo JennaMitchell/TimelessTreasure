@@ -110,6 +110,8 @@
   text-align: left;
   margin: 0px;
   padding: 0px;
+  max-width: max-content;
+  min-width: max-content;
 }
 .stepsubText {
   font-family: $fontFamily;

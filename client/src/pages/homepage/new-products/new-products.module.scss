@@ -54,7 +54,7 @@
   display: grid;
   width: max(1000px, 1000px);
   height: max-content;
-  min-height: max-content;
+  min-height: 400px;
   max-height: max-content;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, max-content);
@@ -75,7 +75,13 @@
   justify-items: center;
   padding: 10px 0px;
   position: relative;
+  transition: background-color 1s;
 }
+
+.itemContainer:hover {
+  background-color: $main200;
+}
+
 .itemImage {
   width: max(90%, 90%);
   height: max(90%, 90%);
@@ -120,6 +126,10 @@
   margin-bottom: 20px;
   transition: all 1s;
   font-family: $fontFamily;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .showMoreButton:hover {
   color: $main800;
@@ -169,4 +179,20 @@
 .moreInfoButton:hover {
   color: $main100;
   background-color: $main600;
+}
+.noItemsFoundText {
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  color: $main800;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  height: 300px;
+  max-height: 300px;
+
+  justify-self: center;
+  align-self: center;
+
+  text-align: center;
+  grid-column: 1 / span 4;
 }

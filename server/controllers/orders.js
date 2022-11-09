@@ -113,6 +113,7 @@ exports.addOrderDataToSeller = async (req, res, next) => {
     });
     await newPlacedOrderObject.save();
 
+    // below updates products if they are for sale or not
     for (
       let indexOfComparison = 0;
       indexOfComparison < orderQuantityArray.length;

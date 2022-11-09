@@ -5,8 +5,10 @@
   display: grid;
   grid-template-columns: max-content max-content max-content;
   grid-auto-rows: max-content;
+  justify-content: space-evenly;
+  align-items: center;
   box-sizing: border-box;
-  padding: 40px 0px;
+  margin-bottom: 20px;
   position: relative;
 }
 .itemContainer {
@@ -82,19 +84,20 @@
   display: flex;
   gap: 10px;
   position: absolute;
-  bottom: -50px;
-  right: 10px;
+  top: -40px;
+  right: 40px;
 }
 
 .pageButton {
   max-width: max-content;
   box-sizing: border-box;
   max-height: max-content;
-  padding: 10px;
+  padding: 5px 7.5px;
   border: 1px solid $main800;
   border-radius: 2px;
   background-color: $white;
-  font-size: toRem(12);
+  font-size: toRem(14);
+
   font-family: $fontFamily;
   transition: all 0.5s;
   position: relative;
@@ -102,4 +105,39 @@
 .pageButton:hover {
   background-color: $main200;
   color: $main800;
+}
+.activePageButton {
+  background-color: $main200;
+  color: $main800;
+}
+.pageButtonIcon {
+  width: max(30px, 30px);
+  height: max(20px, 20px);
+  padding: 0px;
+  margin: 0px;
+  color: $black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  transition: all 0.5s;
+  border-radius: 50%;
+  box-sizing: border-box;
+  padding: 2px;
+}
+.pageButtonIcon:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.buttonSeperatorText {
+  color: $black;
+  font-size: toRem(16);
+  height: max(10px, 10px);
+  display: flex;
+  line-height: toRem(16);
+  align-content: flex-end;
+  align-self: flex-end;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 2.5px;
 }

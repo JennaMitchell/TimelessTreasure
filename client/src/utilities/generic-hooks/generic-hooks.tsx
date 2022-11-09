@@ -74,7 +74,6 @@ export const dropDownNavCategoryHandler = (
       )
     );
     categoryType = splitLetterArray.join(" ");
-    console.log(categoryType);
   } else {
     categoryType = categoryType.slice(0, categoryType.length - 1);
   }
