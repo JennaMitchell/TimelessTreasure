@@ -69,7 +69,7 @@ const ForgotPasswordPopup = () => {
             </p>
             <p className={classes.forgotPasswordText}>
               {" "}
-              All users and data are erased every 24 hours
+              All users accounts are deleted after one hour
             </p>
             <button
               className={classes.signinButton}

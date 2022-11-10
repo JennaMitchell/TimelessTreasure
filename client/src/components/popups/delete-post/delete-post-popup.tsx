@@ -11,6 +11,7 @@ const DeletePostPopup = ({ productId }: Props) => {
   const dispatch = useAppDispatch();
   const userToken = useAppSelector((state) => state.userStore.userToken);
   const userId = useAppSelector((state) => state.userStore.userId);
+
   const closingHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(false));
     dispatch(mainStoreSliceActions.setDeletePostPopup(false));

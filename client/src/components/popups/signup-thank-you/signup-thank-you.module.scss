@@ -1,0 +1,104 @@
+@import "../../../utilities/variables";
+
+.thankYouDialog {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: $popupBackdropZIndex;
+  position: fixed;
+
+  width: max(100vw, 100vw);
+  height: max(100vh, 100vh);
+  display: grid;
+  place-items: center;
+}
+
+.mainContainer {
+  width: max(400px, 400px);
+  height: max-content;
+  min-height: max-content;
+  max-height: max-content;
+  background-color: white;
+  position: relative;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: $popupZIndex;
+  gap: 10px;
+  padding: 20px;
+}
+.popupTitle {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(48);
+  line-height: toRem(48);
+  font-family: $fontFamily;
+  color: $main600;
+  width: max(80%, 80%);
+  height: max-content;
+  text-align: center;
+}
+
+.textDecor {
+  width: max(200px, 200px);
+  height: max(30px, 30px);
+  object-fit: contain;
+  padding-right: 2.5px;
+}
+.closingContainer {
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: $main700;
+  color: $white;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.closingContainer:hover,
+.signinButton:hover {
+  background-color: $main100;
+  color: $black;
+}
+.closingIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+}
+.textBody {
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  width: max(40ch, 40ch);
+  max-height: max-content;
+  color: $main800;
+  text-align: center;
+  padding: 0px;
+  margin: 0px;
+}
+.loginButton {
+  width: max(100px, 100px);
+
+  height: max-content;
+  max-height: max-content;
+  min-height: max-content;
+  transition: all 0s;
+  font-family: $fontFamily;
+  background-color: $main800;
+  color: $white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px;
+
+  font-size: toRem(16);
+  transition: all 0.5s;
+}
+.loginButton:hover {
+  background-color: $main200;
+
+  color: $main800;
+}

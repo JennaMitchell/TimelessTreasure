@@ -7,11 +7,12 @@ import { mainStoreSliceActions } from "../../../store/store";
 import {
   loginCall,
   logoutHandler,
+  signupCall,
 } from "../../../utilities/login-signup-api-hooks/api-calls";
-import {
-  loginPasswordValidator,
-  emailValidator,
-} from "../../../utilities/validation-hooks/validation-hooks";
+// import {
+//   loginPasswordValidator,
+//   emailValidator,
+// } from "../../../utilities/validation-hooks/validation-hooks";
 
 import Spinner from "../../spinner/spinner";
 import { userStoreSliceActions } from "../../../store/user-store";
@@ -21,6 +22,12 @@ import {
 } from "../../../utilities/refresh-hooks/refresh-hooks";
 import { useNavigate } from "react-router-dom";
 import { sellerStoreActions } from "../../../store/seller";
+import { CheckIcon } from "@heroicons/react/24/solid";
+import {
+  tempEmailGenerator,
+  randomKeyGenerator,
+} from "../../../utilities/generic-hooks/generic-hooks";
+import { deleteAccountCall } from "../../../utilities/user-settings-api-hooks/api-calls-user-setting-hooks";
 
 interface LogicObject {
   [key: string]: {
@@ -34,13 +41,20 @@ const LoginPopup = () => {
   );
   const dispatch = useAppDispatch();
   const [initialRender, setInitialRender] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
+  const [tempEmail, setTempEmail] = useState<string>("");
+  const [tempPassword, setTempPassword] = useState<string>("");
+  const [tempUsername, setTempUsername] = useState("");
+  const userToken = useAppSelector((state) => state.userStore.userToken);
+  const userId = useAppSelector((state) => state.userStore.userId);
+
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
     emailLoginInput: {
-      labelMoveout: false,
+      labelMoveout: true,
       inputData: "",
     },
     passwordLoginInput: {
-      labelMoveout: false,
+      labelMoveout: true,
       inputData: "",
     },
   });
@@ -53,6 +67,23 @@ const LoginPopup = () => {
   const apiCallMessageType = useAppSelector(
     (state) => state.mainStore.apiCallMessageType
   );
+
+  const generateFakeUser = (isSellerBoolean: boolean) => {
+    const randomEmail = tempEmailGenerator(isSellerBoolean);
+    const randomPassword = randomKeyGenerator(20);
+    setTempEmail(randomEmail);
+    setTempPassword(randomPassword);
+    setTempUsername(randomEmail);
+  };
+
+  useEffect(() => {
+    const randomEmail = tempEmailGenerator(false);
+    const randomPassword = randomKeyGenerator(20);
+    const randomUsername = randomKeyGenerator(10);
+    setTempEmail(randomEmail);
+    setTempPassword(randomPassword);
+    setTempUsername(randomUsername);
+  }, []);
 
   useEffect(() => {
     if (!initialRender && loginPopupActive) {
@@ -148,32 +179,58 @@ const LoginPopup = () => {
 
   const signInButtonHandler = (e: React.MouseEvent) => {
     e.preventDefault();
-    const validEmail = !emailValidator(
-      inputLogicObject.emailLoginInput.inputData
-    );
+    // const validEmail = !emailValidator(
+    //   inputLogicObject.emailLoginInput.inputData
+    // );
 
-    const validPasswordObject = loginPasswordValidator(
-      inputLogicObject.passwordLoginInput.inputData
-    );
+    // const validPasswordObject = loginPasswordValidator(
+    //   inputLogicObject.passwordLoginInput.inputData
+    // );
 
-    const validPassword = !Object.values(validPasswordObject).includes(true);
+    // const validPassword = !Object.values(validPasswordObject).includes(true);
 
-    if (!validEmail || !validPassword) {
-      dispatch(
-        mainStoreSliceActions.setAPICallMessage("Invalid Login or Password")
-      );
-      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-      setSigningInActive(false);
-      return;
-    } else {
-      setSigningInActive(true);
-    }
-
+    // if (!validEmail || !validPassword) {
+    //   console.log(validEmail);
+    //   console.log(validPassword)
+    //   dispatch(
+    //     mainStoreSliceActions.setAPICallMessage("Invalid Login or Password")
+    //   );
+    //   dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+    //   setSigningInActive(false);
+    //   return;
+    // } else {
+    //   setSigningInActive(true);
+    // }
+    setSigningInActive(true);
     setTimeout(() => {
-      loginCall(dispatch, {
-        email: inputLogicObject.emailLoginInput.inputData.toLowerCase(),
-        password: inputLogicObject.passwordLoginInput.inputData,
+      signupCall(dispatch, {
+        email: tempEmail.toLowerCase(),
+        password: tempPassword,
+        username: tempUsername,
+        isSeller: isSeller,
       })
+        .then((data) => {
+          return data?.json();
+        })
+        .then((jsonData) => {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+            }
+          } else {
+            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          }
+        })
+        .then(() => {
+          return loginCall(dispatch, {
+            email: tempEmail.toLowerCase(),
+            password: tempPassword,
+          });
+        })
         .then((data) => {
           return data?.json();
         })
@@ -195,6 +252,46 @@ const LoginPopup = () => {
               clearUserStateData(dispatch);
               clearActivePopups(dispatch);
               logoutHandler(dispatch, navigate);
+              deleteAccountCall(
+                dispatch,
+                {
+                  password: tempPassword,
+                  userId: userId,
+                },
+                userToken
+              )
+                .then((data) => {
+                  return data?.json();
+                })
+                .then((jsonData) => {
+                  if ("error" in jsonData) {
+                    if (jsonData.error.length !== 0) {
+                      dispatch(
+                        mainStoreSliceActions.setAPICallMessage(
+                          jsonData.message
+                        )
+                      );
+                      dispatch(
+                        mainStoreSliceActions.setAPICallMessageType("ERROR")
+                      );
+                    }
+                  } else {
+                    dispatch(
+                      mainStoreSliceActions.setAPICallMessage(jsonData.message)
+                    );
+                    dispatch(
+                      mainStoreSliceActions.setAPICallMessageType("SUCCESS")
+                    );
+                    dispatch(userStoreSliceActions.setUsername(""));
+                    dispatch(userStoreSliceActions.setUserEmail(""));
+                    dispatch(userStoreSliceActions.setUserLoggedIn(false));
+                    dispatch(userStoreSliceActions.setUserToken(""));
+                    dispatch(userStoreSliceActions.setUserId(""));
+                    dispatch(userStoreSliceActions.setSessionId(""));
+
+                    navigate("/");
+                  }
+                });
             }, remainingMilliseconds);
             dispatch(
               userStoreSliceActions.setAutoLogoutTime(expiryDate.toString())
@@ -222,6 +319,16 @@ const LoginPopup = () => {
   const forgotPasswordHandler = () => {
     dispatch(mainStoreSliceActions.setLoginPopupActive(false));
     dispatch(mainStoreSliceActions.setForgotPasswordPopupActive(true));
+  };
+  const sellerTypeHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsSeller(true);
+    generateFakeUser(true);
+  };
+  const buyerTypeHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsSeller(false);
+    generateFakeUser(false);
   };
 
   return (
@@ -260,6 +367,8 @@ const LoginPopup = () => {
                 onChange={inputChangeHandler}
                 onBlur={inputBlurHandler}
                 onFocus={inputFocusHandler}
+                value={tempEmail}
+                disabled
               />
             </div>
             <div className={classes.inputContainer}>
@@ -282,6 +391,8 @@ const LoginPopup = () => {
                 onBlur={inputBlurHandler}
                 onFocus={inputFocusHandler}
                 type="password"
+                value={tempPassword}
+                disabled
               />
               <p
                 className={classes.forgotPassword}
@@ -289,6 +400,40 @@ const LoginPopup = () => {
               >
                 Forgot your password?
               </p>
+            </div>
+
+            <div className={classes.radialOptionsTopContainer}>
+              <div className={classes.radialContainer}>
+                <button
+                  className={classes.sellerRadial}
+                  id="seller-checkbox"
+                  onClick={sellerTypeHandler}
+                >
+                  {isSeller && <CheckIcon className={classes.checkIcon} />}
+                </button>
+
+                <label
+                  htmlFor="seller-checkbox"
+                  className={classes.checkboxLabel}
+                >
+                  Seller
+                </label>
+              </div>
+              <div className={classes.radialContainer}>
+                <button
+                  className={classes.sellerRadial}
+                  id="buyer-checkbox"
+                  onClick={buyerTypeHandler}
+                >
+                  {!isSeller && <CheckIcon className={classes.checkIcon} />}
+                </button>
+                <label
+                  htmlFor="buyer-checkbox"
+                  className={classes.checkboxLabel}
+                >
+                  Buyer
+                </label>
+              </div>
             </div>
 
             <button

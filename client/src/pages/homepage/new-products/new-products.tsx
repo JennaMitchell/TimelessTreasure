@@ -7,12 +7,13 @@ import {
   latestItemsApiCallWithFilter,
 } from "../../../utilities/product-api-hooks/homepage-hooks";
 
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import {
   imageUrlCreator,
   priceInputCleaner,
   priceStringCreator,
+  convertPrice,
 } from "../../../utilities/generic-hooks/generic-hooks";
 import { getTagDataHandler } from "../../../utilities/product-react-hooks/product-react-hooks";
 import { useNavigate } from "react-router-dom";
@@ -87,8 +88,6 @@ const NewProducts = () => {
     }
   };
 
-  console.log(latestData);
-
   const navButtonApiHandler = (productType: string) => {
     latestItemsApiCallWithFilter(dispatch, productType)
       .then((response) => {
@@ -106,7 +105,6 @@ const NewProducts = () => {
             }
           } else {
             setLatestData(jsonData.foundProducts);
-            console.log(jsonData);
           }
         } else {
           dispatch(
@@ -135,7 +133,6 @@ const NewProducts = () => {
             }
           } else {
             setLatestData(jsonData.foundProducts);
-            console.log(jsonData);
           }
         } else {
           dispatch(
@@ -148,8 +145,32 @@ const NewProducts = () => {
   };
 
   useEffect(() => {
-    latestAllProductHandler();
-  }, []);
+    latestItemsApiCall(dispatch)
+      .then((response) => {
+        return response?.json();
+      })
+      .then((jsonData) => {
+        if (jsonData !== undefined) {
+          if ("error" in jsonData) {
+            if (jsonData.error.length !== 0) {
+              dispatch(
+                mainStoreSliceActions.setAPICallMessage(jsonData.message)
+              );
+              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+              Promise.reject();
+            }
+          } else {
+            setLatestData(jsonData.foundProducts);
+          }
+        } else {
+          dispatch(
+            mainStoreSliceActions.setAPICallMessage("Undefined Returned")
+          );
+          dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          Promise.reject();
+        }
+      });
+  }, [dispatch]);
 
   const renderReadyNavButtons = navButtonTitles.map((title: string, index) => {
     const capitalizedTitle = title.charAt(0).toUpperCase() + title.slice(1);
@@ -168,13 +189,22 @@ const NewProducts = () => {
   });
 
   let renderReadyCollection: any[] = [];
+  const selectedPriceType = useAppSelector(
+    (state) => state.mainStore.selectedPriceType
+  );
 
   if (latestData.length !== 0) {
     renderReadyCollection = latestData.map((dataEntry, index) => {
       const imageUrl = imageUrlCreator(dataEntry.imageUrl);
       const cleanedPrice = priceStringCreator(
-        priceInputCleaner(`${dataEntry.price}`),
-        "USD"
+        priceInputCleaner(
+          `${convertPrice(
+            dataEntry.priceType,
+            selectedPriceType,
+            dataEntry.price
+          )}`
+        ),
+        selectedPriceType
       );
       const productClickHandler = () => {
         setClickedItemData(dataEntry);

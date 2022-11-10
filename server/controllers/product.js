@@ -55,8 +55,7 @@ exports.getHotestItemsFiltered = async (req, res, next) => {
     const result = await ProductSchema.find(
       { status: "For Sale", productTags: { $all: tagFilter } },
       { sellerId: 0 }
-    )
-    .limit(8);
+    ).limit(8);
 
     return res.status(201).json({
       message: "Product Added!",
@@ -409,7 +408,6 @@ exports.getFilteredData = async (req, res, next) => {
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],

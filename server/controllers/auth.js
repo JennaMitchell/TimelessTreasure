@@ -19,12 +19,14 @@ exports.signup = async (req, res, next) => {
   const isSeller = req.body.isSeller;
   try {
     const hashedPw = await bcrypt.hash(password, 12);
+    const currentDate = new Date();
 
     const newUser = new UserSchema({
       email: email,
       password: hashedPw,
       username: username,
       isSeller: isSeller,
+      createdAt: currentDate,
     });
 
     const result = await newUser.save();
@@ -35,6 +37,7 @@ exports.signup = async (req, res, next) => {
       status: 201,
     });
   } catch (err) {
+    console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;
     }

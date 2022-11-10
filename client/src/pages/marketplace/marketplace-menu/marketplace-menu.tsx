@@ -11,9 +11,9 @@ import productTypeSubSelection from "../../../utilities/product-type-sub-selecti
 import { marketplaceStoreActions } from "../../../store/marketplace";
 import { getSearchedProduct } from "../../../utilities/product-api-hooks/marketplace-product-hooks";
 import RecentlyViewedProduct from "../recently-viewed-product/recently-viewed-product";
-import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
+import { randomKeyGenerator } from "../../../utilities/generic-hooks/generic-hooks";
 import { getTagDataHandler } from "../../../utilities/product-react-hooks/product-react-hooks";
-interface RecentlyViewedProduct {
+interface RecentlyViewedProductInterface {
   imageUrl: string;
   title: string;
   price: string;
@@ -44,7 +44,6 @@ const MarketplaceMenu = () => {
     const copyOfActiveTags: string[] = activeTags.slice();
     const indexOfTagToRemove = copyOfActiveTags.indexOf(targetId);
     copyOfActiveTags.splice(indexOfTagToRemove, 1);
-    console.log(copyOfActiveTags);
     getTagDataHandler(dispatch, copyOfActiveTags);
     dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
   };
@@ -165,7 +164,7 @@ const MarketplaceMenu = () => {
         )
       );
     }
-  }, [navMenuSubCategoryClicked]);
+  }, [navMenuSubCategoryClicked, dispatch]);
 
   const priceButtonHandler = (e: React.MouseEvent) => {
     const targetElement = e.target as HTMLDivElement;
@@ -501,8 +500,8 @@ const MarketplaceMenu = () => {
       {recentlyViewedActive && (
         <div className={classes.contentBlock}>
           {recentlyViewedProduct.map(
-            (data: RecentlyViewedProduct, index: number) => {
-              const key = keyIdGenerator();
+            (data: RecentlyViewedProductInterface, index: number) => {
+              const key = randomKeyGenerator(20);
               return (
                 <RecentlyViewedProduct
                   imageUrl={data.imageUrl}

@@ -70,7 +70,7 @@
   transition: all 1s;
   opacity: 1;
 }
-.loginButton {
+.slideShowButton {
   width: max-content;
   max-width: max-content;
   min-width: max-content;
@@ -86,12 +86,13 @@
   z-index: 2;
   opacity: 0;
   transition: all 1s;
+  text-decoration: none;
 }
-.loginButton:hover {
+.slideShowButton:hover {
   color: $main600;
   border-color: $main600;
 }
-.loginButtonActive {
+.slideShowButtonActive {
   opacity: 1;
   transition: all 1s;
 }

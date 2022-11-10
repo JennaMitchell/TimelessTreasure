@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useAppDispatch } from "../../../../../store/hooks";
 
 import classes from "./tablewear-slide.module.scss";
-
+import { getTagDataHandler } from "../../../../../utilities/product-react-hooks/product-react-hooks";
 const TablewearSlide = () => {
   const slideInText = "Large Selection";
   const fadeInText = "Browse a large selection of products";
@@ -11,6 +13,7 @@ const TablewearSlide = () => {
   const [renderReadyslideInText, setRenderReadySlideInText] = useState<
     JSX.Element[]
   >([]);
+  const dispatch = useAppDispatch();
 
   if (!initialRender) {
     const tempSeperatedArray = [];
@@ -65,7 +68,9 @@ const TablewearSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`subtitleText`);
+        const activeElement = document.getElementById(
+          `tablewear-slideshow-fade-in-text`
+        );
         activeElement?.classList.add(classes.subtitleTextActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
@@ -75,12 +80,17 @@ const TablewearSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`loginButton`);
-        activeElement?.classList.add(classes.loginButtonActive);
+        const activeElement = document.getElementById(
+          `tablewear-slideshow-browse-button`
+        );
+        activeElement?.classList.add(classes.slideShowButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
   }
+  const slideshowButtonHandler = () => {
+    getTagDataHandler(dispatch, "");
+  };
 
   return (
     <div className={classes.mainContainer}>
@@ -88,12 +98,17 @@ const TablewearSlide = () => {
       <div className={classes.slideInTextContainer}>
         {renderReadyslideInText}
       </div>
-      <p className={classes.subtitleText} id="subtitleText">
+      <p className={classes.subtitleText} id="tablewear-slideshow-fade-in-text">
         {fadeInText}
       </p>
-      <button className={classes.loginButton} id="loginButton">
+      <NavLink
+        to="/marketplace"
+        className={classes.slideShowButton}
+        id="tablewear-slideshow-browse-button"
+        onClick={slideshowButtonHandler}
+      >
         Browse
-      </button>
+      </NavLink>
     </div>
   );
 };

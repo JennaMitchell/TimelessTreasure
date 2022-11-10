@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef } from "react";
 import NewPostSelectionDropdrop from "./selection-dropdown/new-post-selection-dropdown";
 import productTypeSubSelection from "../../../utilities/product-type-sub-selection";
 import { newProductCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
-import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
+import { randomKeyGenerator } from "../../../utilities/generic-hooks/generic-hooks";
 import { priceValidator } from "../../../utilities/validation-hooks/validation-hooks";
 import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
 import { sellerStoreActions } from "../../../store/seller";
@@ -288,7 +288,7 @@ const NewPostPopup = () => {
       JSON.stringify(Object.values(sellerNewPostTags))
     );
 
-    const productId = keyIdGenerator();
+    const productId = randomKeyGenerator(20);
     formData.append("productId", productId);
     formData.append("userId", userId);
     formData.append("status", "For Sale");

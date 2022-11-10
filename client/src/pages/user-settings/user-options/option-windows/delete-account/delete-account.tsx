@@ -23,6 +23,7 @@ const DeleteAccount = () => {
   const navigate = useNavigate();
 
   const userId = useAppSelector((state) => state.userStore.userId);
+  const tempPassword = useAppSelector((state) => state.userStore.tempPassword);
   const token = useAppSelector((state) => state.userStore.userToken);
 
   const [activeInput, setActiveInput] = useState("");
@@ -98,7 +99,7 @@ const DeleteAccount = () => {
       deleteAccountCall(
         dispatch,
         {
-          password: inputLogicObject.deletePasswordInput.inputData,
+          password: tempPassword,
           userId: userId,
         },
         token
@@ -171,6 +172,8 @@ const DeleteAccount = () => {
           onBlur={inputBlurHandler}
           onFocus={inputFocusHandler}
           type="password"
+          disabled
+          value={tempPassword}
         />
       </div>
 

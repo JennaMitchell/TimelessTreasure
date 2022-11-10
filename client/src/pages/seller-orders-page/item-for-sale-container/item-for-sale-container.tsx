@@ -1,5 +1,5 @@
 import classes from "./item-for-sale-container.module.scss";
-import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
+import { randomKeyGenerator } from "../../../utilities/generic-hooks/generic-hooks";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import DeletePostPopup from "../../../components/popups/delete-post/delete-post-popup";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -33,7 +33,7 @@ const ItemForSaleContainer = ({
   productTags,
   productDescription,
 }: Props) => {
-  const keyId = keyIdGenerator();
+  const keyId = randomKeyGenerator(20);
   const productImageUrl = imageUrlCreator(productImage);
 
   const dispatch = useAppDispatch();

@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 import classes from "./paintings-slide.module.scss";
+import { getTagDataHandler } from "../../../../../utilities/product-react-hooks/product-react-hooks";
 
+import { useAppDispatch } from "../../../../../store/hooks";
 const PaintingsSlide = () => {
   const slideInText = "Discover";
   const fadeInText = "Discover something new with a quick search";
@@ -11,6 +14,7 @@ const PaintingsSlide = () => {
   const [renderReadyslideInText, setRenderReadySlideInText] = useState<
     JSX.Element[]
   >([]);
+  const dispatch = useAppDispatch();
 
   if (!initialRender) {
     const tempSeperatedArray = [];
@@ -65,7 +69,9 @@ const PaintingsSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`subtitleText`);
+        const activeElement = document.getElementById(
+          `paintings-slideshow-fade-in-text`
+        );
         activeElement?.classList.add(classes.subtitleTextActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
@@ -75,12 +81,17 @@ const PaintingsSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`loginButton`);
-        activeElement?.classList.add(classes.loginButtonActive);
+        const activeElement = document.getElementById(
+          `paintings-slideshow-discover-button`
+        );
+        activeElement?.classList.add(classes.slideshowButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
   }
+  const slideshowButtonHandler = () => {
+    getTagDataHandler(dispatch, "");
+  };
 
   return (
     <div className={classes.mainContainer}>
@@ -88,12 +99,17 @@ const PaintingsSlide = () => {
       <div className={classes.slideInTextContainer}>
         {renderReadyslideInText}
       </div>
-      <p className={classes.subtitleText} id="subtitleText">
+      <p className={classes.subtitleText} id="paintings-slideshow-fade-in-text">
         {fadeInText}
       </p>
-      <button className={classes.loginButton} id="loginButton">
-        Search
-      </button>
+      <NavLink
+        to="/marketplace"
+        className={classes.slideshowButton}
+        id="paintings-slideshow-discover-button"
+        onClick={slideshowButtonHandler}
+      >
+        Discover
+      </NavLink>
     </div>
   );
 };

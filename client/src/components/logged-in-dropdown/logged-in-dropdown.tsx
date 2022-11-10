@@ -15,6 +15,7 @@ import {
   getBuyersPendingItemsCall,
 } from "../../utilities/product-api-hooks/buyer-product-hooks";
 import { userStoreSliceActions } from "../../store/user-store";
+import { deleteAccountCall } from "../../utilities/user-settings-api-hooks/api-calls-user-setting-hooks";
 const LoggedInDropdown = () => {
   const isSeller = useAppSelector((state) => state.sellerStore.isSeller);
   const loggedInDropDownActive = useAppSelector(
@@ -24,9 +25,41 @@ const LoggedInDropdown = () => {
   const userToken = useAppSelector((state) => state.userStore.userToken);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const savedPassword = useAppSelector((state) => state.userStore.tempPassword);
   const logoutButtonHandler = () => {
     logoutHandler(dispatch, navigate);
     dropdownButtonHandler();
+
+    deleteAccountCall(
+      dispatch,
+      {
+        password: savedPassword,
+        userId: userId,
+      },
+      userToken
+    )
+      .then((data) => {
+        return data?.json();
+      })
+      .then((jsonData) => {
+        if ("error" in jsonData) {
+          if (jsonData.error.length !== 0) {
+            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+            dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+          }
+        } else {
+          dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+          dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+          dispatch(userStoreSliceActions.setUsername(""));
+          dispatch(userStoreSliceActions.setUserEmail(""));
+          dispatch(userStoreSliceActions.setUserLoggedIn(false));
+          dispatch(userStoreSliceActions.setUserToken(""));
+          dispatch(userStoreSliceActions.setUserId(""));
+          dispatch(userStoreSliceActions.setSessionId(""));
+
+          navigate("/");
+        }
+      });
   };
   const dropdownButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLoggedInDropDownActive(false));

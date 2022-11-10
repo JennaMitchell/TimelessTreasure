@@ -1,5 +1,6 @@
 import { mainStoreSliceActions } from "../../store/store";
 import { clearUserStateData } from "../refresh-hooks/refresh-hooks";
+import { deleteAccountCall } from "../user-settings-api-hooks/api-calls-user-setting-hooks";
 export const signupCall = async (dispatch, signupData) => {
   try {
     const fetchedResponse = await fetch("http://localhost:5000/auth/signup", {
@@ -39,5 +40,6 @@ export const logoutHandler = (dispatch, navigate) => {
   localStorage.removeItem("expiryDate");
   localStorage.removeItem("userId");
   clearUserStateData(dispatch);
+
   navigate("/");
 };

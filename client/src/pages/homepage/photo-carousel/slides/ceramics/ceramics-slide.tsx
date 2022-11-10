@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useAppDispatch } from "../../../../../store/hooks";
+import { mainStoreSliceActions } from "../../../../../store/store";
 
 import classes from "./ceramics-slide.module.scss";
 
@@ -12,6 +14,7 @@ const CeramicsSlide = () => {
   const [renderReadyFallinText, setRenderReadyFallinText] = useState<
     JSX.Element[]
   >([]);
+  const dispatch = useAppDispatch();
 
   if (!initialRender) {
     const tempSeperatedArray = [];
@@ -66,7 +69,9 @@ const CeramicsSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`subtitleText`);
+        const activeElement = document.getElementById(
+          `slide-show-fade-in-text-ceramics`
+        );
         activeElement?.classList.add(classes.subtitleTextActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
@@ -76,21 +81,32 @@ const CeramicsSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`loginButton`);
+        const activeElement = document.getElementById(
+          `slide-show-try-now-button-ceramics`
+        );
         activeElement?.classList.add(classes.loginButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
   }
 
+  const tryNowButtonHandler = () => {
+    dispatch(mainStoreSliceActions.setLockViewPort(true));
+    dispatch(mainStoreSliceActions.setLoginPopupActive(true));
+  };
+
   return (
     <div className={classes.mainContainer}>
       <div className={classes.backdropFilter} />
       <div className={classes.fallInTextContainer}>{renderReadyFallinText}</div>
-      <p className={classes.subtitleText} id="subtitleText">
+      <p className={classes.subtitleText} id="slide-show-fade-in-text-ceramics">
         {fadeInText}
       </p>
-      <button className={classes.loginButton} id="loginButton">
+      <button
+        className={classes.loginButton}
+        id="slide-show-try-now-button-ceramics"
+        onClick={tryNowButtonHandler}
+      >
         Try Now
       </button>
     </div>

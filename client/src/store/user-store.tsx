@@ -10,7 +10,9 @@ interface State {
   sessionId: string;
   buyerPendingOrders: any[];
   buyerFulfilledOrders: any[];
+  tempPassword: string;
 }
+// Usually you don;t want to store the password in state, but since its a login its okay
 
 const initialState: State = {
   userToken: "",
@@ -22,6 +24,7 @@ const initialState: State = {
   sessionId: "",
   buyerPendingOrders: [],
   buyerFulfilledOrders: [],
+  tempPassword: "",
 };
 
 export const userStoreSlice = createSlice({
@@ -54,6 +57,9 @@ export const userStoreSlice = createSlice({
     },
     setBuyerFulfilledOrders(state, { payload }) {
       state.buyerFulfilledOrders = payload;
+    },
+    setTempPassword(state, { payload }) {
+      state.tempPassword = payload;
     },
   },
 });

@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import classes from "./clocks-slide.module.scss";
-
+import { useAppDispatch } from "../../../../../store/hooks";
+import { mainStoreSliceActions } from "../../../../../store/store";
 const ClocksSlide = () => {
   const slideInText = "Live Inventory";
   const fadeInText =
@@ -12,6 +13,7 @@ const ClocksSlide = () => {
   const [renderReadyslideInText, setRenderReadySlideInText] = useState<
     JSX.Element[]
   >([]);
+  const dispatch = useAppDispatch();
 
   if (!initialRender) {
     const tempSeperatedArray = [];
@@ -66,7 +68,9 @@ const ClocksSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`subtitleText`);
+        const activeElement = document.getElementById(
+          `clocks-slide-show-fade-in-text`
+        );
         activeElement?.classList.add(classes.subtitleTextActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
@@ -76,12 +80,18 @@ const ClocksSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`loginButton`);
+        const activeElement = document.getElementById(
+          "clocks-slide-show-login-button"
+        );
         activeElement?.classList.add(classes.loginButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
   }
+  const loginButtonHandler = () => {
+    dispatch(mainStoreSliceActions.setLockViewPort(true));
+    dispatch(mainStoreSliceActions.setLoginPopupActive(true));
+  };
 
   return (
     <div className={classes.mainContainer}>
@@ -89,10 +99,14 @@ const ClocksSlide = () => {
       <div className={classes.slideInTextContainer}>
         {renderReadyslideInText}
       </div>
-      <p className={classes.subtitleText} id="subtitleText">
+      <p className={classes.subtitleText} id="clocks-slide-show-fade-in-text">
         {fadeInText}
       </p>
-      <button className={classes.loginButton} id="loginButton">
+      <button
+        className={classes.loginButton}
+        id="clocks-slide-show-login-button"
+        onClick={loginButtonHandler}
+      >
         Login
       </button>
     </div>

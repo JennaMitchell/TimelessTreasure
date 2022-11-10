@@ -44,7 +44,7 @@ const TopNavBar = () => {
           dispatch(mainStoreSliceActions.setAPICallMessage("Product Found"));
           dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
           dispatch(
-            marketplaceStoreActions.setRetrievedData(jsonData.foundProduct)
+            marketplaceStoreActions.setRetrievedData(jsonData.foundProducts)
           );
           setInputLogicObject({
             searchBarNavInput: {
@@ -159,6 +159,12 @@ const TopNavBar = () => {
     );
   };
 
+  const priceTypeDropdownHandler = (e: React.ChangeEvent) => {
+    const targetElement = e.target as HTMLOptionElement;
+    const targetValue = targetElement.value;
+    dispatch(mainStoreSliceActions.setSelectedPriceType(targetValue));
+  };
+
   return (
     <div className={classes.backgroundContainer}>
       <div className={classes.topContainer}>
@@ -210,7 +216,10 @@ const TopNavBar = () => {
             />
           </div>
 
-          <select className={classes.currencyDropDown}>
+          <select
+            className={classes.currencyDropDown}
+            onChange={priceTypeDropdownHandler}
+          >
             {renderReadyCurrencyOptions}
           </select>
           <NavLink className={classes.cartContainer} to="/cart">

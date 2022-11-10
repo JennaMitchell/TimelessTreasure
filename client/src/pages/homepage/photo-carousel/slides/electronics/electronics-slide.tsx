@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useAppDispatch } from "../../../../../store/hooks";
 
 import classes from "./electronics-slide.module.scss";
+import { getTagDataHandler } from "../../../../../utilities/product-react-hooks/product-react-hooks";
 
 const ElectronicsSlide = () => {
   const slideInText = "Recapture the Past";
@@ -11,6 +14,7 @@ const ElectronicsSlide = () => {
   const [renderReadyslideInText, setRenderReadySlideInText] = useState<
     JSX.Element[]
   >([]);
+  const dispatch = useAppDispatch();
 
   if (!initialRender) {
     const tempSeperatedArray = [];
@@ -50,7 +54,6 @@ const ElectronicsSlide = () => {
     if (activeAnimationNumber <= seperatedText.length) {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
-
         const activeElement = document.getElementById(
           `${seperatedText[activeAnimationNumber]} ${activeAnimationNumber}`
         );
@@ -58,14 +61,16 @@ const ElectronicsSlide = () => {
         activeElement?.classList.add(classes.slideInTitleTextActive);
 
         setActiveAnimationNumber(tempActiveNumber);
-      }, 150);
+      }, 100);
     }
 
     if (activeAnimationNumber === seperatedText.length + 1) {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`subtitleText`);
+        const activeElement = document.getElementById(
+          `electronics-slideshow-fade-in-text`
+        );
         activeElement?.classList.add(classes.subtitleTextActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
@@ -75,12 +80,18 @@ const ElectronicsSlide = () => {
       setTimeout(() => {
         let tempActiveNumber = activeAnimationNumber + 1;
 
-        const activeElement = document.getElementById(`loginButton`);
-        activeElement?.classList.add(classes.loginButtonActive);
+        const activeElement = document.getElementById(
+          `slideshow-electronics-search-button`
+        );
+        activeElement?.classList.add(classes.slideshowButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
   }
+
+  const slideshowButtonHandler = () => {
+    getTagDataHandler(dispatch, "");
+  };
 
   return (
     <div className={classes.mainContainer}>
@@ -88,12 +99,20 @@ const ElectronicsSlide = () => {
       <div className={classes.slideInTextContainer}>
         {renderReadyslideInText}
       </div>
-      <p className={classes.subtitleText} id="subtitleText">
+      <p
+        className={classes.subtitleText}
+        id="electronics-slideshow-fade-in-text"
+      >
         {fadeInText}
       </p>
-      <button className={classes.loginButton} id="loginButton">
+      <NavLink
+        to="/marketplace"
+        className={classes.slideshowButton}
+        id="slideshow-electronics-search-button"
+        onClick={slideshowButtonHandler}
+      >
         Search
-      </button>
+      </NavLink>
     </div>
   );
 };

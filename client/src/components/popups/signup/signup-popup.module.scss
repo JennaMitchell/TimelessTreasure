@@ -205,14 +205,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
+  border: 1px solid $black;
   box-sizing: border-box;
   padding: 5px;
   background-color: $white;
   transition: border 0.5s;
 }
 .sellerRadial:hover {
-  border: 1px solid lightblue;
+  border: 1px solid $main200;
 }
 .checkIcon {
   width: max(100%, 100%);

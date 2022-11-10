@@ -3,7 +3,7 @@ import BuyerOrderContainer from "./buyer-order-container/buyer-order-container";
 import decor from "../../images/homepage/decor/decor.png";
 import { tempSellerOrders } from "./temp-seller-orders";
 import { useAppSelector } from "../../store/hooks";
-import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
+import { randomKeyGenerator } from "../../utilities/generic-hooks/generic-hooks";
 
 const BuyerOrdersPage = () => {
   const pendingOrders = [];
@@ -25,7 +25,7 @@ const BuyerOrdersPage = () => {
   }
 
   const renderReadyPendingOrders = buyerPendingOrders.map((data) => {
-    const keyId = keyIdGenerator();
+    const keyId = randomKeyGenerator(20);
     return (
       <BuyerOrderContainer
         itemsPlaced={data.itemsPlacedData}
@@ -38,7 +38,7 @@ const BuyerOrdersPage = () => {
     );
   });
   const renderReadyFullfilledOrders = buyerFulfilledOrders.map((data) => {
-    const keyId = keyIdGenerator();
+    const keyId = randomKeyGenerator(20);
     return (
       <BuyerOrderContainer
         itemsPlaced={data.itemsPlacedData}

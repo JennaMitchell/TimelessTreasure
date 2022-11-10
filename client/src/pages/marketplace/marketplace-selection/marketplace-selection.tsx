@@ -6,21 +6,34 @@ import { useState } from "react";
 import {
   imageUrlCreator,
   priceStringCreator,
+  convertPrice,
+  priceInputCleaner,
 } from "../../../utilities/generic-hooks/generic-hooks";
 import { marketplaceStoreActions } from "../../../store/marketplace";
 import { recentlyViewedHook } from "../../../utilities/recently-viewed-hook/recently-viewed-hook";
 import openSocket from "socket.io-client";
-import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
+import { randomKeyGenerator } from "../../../utilities/generic-hooks/generic-hooks";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 const MarketplaceSelection = () => {
   const socket = openSocket("http://localhost:5000");
+  const acceptedCategories = [
+    "Ceramics",
+    "Clocks",
+    "Tablewear",
+    "Paintings",
+    "Electronics",
+  ];
 
   const retrievedData = useAppSelector(
     (state) => state.marketStore.retrievedData
   );
   const activePageNumber = useAppSelector(
     (state) => state.marketStore.activePageNumber
+  );
+  const activeTags = useAppSelector((state) => state.marketStore.activeTags);
+  const selectedPriceType = useAppSelector(
+    (state) => state.mainStore.selectedPriceType
   );
 
   const [popupImageUrl, setPopupImageUrl] = useState<string>("");
@@ -39,28 +52,123 @@ const MarketplaceSelection = () => {
   );
   socket.on("new-product", (data) => {
     if (data.action === "create-new-product") {
-      console.log("Product Created");
       // once data is recieved need to check if the users selected tags match with what is
-      // the user is looking at
-      const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
-      copyOfRetrievedData.push(data.productCreated);
-      dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
+      // the user is looking at the product added section
+      //
+      const newProductTags = data.productCreated.productTags;
+      const copyOfActiveTags = JSON.parse(JSON.stringify(activeTags)).slice();
+
+      // Handeling Scenario where there are no active tags
+      if (copyOfActiveTags.length === 0) {
+        const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
+        copyOfRetrievedData.push(data.productCreated);
+        dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
+        return;
+      }
+
+      // checking to see if the active tags only has category highlighted
+
+      let indexOfActiveTagCategory = -1;
+      let indexOfNewProductTagCategory = -1;
+      let activeTagCategory = "";
+      let productIdTagCategory = "";
+
+      for (
+        let indexOfActiveTag = 0;
+        indexOfActiveTag < acceptedCategories.length;
+        indexOfActiveTag++
+      ) {
+        if (copyOfActiveTags.includes(acceptedCategories[indexOfActiveTag])) {
+          indexOfActiveTagCategory = copyOfActiveTags.indexOf(
+            acceptedCategories[indexOfActiveTag]
+          );
+          activeTagCategory = acceptedCategories[indexOfActiveTag];
+        }
+        if (newProductTags.includes(acceptedCategories[indexOfActiveTag])) {
+          indexOfNewProductTagCategory = newProductTags.indexOf(
+            acceptedCategories[indexOfActiveTag]
+          );
+          productIdTagCategory = acceptedCategories[indexOfActiveTag];
+        }
+      }
+      if (indexOfActiveTagCategory !== -1) {
+        copyOfActiveTags.splice(indexOfActiveTagCategory, 1);
+      }
+      if (indexOfNewProductTagCategory !== -1) {
+        newProductTags.splice(indexOfNewProductTagCategory, 1);
+      }
+
+      // Checking to see if the two removed categories are the same
+
+      if (indexOfActiveTagCategory !== -1) {
+        if (activeTagCategory !== productIdTagCategory) {
+          return;
+        }
+      }
+
+      for (
+        let indexOfNewProductIds = 0;
+        indexOfNewProductIds < newProductTags.length;
+        indexOfNewProductIds++
+      ) {
+        if (activeTags.includes(newProductTags[indexOfNewProductIds])) {
+          const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
+          copyOfRetrievedData.push(data.productCreated);
+          dispatch(
+            marketplaceStoreActions.setRetrievedData(copyOfRetrievedData)
+          );
+          return;
+        } else {
+          return;
+        }
+      }
     }
   });
   socket.on("update-product", (data) => {
     if (data.action === "update-product") {
-      console.log("Product Created");
       const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
-      copyOfRetrievedData.push(data.productCreated);
+      const updatedProductId = data.productCreated.productId;
+
+      for (
+        let indexOfCopiedRetrievedData = 0;
+        indexOfCopiedRetrievedData < copyOfRetrievedData.length;
+        indexOfCopiedRetrievedData++
+      ) {
+        if (
+          copyOfRetrievedData[indexOfCopiedRetrievedData].productId ===
+          updatedProductId
+        ) {
+          copyOfRetrievedData[indexOfCopiedRetrievedData] = data.productCreated;
+        }
+      }
+
       dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
     }
   });
 
   if (retrievedData.length !== 0) {
-    renderReadyProductData = retrievedData.map((itemData, index) => {
+    let indexOfRender = 0;
+    for (
+      let indexOfRenderReadyProductData =
+        (activePageNumber - 1) * numberOfItemsPerPage;
+      indexOfRenderReadyProductData < numberOfItemsPerPage * activePageNumber;
+      indexOfRenderReadyProductData++
+    ) {
+      const itemData = retrievedData[indexOfRenderReadyProductData];
       const productImageUrl = imageUrlCreator(itemData.imageUrl);
-      const tempPrice = priceStringCreator(itemData.price, itemData.priceType);
-      const key = keyIdGenerator();
+
+      const tempPrice = priceStringCreator(
+        priceInputCleaner(
+          `${convertPrice(
+            itemData.priceType,
+            selectedPriceType,
+            itemData.price
+          )}`
+        ),
+        selectedPriceType
+      );
+
+      const key = randomKeyGenerator(20);
 
       const itemContainerClickHandler = () => {
         dispatch(mainStoreSliceActions.setLockViewPort(true));
@@ -80,29 +188,23 @@ const MarketplaceSelection = () => {
           productId: itemData.productId,
         });
       };
-      if (
-        index >= numberOfItemsPerPage * activePageNumber ||
-        index < (activePageNumber - 1) * numberOfItemsPerPage
-      ) {
-        return;
-      } else {
-        return (
-          <div
-            className={classes.itemContainer}
-            key={`${itemData.title} ${index} ${key}`}
-            onClick={itemContainerClickHandler}
-          >
-            <img
-              src={productImageUrl}
-              alt={itemData.title}
-              className={classes.itemImage}
-            />
-            <h6 className={classes.itemTitle}>{itemData.title}</h6>
-            <p className={classes.itemPrice}>{tempPrice}</p>
-          </div>
-        );
-      }
-    });
+      renderReadyProductData[indexOfRender] = (
+        <div
+          className={classes.itemContainer}
+          key={`${itemData.title} ${indexOfRender} ${key}`}
+          onClick={itemContainerClickHandler}
+        >
+          <img
+            src={productImageUrl}
+            alt={itemData.title}
+            className={classes.itemImage}
+          />
+          <h6 className={classes.itemTitle}>{itemData.title}</h6>
+          <p className={classes.itemPrice}>{tempPrice}</p>
+        </div>
+      );
+      indexOfRender++;
+    }
   }
 
   const renderReadyItemPageButtons: any[] = [];
@@ -134,7 +236,7 @@ const MarketplaceSelection = () => {
       </button>
     );
   }
-  const containerKey = keyIdGenerator();
+  const containerKey = randomKeyGenerator(20);
 
   const pageButtonLeftIconHandler = () => {
     if (activePageNumber === 0) {
@@ -177,7 +279,7 @@ const MarketplaceSelection = () => {
         {renderReadyProductData.length === 0 && (
           <p className={classes.noProductFoundText}>No products found!</p>
         )}
-        {renderReadyProductData}
+        {renderReadyProductData.length !== 0 && renderReadyProductData}
 
         {numberOfPages < 4 && (
           <div className={classes.pageButtonContainer}>

@@ -22,6 +22,8 @@ interface State {
   activeEditPostPopupId: string;
   navMenuSubCategoryClicked: string[];
   productPopupActive: boolean;
+  signupThankYouPopupActive: boolean;
+  selectedPriceType: string;
 }
 
 const initialState: State = {
@@ -43,6 +45,8 @@ const initialState: State = {
   activeEditPostPopupId: "",
   navMenuSubCategoryClicked: [],
   productPopupActive: false,
+  signupThankYouPopupActive: false,
+  selectedPriceType: "USD",
 };
 
 const mainStoreSlice = createSlice({
@@ -102,6 +106,12 @@ const mainStoreSlice = createSlice({
     },
     setProductPopupActive(state, { payload }) {
       state.productPopupActive = payload;
+    },
+    setSignupThankYouPopupActive(state, { payload }) {
+      state.signupThankYouPopupActive = payload;
+    },
+    setSelectedPriceType(state, { payload }) {
+      state.selectedPriceType = payload;
     },
   },
 });

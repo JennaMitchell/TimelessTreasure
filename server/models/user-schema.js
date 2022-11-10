@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  createdAt: { type: Date, expires: 3600 },
 });
 
 module.exports = mongoose.model("UserSchema", UserSchema);

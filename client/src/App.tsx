@@ -17,6 +17,7 @@ import SellerOrdersPage from "./pages/seller-orders-page/seller-orders";
 import NewPostPopup from "./components/popups/new-post/new-post-popup";
 import OrderPlacedPage from "./pages/order-placed/order-placed";
 import BuyerOrdersPage from "./pages/buyer-order-page/buyer-orders";
+import SignupThankYou from "./components/popups/signup-thank-you/signup-thank-you";
 function App() {
   const lockViewport = useAppSelector((state) => state.mainStore.lockViewport);
   const loadingPageActive = useAppSelector(
@@ -39,6 +40,7 @@ function App() {
       <ApiCallDropdown />
       <LoggedInDropdown />
       <NewPostPopup />
+      <SignupThankYou />
 
       <Routes>
         <Route path="/" element={<Navigate replace to="/home" />} />

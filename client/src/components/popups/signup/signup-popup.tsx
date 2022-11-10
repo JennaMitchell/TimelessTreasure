@@ -4,15 +4,15 @@ import decor from "../../../images/homepage/decor/decor.png";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { useState, useEffect } from "react";
 import { mainStoreSliceActions } from "../../../store/store";
-import {
-  emailValidator,
-  signupPasswordValidator,
-} from "../../../utilities/validation-hooks/validation-hooks";
-import Spinner from "../../spinner/spinner";
+// import {
+//   emailValidator,
+//   signupPasswordValidator,
+// } from "../../../utilities/validation-hooks/validation-hooks";
+// import Spinner from "../../spinner/spinner";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
 import SignupRequirements from "./signup-requirements/signup-requirements";
-import { signupCall } from "../../../utilities/login-signup-api-hooks/api-calls.js";
+// import { signupCall } from "../../../utilities/login-signup-api-hooks/api-calls.js";
 
 interface LogicObject {
   [key: string]: {
@@ -26,7 +26,7 @@ const SignupPopup = () => {
     (state) => state.mainStore.signupPopupActive
   );
   const dispatch = useAppDispatch();
-  const [signupLoading, setSignupLoading] = useState(false);
+  // const [signupLoading, setSignupLoading] = useState(false);
   const [initialRender, setInitialRender] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const sellerTypeHandler = (e: React.MouseEvent) => {
@@ -157,58 +157,55 @@ const SignupPopup = () => {
   };
 
   const signupButtonHandler = (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    const validEmail = !emailValidator(
-      inputLogicObject.emailSignupInput.inputData
-    );
-
-    const validPasswordObject = signupPasswordValidator(
-      inputLogicObject.passwordSignupInput.inputData,
-      inputLogicObject.confirmationPasswordSignupInput.inputData
-    );
-
-    const validPassword = !Object.values(validPasswordObject).includes(true);
-
-    if (!validEmail || !validPassword) {
-      dispatch(
-        mainStoreSliceActions.setAPICallMessage("Invalid Login or Password")
-      );
-      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-      setSignupLoading(false);
-      return;
-    } else {
-      setSignupLoading(true);
-    }
-
-    setTimeout(() => {
-      // sign up function
-      let promiseData: any = "";
-      signupCall(dispatch, {
-        email: inputLogicObject.emailSignupInput.inputData.toLowerCase(),
-        password: inputLogicObject.passwordSignupInput.inputData,
-        username: inputLogicObject.usernameSignupInput.inputData,
-        isSeller: isSeller,
-      })
-        .then((data) => {
-          promiseData = data?.json();
-          return promiseData;
-        })
-        .then((jsonData) => {
-          if ("error" in jsonData) {
-            if (jsonData.error.length !== 0) {
-              dispatch(
-                mainStoreSliceActions.setAPICallMessage(jsonData.message)
-              );
-              dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-            }
-          } else {
-            dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
-            dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
-          }
-          setSignupLoading(false);
-        });
-    }, 2000);
+    dispatch(mainStoreSliceActions.setSignupPopupActive(false));
+    dispatch(mainStoreSliceActions.setSignupThankYouPopupActive(true));
+    // e.preventDefault();
+    // const validEmail = !emailValidator(
+    //   inputLogicObject.emailSignupInput.inputData
+    // );
+    // const validPasswordObject = signupPasswordValidator(
+    //   inputLogicObject.passwordSignupInput.inputData,
+    //   inputLogicObject.confirmationPasswordSignupInput.inputData
+    // );
+    // const validPassword = !Object.values(validPasswordObject).includes(true);
+    // if (!validEmail || !validPassword) {
+    //   dispatch(
+    //     mainStoreSliceActions.setAPICallMessage("Invalid Login or Password")
+    //   );
+    //   dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+    //   setSignupLoading(false);
+    //   return;
+    // } else {
+    //   setSignupLoading(true);
+    // }
+    // setTimeout(() => {
+    //   // sign up function
+    //   let promiseData: any = "";
+    //   signupCall(dispatch, {
+    //     email: inputLogicObject.emailSignupInput.inputData.toLowerCase(),
+    //     password: inputLogicObject.passwordSignupInput.inputData,
+    //     username: inputLogicObject.usernameSignupInput.inputData,
+    //     isSeller: isSeller,
+    //   })
+    //     .then((data) => {
+    //       promiseData = data?.json();
+    //       return promiseData;
+    //     })
+    //     .then((jsonData) => {
+    //       if ("error" in jsonData) {
+    //         if (jsonData.error.length !== 0) {
+    //           dispatch(
+    //             mainStoreSliceActions.setAPICallMessage(jsonData.message)
+    //           );
+    //           dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+    //         }
+    //       } else {
+    //         dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
+    //         dispatch(mainStoreSliceActions.setAPICallMessageType("SUCCESS"));
+    //       }
+    //       setSignupLoading(false);
+    //     });
+    // }, 2000);
   };
 
   return (
@@ -370,7 +367,7 @@ const SignupPopup = () => {
               onClick={signupButtonHandler}
               id="signupPopupButton"
             >
-              {initialRender &&
+              {/* {initialRender &&
                 (signupLoading ? (
                   <Spinner
                     parentButtonId={"signupPopupButton"}
@@ -378,7 +375,8 @@ const SignupPopup = () => {
                   />
                 ) : (
                   "Sign Up"
-                ))}
+                ))} */}
+              Sign Up
             </button>
             <p className={classes.orText}>- - or - -</p>
             <button

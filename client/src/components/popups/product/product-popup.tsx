@@ -23,7 +23,6 @@ const ProductPopup = ({
 }: Props) => {
   const renderReadyQuantityOptions: any[] = [];
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  console.log(price);
 
   const quantitySelectionHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLOptionElement;

@@ -10,7 +10,7 @@ const initialState: State = {
   activeTags: [],
   retrievedData: [],
   recentlyViewedProduct: [],
-  numberOfItemsPerPage: 2,
+  numberOfItemsPerPage: 9,
   activePageNumber: 1,
 };
 

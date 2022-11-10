@@ -5,7 +5,7 @@ import decor from "../../images/homepage/decor/decor.png";
 import ItemForSaleContainer from "./item-for-sale-container/item-for-sale-container";
 import { useAppDispatch } from "../../store/hooks";
 import { mainStoreSliceActions } from "../../store/store";
-import keyIdGenerator from "../../utilities/key-id-generator/key-id-generator";
+import { randomKeyGenerator } from "../../utilities/generic-hooks/generic-hooks";
 import BuyerOrderContainer from "../buyer-order-page/buyer-order-container/buyer-order-container";
 import { useAppSelector } from "../../store/hooks";
 import { closeApiMessageDropDown } from "../../utilities/generic-hooks/generic-hooks";
@@ -43,7 +43,7 @@ const SellerOrdersPage = () => {
       dataIndex < sellerData.foundProducts.length;
       dataIndex++
     ) {
-      const keyId = keyIdGenerator();
+      const keyId = randomKeyGenerator(20);
 
       if (sellerData.foundProducts[dataIndex].status === "For Sale") {
         renderReadySellerDataItemsForSale.push(
@@ -65,7 +65,7 @@ const SellerOrdersPage = () => {
   }
 
   const renderReadyPendingOrders = sellerPendingOrderData.map((data) => {
-    const keyId = keyIdGenerator();
+    const keyId = randomKeyGenerator(20);
     return (
       <PendingSellerOrderContainer
         itemsPlaced={data.itemsPlacedData}
@@ -77,7 +77,7 @@ const SellerOrdersPage = () => {
     );
   });
   const renderReadyFullfilledOrders = sellerFulfilledOrderData.map((data) => {
-    const keyId = keyIdGenerator();
+    const keyId = randomKeyGenerator(20);
     return (
       <FulfilledSellerOrders
         itemsPlaced={data.itemsPlacedData}
@@ -90,7 +90,7 @@ const SellerOrdersPage = () => {
   });
 
   const renderReadyBuyerPendingOrders = buyerPendingOrders.map((data) => {
-    const keyId = keyIdGenerator();
+    const keyId = randomKeyGenerator(20);
     return (
       <BuyerOrderContainer
         itemsPlaced={data.itemsPlacedData}
@@ -103,7 +103,7 @@ const SellerOrdersPage = () => {
     );
   });
   const renderReadyBuyerFullfilledOrders = buyerFulfilledOrders.map((data) => {
-    const keyId = keyIdGenerator();
+    const keyId = randomKeyGenerator(20);
     return (
       <BuyerOrderContainer
         itemsPlaced={data.itemsPlacedData}

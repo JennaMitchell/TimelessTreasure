@@ -4,10 +4,10 @@ import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import { priceStringCreator } from "../../../utilities/generic-hooks/generic-hooks";
 import { useNavigate } from "react-router-dom";
 
-import keyIdGenerator from "../../../utilities/key-id-generator/key-id-generator";
+import { randomKeyGenerator } from "../../../utilities/generic-hooks/generic-hooks";
 import { updateSellersWithOrder } from "../../../utilities/order-api-hooks/order-api-hooks";
 import { mainStoreSliceActions } from "../../../store/store";
-import { useId } from "react";
+
 import { cartStoreActions } from "../../../store/cart";
 const CartCheckoutMenu = () => {
   const cartData = useAppSelector((state) => state.cartStore.cartData);
@@ -22,7 +22,7 @@ const CartCheckoutMenu = () => {
     indexOfCartData < cartData.length;
     indexOfCartData++
   ) {
-    let priceType = "USD";
+    // let priceType = "USD";
     orderQuantityArray.push(cartData[indexOfCartData].quantity);
 
     let cartDataPrice: string | string[] = cartData[indexOfCartData].price;
@@ -35,7 +35,7 @@ const CartCheckoutMenu = () => {
     if (cartDataPrice.includes("€")) {
       const indexOfPriceType = cartDataPrice.indexOf("€");
       cartDataPrice.splice(indexOfPriceType, 1);
-      priceType = "EUR";
+      // priceType = "EUR";
     }
     cartDataPrice = cartDataPrice.join("");
     console.log(cartData[indexOfCartData]);
@@ -69,12 +69,12 @@ const CartCheckoutMenu = () => {
         }
         arrayOfProductIds.push(cartData[indexOfCartData].productId);
       }
-      const orderId = keyIdGenerator();
+      const orderId = randomKeyGenerator(20);
 
       // Making request to the sellers coorsponding with the product Ids
 
       if (userId.length === 0) {
-        userId = keyIdGenerator();
+        userId = randomKeyGenerator(20);
       }
 
       const orderData = {

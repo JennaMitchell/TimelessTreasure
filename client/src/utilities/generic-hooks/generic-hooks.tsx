@@ -1,5 +1,11 @@
 import { marketplaceStoreActions } from "../../store/marketplace";
 import { mainStoreSliceActions } from "../../store/store";
+import {
+  lowerCaseLetters,
+  numbers,
+  upperCaseLettersArray,
+  priceConversionObject,
+} from "../constants/constants";
 
 export const priceInputCleaner = (price: string) => {
   const firstCharacterRegexExpression = /[$€]/;
@@ -19,6 +25,27 @@ export const priceInputCleaner = (price: string) => {
   }
 
   return finalPrice;
+};
+
+export const convertPrice = (
+  productsCurrentPriceType: string,
+  newProductPriceType: string,
+  price: number
+) => {
+  if (
+    productsCurrentPriceType.toUpperCase().trim() ===
+    newProductPriceType.toUpperCase().trim()
+  ) {
+    return price;
+  }
+
+  const objectKey =
+    productsCurrentPriceType.toUpperCase().trim() +
+    "to" +
+    newProductPriceType.toUpperCase().trim();
+  const conversion = priceConversionObject[objectKey];
+  const finalPrice = conversion * price;
+  return finalPrice.toFixed(2);
 };
 export const capitalizeFirstLetter = (input: string) => {
   return input.trim().charAt(0).toUpperCase() + input.slice(1);
@@ -90,6 +117,33 @@ export const dropDownNavCategoryHandler = (
 
 export const imageUrlCreator = (url: string) => {
   return "http://localhost:5000/" + url;
+};
+
+export const tempEmailGenerator = (isSeller: boolean) => {
+  const lengthOfId = 10;
+
+  const idArray = lowerCaseLetters.concat(numbers, upperCaseLettersArray);
+  let createdKey = [];
+  for (let idIndex = 0; idIndex < lengthOfId; idIndex++) {
+    const randomIndex = Math.floor(Math.random() * idArray.length);
+    createdKey.push(idArray[randomIndex]);
+  }
+
+  if (isSeller) {
+    return "testSeller" + createdKey.join("") + "@test.com";
+  } else {
+    return "testBuyer" + createdKey.join("") + "@test.com";
+  }
+};
+
+export const randomKeyGenerator = (keyLength: number) => {
+  const idArray = lowerCaseLetters.concat(numbers, upperCaseLettersArray);
+  let createdKey = [];
+  for (let idIndex = 0; idIndex < keyLength; idIndex++) {
+    const randomIndex = Math.floor(Math.random() * idArray.length);
+    createdKey.push(idArray[randomIndex]);
+  }
+  return createdKey.join("");
 };
 
 export const priceStringCreator = (price: string, priceType: string) => {
