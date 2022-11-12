@@ -26,7 +26,7 @@ const ClocksSlide = () => {
       if (text === " ") {
         return (
           <p
-            className={classes.slideInTitleText}
+            className={classes.animationTitleText}
             key={`${text} ${index}`}
             id={`${text} ${index}`}
           >
@@ -36,7 +36,7 @@ const ClocksSlide = () => {
       }
       return (
         <p
-          className={classes.slideInTitleText}
+          className={classes.animationTitleText}
           key={`${text} ${index}`}
           id={`${text} ${index}`}
         >
@@ -58,7 +58,7 @@ const ClocksSlide = () => {
           `${seperatedText[activeAnimationNumber]} ${activeAnimationNumber}`
         );
 
-        activeElement?.classList.add(classes.slideInTitleTextActive);
+        activeElement?.classList.add(classes.animationTitleTextActive);
 
         setActiveAnimationNumber(tempActiveNumber);
       }, 150);
@@ -83,7 +83,7 @@ const ClocksSlide = () => {
         const activeElement = document.getElementById(
           "clocks-slide-show-login-button"
         );
-        activeElement?.classList.add(classes.loginButtonActive);
+        activeElement?.classList.add(classes.slideshowButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
@@ -103,7 +103,7 @@ const ClocksSlide = () => {
         {fadeInText}
       </p>
       <button
-        className={classes.loginButton}
+        className={classes.slideshowButton}
         id="clocks-slide-show-login-button"
         onClick={loginButtonHandler}
       >

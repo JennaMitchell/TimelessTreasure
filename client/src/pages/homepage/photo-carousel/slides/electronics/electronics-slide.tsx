@@ -27,7 +27,7 @@ const ElectronicsSlide = () => {
       if (text === " ") {
         return (
           <p
-            className={classes.slideInTitleText}
+            className={classes.animationTitleText}
             key={`${text} ${index}`}
             id={`${text} ${index}`}
           >
@@ -37,7 +37,7 @@ const ElectronicsSlide = () => {
       }
       return (
         <p
-          className={classes.slideInTitleText}
+          className={classes.animationTitleText}
           key={`${text} ${index}`}
           id={`${text} ${index}`}
         >
@@ -58,7 +58,7 @@ const ElectronicsSlide = () => {
           `${seperatedText[activeAnimationNumber]} ${activeAnimationNumber}`
         );
 
-        activeElement?.classList.add(classes.slideInTitleTextActive);
+        activeElement?.classList.add(classes.animationTitleTextActive);
 
         setActiveAnimationNumber(tempActiveNumber);
       }, 100);

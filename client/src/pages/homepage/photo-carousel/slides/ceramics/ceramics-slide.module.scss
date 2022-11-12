@@ -12,7 +12,7 @@
 
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
 }
 .backdropFilter {
   background-color: rgba(0, 0, 0, 0.7);
@@ -23,7 +23,7 @@
   left: 0px;
 }
 
-.fallInTextContainer {
+.animationTextContainer {
   width: max-content;
   max-width: max-content;
   min-width: max-content;
@@ -37,8 +37,9 @@
   padding: 0px 100px;
 }
 
-.fallInTitleText {
-  font-size: 4.8rem;
+.animationTitleText {
+  font-size: toRem(72);
+  line-height: toRem(72);
   transition: all 1s;
   color: $white;
   transform: rotate(-180deg) translateY(50px);
@@ -48,12 +49,12 @@
   margin: 0px;
 }
 
-.fallInTitleTextActive {
+.animationTitleTextActive {
   transform: rotate(0deg) translateY(0px) !important;
   transition: all 1s;
 }
 .subtitleText {
-  font-size: 1.6rem;
+  font-size: toRem(24);
   width: max(65ch, 65ch);
   text-align: center;
   color: white;
@@ -71,7 +72,7 @@
   transition: all 1s;
   opacity: 1;
 }
-.loginButton {
+.slideshowButton {
   width: max-content;
   max-width: max-content;
   min-width: max-content;
@@ -83,16 +84,72 @@
   border: 2px solid white;
   background-color: transparent;
   color: white;
-  font-size: 1.6rem;
+  font-size: toRem(20);
   z-index: 2;
   opacity: 0;
   transition: all 1s;
 }
-.loginButton:hover {
+.slideshowButton:hover {
   color: $main600;
   border-color: $main600;
 }
-.loginButtonActive {
+.slideshowButtonActive {
   opacity: 1;
   transition: all 1s;
+}
+@media (max-width: 1000px) {
+  .animationTitleText {
+    font-size: toRem(68);
+    line-height: toRem(68);
+  }
+  .subtitleText {
+    font-size: toRem(16);
+  }
+  .slideshowButton {
+    font-size: toRem(16);
+  }
+}
+@media (max-width: 750px) {
+  .mainContainer {
+    height: max(500px, 500px);
+  }
+  .animationTitleText {
+    font-size: toRem(52);
+    line-height: toRem(52);
+  }
+  .subtitleText {
+    font-size: toRem(14);
+  }
+  .slideshowButton {
+    font-size: toRem(14);
+  }
+}
+@media (max-width: 580px) {
+  .subtitleText {
+    width: max(45ch, 45ch);
+  }
+  .animationTitleText {
+    font-size: toRem(48);
+    line-height: toRem(48);
+  }
+  .mainContainer {
+    height: max(400px, 400px);
+  }
+}
+@media (max-width: 500px) {
+  .subtitleText {
+    width: max(38ch, 38ch);
+  }
+  .animationTitleText {
+    font-size: toRem(36);
+    line-height: toRem(36);
+  }
+  .mainContainer {
+    height: max(400px, 400px);
+  }
+}
+@media (max-width: 400px) {
+  .subtitleText {
+    width: max(32ch, 32ch);
+  }
 }

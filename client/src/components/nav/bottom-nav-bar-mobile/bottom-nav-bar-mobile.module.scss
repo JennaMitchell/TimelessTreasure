@@ -1,0 +1,71 @@
+@import "../../../utilities/variables";
+.dropdownButton {
+  width: max(40px, 40px);
+  height: max(40px, 40px);
+  background-color: $main800;
+  color: $white;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: 90px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border: 0px;
+  transition: all 1s;
+}
+
+.dropdownButton:hover,
+.marketplaceButton:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.menuIcon {
+  width: max(100%, 100%);
+  height: max(100%, 100%);
+  color: inherit;
+}
+.marketplaceButtonDropdown {
+  width: max(140px, 140px);
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
+  background-color: $white;
+  border-radius: 10px;
+  position: absolute;
+  top: 105px;
+  right: 32px;
+  padding: 20px 10px;
+  box-sizing: border-box;
+  z-index: 4;
+  box-shadow: 0px 0px 10px black;
+}
+.marketplaceButton {
+  width: max(90%, 90%);
+  max-height: max-content;
+  font-size: toRem(16);
+  color: $white;
+  background-color: $main800;
+  border-radius: 5px;
+  text-decoration: none;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  text-align: center;
+  transition: all 1s;
+}
+@media (max-width: 480px) {
+  .dropdownButton {
+    top: 75px;
+    right: 15px;
+  }
+  .marketplaceButtonDropdown {
+    top: 90px;
+    right: 32px;
+  }
+}

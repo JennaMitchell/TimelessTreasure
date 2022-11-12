@@ -47,3 +47,19 @@
   top: 0px;
   right: 0px;
 }
+@media (max-width: 1650px) {
+  .mainContainer {
+    left: -150px;
+    width: max(400px, 400px);
+    height: max(210px, 210px);
+    padding: 20px;
+  }
+  .productButton {
+    font-size: toRem(12);
+    height: max(80%, 80%);
+    width: max(80%, 80%);
+  }
+  .options {
+    grid-template-rows: repeat(6, calc(230px / 7));
+  }
+}

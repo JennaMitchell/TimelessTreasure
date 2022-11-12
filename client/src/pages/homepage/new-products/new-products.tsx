@@ -21,10 +21,22 @@ import openSocket from "socket.io-client";
 
 const NewProducts = () => {
   const [activeNewArrivalButton, setActiveNewArrivalButton] = useState("All");
+  const [navBarSeperatedEnabler, setNavBarSeperatedEnabler] = useState(false);
   const [clickedItemData, setClickedItemData] = useState<{
     [key: string]: any;
   }>({});
   const [latestData, setLatestData] = useState<any[]>([]);
+  const navBarSeperatedEnablerHandler = () => {
+    const match = window.matchMedia(`(max-width:1000px)`);
+
+    if (match.matches) {
+      setNavBarSeperatedEnabler(true);
+    }
+    if (!navBarSeperatedEnabler && !match.matches) {
+      setNavBarSeperatedEnabler(false);
+    }
+  };
+  window.addEventListener("resize", navBarSeperatedEnablerHandler);
 
   const socket = openSocket("http://localhost:5000");
   socket.on("new-product", (data) => {
@@ -250,7 +262,19 @@ const NewProducts = () => {
         />
       )}
 
-      <div className={classes.navBar}>{renderReadyNavButtons}</div>
+      {!navBarSeperatedEnabler && (
+        <div className={classes.navBar}>{renderReadyNavButtons}</div>
+      )}
+      {navBarSeperatedEnabler && (
+        <div className={classes.seperatedNavBar}>
+          {renderReadyNavButtons.slice(0, 3)}
+        </div>
+      )}
+      {navBarSeperatedEnabler && (
+        <div className={classes.seperatedNavBar}>
+          {renderReadyNavButtons.slice(3, 6)}
+        </div>
+      )}
       <div className={classes.itemCollection}>
         {latestData.length === 0 && (
           <p className={classes.noItemsFoundText}>

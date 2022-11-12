@@ -12,7 +12,7 @@
 
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
 }
 .backdropFilter {
   background-color: rgba(0, 0, 0, 0.7);
@@ -37,7 +37,7 @@
   padding: 0px 100px;
 }
 
-.slideInTitleText {
+.animationTitleText {
   font-size: 4.8rem;
   transition: all 1s;
   color: $white;
@@ -46,7 +46,7 @@
   padding: 0px;
   margin: 0px;
 }
-
+.animationTitleTextActive,
 .slideInTitleTextActive {
   transform: translateX(0%);
   transition: all 1s;
@@ -95,4 +95,60 @@
 .slideshowButtonActive {
   opacity: 1;
   transition: all 1s;
+}
+@media (max-width: 1000px) {
+  .animationTitleText {
+    font-size: toRem(68);
+    line-height: toRem(68);
+  }
+  .subtitleText {
+    font-size: toRem(16);
+  }
+  .slideshowButton {
+    font-size: toRem(16);
+  }
+}
+@media (max-width: 750px) {
+  .mainContainer {
+    height: max(500px, 500px);
+  }
+  .animationTitleText {
+    font-size: toRem(52);
+    line-height: toRem(52);
+  }
+  .subtitleText {
+    font-size: toRem(14);
+  }
+  .slideshowButton {
+    font-size: toRem(14);
+  }
+}
+@media (max-width: 580px) {
+  .subtitleText {
+    width: max(45ch, 45ch);
+  }
+  .animationTitleText {
+    font-size: toRem(48);
+    line-height: toRem(48);
+  }
+  .mainContainer {
+    height: max(400px, 400px);
+  }
+}
+@media (max-width: 500px) {
+  .subtitleText {
+    width: max(38ch, 38ch);
+  }
+  .animationTitleText {
+    font-size: toRem(36);
+    line-height: toRem(36);
+  }
+  .mainContainer {
+    height: max(400px, 400px);
+  }
+}
+@media (max-width: 400px) {
+  .subtitleText {
+    width: max(32ch, 32ch);
+  }
 }

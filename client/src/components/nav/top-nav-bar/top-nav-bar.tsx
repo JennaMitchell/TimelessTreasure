@@ -2,13 +2,17 @@ import classes from "./top-nav-bar.module.scss";
 import logo from "../../../images/logo/logo.png";
 import bagIcon from "../../../images/icons/bag-icon.png";
 import React, { useRef, useState } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+} from "@heroicons/react/24/outline";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import { NavLink, useNavigate } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { getSearchedProduct } from "../../../utilities/product-api-hooks/marketplace-product-hooks";
 import { marketplaceStoreActions } from "../../../store/marketplace";
+
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
@@ -16,6 +20,31 @@ interface LogicObject {
   };
 }
 const TopNavBar = () => {
+  const [priceDropDownEnabler, setPriceDropDownEnabler] = useState(true);
+  const [searchBarEnabled, setSearchBarEnabled] = useState(true);
+  const priceDropDownEnablerHandler = () => {
+    const match = window.matchMedia(`(max-width:480px)`);
+
+    if (match.matches) {
+      setPriceDropDownEnabler(false);
+    }
+    if (!priceDropDownEnabler && !match.matches) {
+      setPriceDropDownEnabler(true);
+    }
+  };
+  const searchBarEnablerHandler = () => {
+    const match = window.matchMedia(`(max-width:750px)`);
+    if (match.matches) {
+      setSearchBarEnabled(false);
+    }
+    if (!searchBarEnabled && !match.matches) {
+      setSearchBarEnabled(true);
+    }
+  };
+
+  window.addEventListener("resize", priceDropDownEnablerHandler);
+  window.addEventListener("resize", searchBarEnablerHandler);
+
   const availableCurrency = ["USD", "CAN", "EUR"];
   const [searchBarActive, setSearchBarActive] = useState(false);
   const dispatch = useAppDispatch();
@@ -185,45 +214,49 @@ const TopNavBar = () => {
             </button>
           )}
 
-          <div
-            className={`${classes.searchContainer} ${
-              searchBarActive && classes.searchContainerActive
-            }`}
-            onClick={searchContainerClickHandler}
-          >
-            <label
-              className={`${classes.searchInputLabel} ${
-                inputLogicObject.searchBarNavInput.labelMoveout &&
-                classes.searchInputLabelMoveOut
+          {searchBarEnabled && (
+            <div
+              className={`${classes.searchContainer} ${
+                searchBarActive && classes.searchContainerActive
               }`}
-              onClick={inputLabelClickHandler}
-              htmlFor="searchBarNavInput"
-            >
-              Search
-            </label>
-            <MagnifyingGlassIcon
-              className={classes.searchIcon}
               onClick={searchContainerClickHandler}
-            />
-            <input
-              className={classes.searchInput}
-              id="searchBarNavInput"
-              ref={searchBarRef}
-              onBlur={inputBlurHandler}
-              onFocus={inputFocusHandler}
-              onChange={inputChangeHandler}
-              maxLength={100}
-            />
-          </div>
+            >
+              <label
+                className={`${classes.searchInputLabel} ${
+                  inputLogicObject.searchBarNavInput.labelMoveout &&
+                  classes.searchInputLabelMoveOut
+                }`}
+                onClick={inputLabelClickHandler}
+                htmlFor="searchBarNavInput"
+              >
+                Search
+              </label>
+              <MagnifyingGlassIcon
+                className={classes.searchIcon}
+                onClick={searchContainerClickHandler}
+              />
+              <input
+                className={classes.searchInput}
+                id="searchBarNavInput"
+                ref={searchBarRef}
+                onBlur={inputBlurHandler}
+                onFocus={inputFocusHandler}
+                onChange={inputChangeHandler}
+                maxLength={100}
+              />
+            </div>
+          )}
 
-          <select
-            className={classes.currencyDropDown}
-            onChange={priceTypeDropdownHandler}
-          >
-            {renderReadyCurrencyOptions}
-          </select>
+          {priceDropDownEnabler && (
+            <select
+              className={classes.currencyDropDown}
+              onChange={priceTypeDropdownHandler}
+            >
+              {renderReadyCurrencyOptions}
+            </select>
+          )}
           <NavLink className={classes.cartContainer} to="/cart">
-            <img className={classes.cartIcon} src={bagIcon} alt="Cart Icon" />
+            <ShoppingBagIcon className={classes.cartIcon} />
             <div className={classes.cartItemsTrackers}>{cartData.length}</div>
           </NavLink>
         </div>

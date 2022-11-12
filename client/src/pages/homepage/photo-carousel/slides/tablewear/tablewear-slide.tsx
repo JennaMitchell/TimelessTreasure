@@ -26,7 +26,7 @@ const TablewearSlide = () => {
       if (text === " ") {
         return (
           <p
-            className={classes.slideInTitleText}
+            className={classes.animationTitleText}
             key={`${text} ${index}`}
             id={`${text} ${index}`}
           >
@@ -36,7 +36,7 @@ const TablewearSlide = () => {
       }
       return (
         <p
-          className={classes.slideInTitleText}
+          className={classes.animationTitleText}
           key={`${text} ${index}`}
           id={`${text} ${index}`}
         >
@@ -58,7 +58,7 @@ const TablewearSlide = () => {
           `${seperatedText[activeAnimationNumber]} ${activeAnimationNumber}`
         );
 
-        activeElement?.classList.add(classes.slideInTitleTextActive);
+        activeElement?.classList.add(classes.animationTitleTextActive);
 
         setActiveAnimationNumber(tempActiveNumber);
       }, 150);
@@ -83,7 +83,7 @@ const TablewearSlide = () => {
         const activeElement = document.getElementById(
           `tablewear-slideshow-browse-button`
         );
-        activeElement?.classList.add(classes.slideShowButtonActive);
+        activeElement?.classList.add(classes.slideshowButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
@@ -103,7 +103,7 @@ const TablewearSlide = () => {
       </p>
       <NavLink
         to="/marketplace"
-        className={classes.slideShowButton}
+        className={classes.slideshowButton}
         id="tablewear-slideshow-browse-button"
         onClick={slideshowButtonHandler}
       >

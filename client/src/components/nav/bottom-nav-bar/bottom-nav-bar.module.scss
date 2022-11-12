@@ -11,7 +11,7 @@
   z-index: $navZIndex;
 }
 .mainContainer {
-  width: 1000px;
+  width: min(1000px, 100%);
   height: 50px;
 
   display: grid;
@@ -39,4 +39,9 @@
 }
 .sectionButton:hover {
   color: orange;
+}
+@media (max-width: 750px) {
+  .sectionButton {
+    font-size: toRem(14);
+  }
 }

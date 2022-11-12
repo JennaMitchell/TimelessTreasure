@@ -8,7 +8,7 @@
   min-width: 100%;
   display: grid;
   grid-template-rows: 60px max-content 40px;
-  grid-template-columns: 1000px;
+  grid-template-columns: minmax(100%, 1000px);
   justify-content: center;
   align-items: center;
   gap: 0px;
@@ -18,7 +18,7 @@
 
 .navBar {
   height: max(100%, 100%);
-  width: min(1000px, 1000px);
+  width: min(1000px, 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,6 +41,7 @@
   font-size: 1rem;
   transition: all 1s;
   font-family: $fontFamily;
+  box-sizing: border-box;
 }
 .navButton:hover {
   color: $main100;
@@ -52,25 +53,31 @@
 }
 .itemCollection {
   display: grid;
-  width: max(1000px, 1000px);
+
+  min-width: 100%;
+  width: 100%;
+  max-width: 1000px;
   height: max-content;
   min-height: 400px;
   max-height: max-content;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, max-content);
+  grid-auto-rows: max-content;
+
   gap: 20px;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 .itemContainer {
-  width: max(100%, 100%);
-  height: max(360px, 360px);
+  width: max(235px, 235px);
+  height: max(370px, 370px);
   border-radius: 5px;
+  box-sizing: border-box;
 
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 300px 30px 30px;
+  grid-template-rows: 270px 60px 30px;
   align-items: center;
   justify-items: center;
   padding: 10px 0px;
@@ -135,51 +142,7 @@
   color: $main800;
   background-color: $main200;
 }
-.moreInfoContainer {
-  width: max(100%, 100%);
-  height: max(300px, 300px);
-  position: absolute;
-  top: 5px;
-  right: 0px;
-  z-index: 2;
-  display: grid;
-  transition: all 0.25s;
-  grid-template-columns: 100%;
-  align-items: center;
-  justify-content: center;
-}
-.moreInfoContainer:hover {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.moreInfoBar {
-  display: flex;
-  width: max(100%, 100%);
-  height: max(40px, 40px);
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
 
-.moreInfoButton {
-  width: max(20px, 20px);
-  height: max(20px, 20px);
-  padding: 5px;
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  background-color: $white;
-  color: $black;
-  border-radius: 50%;
-  opacity: 0;
-  transition: all 0.5s;
-}
-.moreInfoButtonActive {
-  opacity: 1;
-}
-.moreInfoButton:hover {
-  color: $main100;
-  background-color: $main600;
-}
 .noItemsFoundText {
   font-size: toRem(16);
   font-family: $fontFamily;
@@ -195,4 +158,52 @@
 
   text-align: center;
   grid-column: 1 / span 4;
+}
+
+.seperatedNavBar {
+  width: max(400px, 400px);
+  max-height: max-content;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+}
+@media (max-width: 1000px) {
+  .mainContainer {
+    grid-template-rows: 60px 60px max-content 40px;
+  }
+  .itemCollection {
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+  }
+}
+@media (max-width: 810px) {
+  .itemCollection {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+}
+@media (max-width: 550px) {
+  .itemCollection {
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center;
+  }
+}
+@media (max-width: 420px) {
+  .seperatedNavBar {
+    width: max(330px, 330px);
+    max-height: max-content;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-items: center;
+    justify-self: center;
+  }
+  .navButton {
+    width: max(100px, 100px);
+    padding: 10px 0px;
+    border-radius: 20px;
+    font-size: toRem(12);
+  }
 }

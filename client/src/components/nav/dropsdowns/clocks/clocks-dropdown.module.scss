@@ -52,7 +52,7 @@
   font-size: 1.4rem;
   line-height: 1.2rem;
   width: max(90%, 90%);
-  height: max(100%, 100%);
+  max-height: max-content;
   padding: 0px;
   margin: 0px;
   display: inline-block;
@@ -63,4 +63,28 @@
   align-items: center;
   font-family: $fontFamily;
   margin-bottom: 10px;
+}
+@media (max-width: 1650px) {
+  .mainContainer {
+    left: -200px;
+    width: max(400px, 400px);
+    height: max(210px, 210px);
+    padding: 20px;
+  }
+  .options {
+    grid-template-rows: max-content repeat(5, calc(230px / 7));
+  }
+  .optionsTitle {
+    font-size: toRem(12);
+    line-height: toRem(12);
+    margin-bottom: 5px;
+  }
+  .productButton {
+    font-size: toRem(14);
+    height: max(80%, 80%);
+    width: max(80%, 80%);
+    padding: 0px;
+    justify-self: flex-start;
+    margin-left: 10px;
+  }
 }

@@ -27,7 +27,7 @@ const CeramicsSlide = () => {
       if (text === " ") {
         return (
           <p
-            className={classes.fallInTitleText}
+            className={classes.animationTitleText}
             key={`${text} ${index}`}
             id={`${text} ${index}`}
           >
@@ -37,7 +37,7 @@ const CeramicsSlide = () => {
       }
       return (
         <p
-          className={classes.fallInTitleText}
+          className={classes.animationTitleText}
           key={`${text} ${index}`}
           id={`${text} ${index}`}
         >
@@ -59,7 +59,7 @@ const CeramicsSlide = () => {
           `${seperatedText[activeAnimationNumber]} ${activeAnimationNumber}`
         );
 
-        activeElement?.classList.add(classes.fallInTitleTextActive);
+        activeElement?.classList.add(classes.animationTitleTextActive);
 
         setActiveAnimationNumber(tempActiveNumber);
       }, 150);
@@ -84,7 +84,7 @@ const CeramicsSlide = () => {
         const activeElement = document.getElementById(
           `slide-show-try-now-button-ceramics`
         );
-        activeElement?.classList.add(classes.loginButtonActive);
+        activeElement?.classList.add(classes.slideshowButtonActive);
         setActiveAnimationNumber(tempActiveNumber);
       }, 1000);
     }
@@ -98,12 +98,14 @@ const CeramicsSlide = () => {
   return (
     <div className={classes.mainContainer}>
       <div className={classes.backdropFilter} />
-      <div className={classes.fallInTextContainer}>{renderReadyFallinText}</div>
+      <div className={classes.animationTextContainer}>
+        {renderReadyFallinText}
+      </div>
       <p className={classes.subtitleText} id="slide-show-fade-in-text-ceramics">
         {fadeInText}
       </p>
       <button
-        className={classes.loginButton}
+        className={classes.slideshowButton}
         id="slide-show-try-now-button-ceramics"
         onClick={tryNowButtonHandler}
       >

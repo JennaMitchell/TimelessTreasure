@@ -27,7 +27,7 @@ const PaintingsSlide = () => {
       if (text === " ") {
         return (
           <p
-            className={classes.slideInTitleText}
+            className={classes.animationTitleText}
             key={`${text} ${index}`}
             id={`${text} ${index}`}
           >
@@ -37,7 +37,7 @@ const PaintingsSlide = () => {
       }
       return (
         <p
-          className={classes.slideInTitleText}
+          className={classes.animationTitleText}
           key={`${text} ${index}`}
           id={`${text} ${index}`}
         >
