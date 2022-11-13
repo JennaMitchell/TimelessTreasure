@@ -3,11 +3,9 @@
   height: max-content;
   max-height: max-content;
   min-height: max-content;
-  width: 100%;
-  max-width: 100%;
-  min-width: 100%;
+  width: min(1000px, 100%);
   display: grid;
-  grid-template-rows: 60px max-content 40px;
+  grid-template-rows: 60px max-content max-content;
   grid-template-columns: minmax(100%, 1000px);
   justify-content: center;
   align-items: center;
@@ -71,20 +69,19 @@
 }
 .itemContainer {
   width: max(235px, 235px);
-  height: max(370px, 370px);
+  height: max(360px, 360px);
   border-radius: 5px;
   box-sizing: border-box;
 
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 270px 60px 30px;
+  grid-template-rows: 250px 60px 30px;
   align-items: center;
   justify-items: center;
   padding: 10px 0px;
   position: relative;
   transition: background-color 1s;
 }
-
 .itemContainer:hover {
   background-color: $main200;
 }
@@ -92,7 +89,7 @@
 .itemImage {
   width: max(90%, 90%);
   height: max(90%, 90%);
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 .itemTitle {
@@ -100,7 +97,7 @@
   height: max-content;
   min-height: max-content;
   max-height: max-content;
-  font-size: 1rem;
+  font-size: toRem(16);
   color: $black;
   display: grid;
   align-items: center;
@@ -114,7 +111,7 @@
   max-width: max-content;
   min-width: max-content;
   height: max(100%, 100%);
-  font-size: 1rem;
+  font-size: toRem(16);
   color: $black;
   text-align: center;
   font-family: $fontFamily;
@@ -125,7 +122,7 @@
   height: max(40px, 40px);
   background-color: $main600;
   color: $white;
-  font-size: 1rem;
+  font-size: toRem(16);
   justify-self: center;
   border: 0px;
   border-radius: 20px;
@@ -137,6 +134,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
 }
 .showMoreButton:hover {
   color: $main800;
@@ -171,7 +169,7 @@
 }
 @media (max-width: 1000px) {
   .mainContainer {
-    grid-template-rows: 60px 60px max-content 40px;
+    grid-template-rows: 50px 50px max-content max-content;
   }
   .itemCollection {
     grid-template-columns: repeat(3, 1fr);

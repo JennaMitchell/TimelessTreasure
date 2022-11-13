@@ -30,7 +30,8 @@ const ProcessSteps = () => {
           <div className={classes.stepTextContainer}>
             <p className={classes.stepText}>Create a Product</p>
             <p className={classes.stepsubText}>
-              Upload a photo of your product and check a few boxs to selling
+              Upload a photo of your product and check a few boxs to start
+              selling
             </p>
           </div>
         </div>
@@ -39,9 +40,9 @@ const ProcessSteps = () => {
             <p className={classes.stepIconText}>3</p>
           </div>
           <div className={classes.stepTextContainer}>
-            <p className={classes.stepText}>Start Selling</p>
+            <p className={classes.stepText}>Publish</p>
             <p className={classes.stepsubText}>
-              Upload a photo of your product
+              Publish and let the customers find you
             </p>
           </div>
         </div>

@@ -7,7 +7,7 @@ import classes from "./ceramics-slide.module.scss";
 const CeramicsSlide = () => {
   const fallInText = "Live Collection";
   const fadeInText =
-    "Add and sell products live, and update product status to all users immediately";
+    "Add and sell products live, and update all users immediately";
   const [seperatedText, setSeperatedText] = useState<string[]>([]);
   const [initialRender, setIntialRender] = useState(false);
   const [activeAnimationNumber, setActiveAnimationNumber] = useState(0);

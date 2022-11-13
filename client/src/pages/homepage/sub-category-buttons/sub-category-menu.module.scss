@@ -2,7 +2,7 @@
 
 .mainContainer {
   margin: 0px auto;
-  width: max(1000px, 1000px);
+  width: min(1000px, 100%);
   height: max-content;
   min-height: max-content;
   max-height: max-content;
@@ -41,7 +41,7 @@
 }
 
 .categoryTitle {
-  font-size: 1.6rem;
+  font-size: toRem(24);
   color: $white;
   font-family: $fontFamily;
   z-index: 2;
@@ -58,14 +58,14 @@
 }
 
 .categorySubText {
-  font-size: 1rem;
+  font-size: toRem(16);
   color: $white;
   font-family: $fontFamily;
   z-index: 2;
   margin: 0px;
   padding: 0px;
   padding-left: 20px;
-  width: max(45ch, 45ch);
+  width: max(20ch, 20ch);
 }
 .activeText {
   color: $main300;
@@ -91,4 +91,35 @@
 .activeActionButton {
   border: 1px solid $main300;
   color: $main300;
+}
+@media (max-width: 1000px) {
+  .mainContainer {
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: max-content;
+  }
+}
+@media (max-width: 500px) {
+  .subCategoryButton {
+    width: max(80vw, 80vw);
+    height: max(250px, 250px);
+  }
+  .categoryTitle {
+    font-size: toRem(22);
+  }
+  .categorySubText {
+    font-size: toRem(16);
+  }
+}
+@media (max-width: 450px) {
+  .subCategoryButton {
+    width: max(90vw, 90vw);
+    height: max(250px, 250px);
+  }
+  .categoryTitle {
+    font-size: toRem(18);
+  }
+  .categorySubText {
+    font-size: toRem(14);
+  }
 }

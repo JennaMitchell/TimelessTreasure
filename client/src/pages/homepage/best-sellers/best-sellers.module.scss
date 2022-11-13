@@ -3,19 +3,22 @@
   height: max-content;
   max-height: max-content;
   min-height: max-content;
-  min-width: 100%;
   width: 100%;
   max-width: 100%;
+  min-width: 100%;
   display: grid;
-  grid-template-rows: 60px max-content 40px;
-  justify-content: center;
+  grid-template-rows: 60px max-content max-content;
+  grid-template-columns: minmax(100%, 1000px);
+  justify-items: center;
   align-items: center;
   gap: 0px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .navBar {
   height: max(100%, 100%);
-  width: min(1000px, 1000px);
+  width: min(1000px, 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,9 +38,10 @@
   align-items: center;
   justify-items: center;
   border: 0px;
-  font-size: 1rem;
+  font-size: toRem(16);
   transition: all 1s;
   font-family: $fontFamily;
+  box-sizing: border-box;
 }
 .navButton:hover {
   color: $main100;
@@ -49,34 +53,45 @@
 }
 .itemCollection {
   display: grid;
-  width: max(1000px, 1000px);
+
+  width: min(1000px, 100%);
   height: max-content;
-  min-height: max-content;
+  min-height: 400px;
   max-height: max-content;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, max-content);
+  grid-auto-rows: max-content;
+
   gap: 20px;
   align-items: center;
   justify-content: center;
+
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 .itemContainer {
-  width: max(100%, 100%);
+  width: max(235px, 235px);
   height: max(360px, 360px);
   border-radius: 5px;
+  box-sizing: border-box;
 
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 300px 30px 30px;
+  grid-template-rows: 250px 60px 30px;
   align-items: center;
   justify-items: center;
   padding: 10px 0px;
   position: relative;
+  transition: background-color 1s;
 }
+
+.itemContainer:hover {
+  background-color: $main200;
+}
+
 .itemImage {
   width: max(90%, 90%);
   height: max(90%, 90%);
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 .itemTitle {
@@ -84,7 +99,7 @@
   height: max-content;
   min-height: max-content;
   max-height: max-content;
-  font-size: 1rem;
+  font-size: toRem(16);
   color: $black;
   display: grid;
   align-items: center;
@@ -98,7 +113,7 @@
   max-width: max-content;
   min-width: max-content;
   height: max(100%, 100%);
-  font-size: 1rem;
+  font-size: toRem(16);
   color: $black;
   text-align: center;
   font-family: $fontFamily;
@@ -109,7 +124,7 @@
   height: max(40px, 40px);
   background-color: $main600;
   color: $white;
-  font-size: 1rem;
+  font-size: toRem(16);
   justify-self: center;
   border: 0px;
   border-radius: 20px;
@@ -117,53 +132,78 @@
   margin-bottom: 20px;
   transition: all 1s;
   font-family: $fontFamily;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
 .showMoreButton:hover {
   color: $main800;
   background-color: $main200;
 }
-.moreInfoContainer {
-  width: max(100%, 100%);
-  height: max(300px, 300px);
-  position: absolute;
-  top: 5px;
-  right: 0px;
-  z-index: 2;
-  display: grid;
-  transition: all 0.25s;
-  grid-template-columns: 100%;
-  align-items: center;
-  justify-content: center;
-}
-.moreInfoContainer:hover {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.moreInfoBar {
-  display: flex;
-  width: max(100%, 100%);
-  height: max(40px, 40px);
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
+
+.noItemsFoundText {
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  color: $main800;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  height: 300px;
+  max-height: 300px;
+
+  justify-self: center;
+  align-self: center;
+
+  text-align: center;
+  grid-column: 1 / span 4;
 }
 
-.moreInfoButton {
-  width: max(20px, 20px);
-  height: max(20px, 20px);
-  padding: 5px;
-  display: grid;
+.seperatedNavBar {
+  width: max(400px, 400px);
+  max-height: max-content;
+  display: flex;
+  gap: 10px;
   align-items: center;
   justify-content: center;
-  background-color: $white;
-  color: $black;
-  border-radius: 50%;
-  opacity: 0;
-  transition: all 0.5s;
+  justify-self: center;
 }
-.moreInfoButtonActive {
-  opacity: 1;
+@media (max-width: 1000px) {
+  .mainContainer {
+    grid-template-rows: 50px 50px max-content max-content;
+  }
+  .itemCollection {
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+  }
 }
-.moreInfoButton:hover {
-  color: $main100;
-  background-color: $main600;
+@media (max-width: 810px) {
+  .itemCollection {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+}
+@media (max-width: 550px) {
+  .itemCollection {
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center;
+  }
+}
+@media (max-width: 420px) {
+  .seperatedNavBar {
+    width: max(330px, 330px);
+    max-height: max-content;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-items: center;
+    justify-self: center;
+  }
+  .navButton {
+    width: max(100px, 100px);
+    padding: 10px 0px;
+    border-radius: 20px;
+    font-size: toRem(12);
+  }
 }

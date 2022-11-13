@@ -1,6 +1,6 @@
 import classes from "./bottom-nav-bar.module.scss";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { buttonLogicObject } from "./bottom-nav-bar-data";
 import CeramicsDropDown from "../dropsdowns/ceramics/ceramics-dropdown";
 import ClocksDropDown from "../dropsdowns/clocks/clocks-dropdown";
@@ -31,6 +31,17 @@ const BottomNavBar = () => {
       setDropdownsEnabled(true);
     }
   };
+
+  useEffect(() => {
+    const bottomNavWindowMatch = window.matchMedia("(max-width:480px)").matches;
+    const dropdownWindowMatch = window.matchMedia("(max-width:1250px)").matches;
+    if (bottomNavWindowMatch) {
+      setBottomNavBarEnabled(false);
+    }
+    if (dropdownWindowMatch) {
+      setDropdownsEnabled(false);
+    }
+  }, []);
 
   window.addEventListener("resize", bottomNavBarEnablerHandler);
 

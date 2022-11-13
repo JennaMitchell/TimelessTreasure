@@ -22,7 +22,7 @@
   justify-content: center;
 }
 .sectionTitle {
-  font-size: 2.2rem;
+  font-size: toRem(48);
   color: $main600;
   width: max-content;
   max-height: max-content;
@@ -38,4 +38,9 @@
   object-fit: contain;
   justify-self: center;
   padding-right: 5px;
+}
+@media (max-width: 450px) {
+  .sectionTitle {
+    font-size: toRem(36);
+  }
 }

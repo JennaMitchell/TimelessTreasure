@@ -27,6 +27,25 @@ const BestSellers = () => {
   const selectedPriceType = useAppSelector(
     (state) => state.mainStore.selectedPriceType
   );
+  const [navBarSeperatedEnabler, setNavBarSeperatedEnabler] = useState(false);
+  const navBarSeperatedEnablerHandler = () => {
+    const match = window.matchMedia(`(max-width:1000px)`);
+
+    if (match.matches) {
+      setNavBarSeperatedEnabler(true);
+    }
+    if (!navBarSeperatedEnabler && !match.matches) {
+      setNavBarSeperatedEnabler(false);
+    }
+  };
+  useEffect(() => {
+    const navBarWindowMatch = window.matchMedia("(max-width:1000px)");
+
+    if (navBarWindowMatch) {
+      setNavBarSeperatedEnabler(true);
+    }
+  }, []);
+  window.addEventListener("resize", navBarSeperatedEnablerHandler);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -239,7 +258,19 @@ const BestSellers = () => {
         />
       )}
 
-      <div className={classes.navBar}>{renderReadyNavButtons}</div>
+      {!navBarSeperatedEnabler && (
+        <div className={classes.navBar}>{renderReadyNavButtons}</div>
+      )}
+      {navBarSeperatedEnabler && (
+        <div className={classes.seperatedNavBar}>
+          {renderReadyNavButtons.slice(0, 3)}
+        </div>
+      )}
+      {navBarSeperatedEnabler && (
+        <div className={classes.seperatedNavBar}>
+          {renderReadyNavButtons.slice(3, 6)}
+        </div>
+      )}
       <div className={classes.itemCollection}>
         {hotestData.length === 0 && (
           <p className={classes.noItemsFoundText}>

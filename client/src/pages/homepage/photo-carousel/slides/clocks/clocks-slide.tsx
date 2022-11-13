@@ -5,8 +5,7 @@ import { useAppDispatch } from "../../../../../store/hooks";
 import { mainStoreSliceActions } from "../../../../../store/store";
 const ClocksSlide = () => {
   const slideInText = "Live Inventory";
-  const fadeInText =
-    "Update your stores inventory whenever and update all customers live";
+  const fadeInText = "Update your stores inventory status whenever";
   const [seperatedText, setSeperatedText] = useState<string[]>([]);
   const [initialRender, setIntialRender] = useState(false);
   const [activeAnimationNumber, setActiveAnimationNumber] = useState(0);

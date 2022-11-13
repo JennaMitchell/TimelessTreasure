@@ -36,6 +36,15 @@ const NewProducts = () => {
       setNavBarSeperatedEnabler(false);
     }
   };
+
+  useEffect(() => {
+    const navBarWindowMatch = window.matchMedia("(max-width:1000px)");
+
+    if (navBarWindowMatch) {
+      setNavBarSeperatedEnabler(true);
+    }
+  }, []);
+
   window.addEventListener("resize", navBarSeperatedEnablerHandler);
 
   const socket = openSocket("http://localhost:5000");

@@ -1,7 +1,7 @@
 import classes from "./top-nav-bar.module.scss";
 import logo from "../../../images/logo/logo.png";
 import bagIcon from "../../../images/icons/bag-icon.png";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MagnifyingGlassIcon,
   ShoppingBagIcon,
@@ -41,6 +41,19 @@ const TopNavBar = () => {
       setSearchBarEnabled(true);
     }
   };
+
+  // this useEffect is used check the screen size on refresh and update as needed
+  useEffect(() => {
+    const searchBarEnabled = window.matchMedia("(max-width:750px)").matches;
+    const priceDropDownEnabled = window.matchMedia("(max-width:480px)").matches;
+
+    if (searchBarEnabled) {
+      setSearchBarEnabled(false);
+    }
+    if (priceDropDownEnabled) {
+      setPriceDropDownEnabler(false);
+    }
+  }, []);
 
   window.addEventListener("resize", priceDropDownEnablerHandler);
   window.addEventListener("resize", searchBarEnablerHandler);

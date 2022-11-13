@@ -51,14 +51,6 @@ const Footer = () => {
             />
           </div>
         </div>
-        <div className={classes.collectionBlock}>
-          <h6 className={classes.sectionTitle}> Our Collection</h6>
-          <button className={classes.footerButton}>Ceramics</button>
-          <button className={classes.footerButton}>Clocks</button>
-          <button className={classes.footerButton}>Tablewear</button>
-          <button className={classes.footerButton}>Paintings</button>
-          <button className={classes.footerButton}>Electronics</button>
-        </div>
         <div className={classes.infoBlock}>
           <h6 className={classes.sectionTitle}>Help {"&"} Info</h6>
           <button className={classes.footerButton}>My Account</button>
@@ -68,6 +60,14 @@ const Footer = () => {
           <button className={classes.footerButton}>Shipping Policy</button>
           <button className={classes.footerButton}>Returns Policy</button>
           <button className={classes.footerButton}>Careers</button>
+        </div>
+        <div className={classes.collectionBlock}>
+          <h6 className={classes.sectionTitle}> Our Collection</h6>
+          <button className={classes.footerButton}>Ceramics</button>
+          <button className={classes.footerButton}>Clocks</button>
+          <button className={classes.footerButton}>Tablewear</button>
+          <button className={classes.footerButton}>Paintings</button>
+          <button className={classes.footerButton}>Electronics</button>
         </div>
       </div>
     </div>

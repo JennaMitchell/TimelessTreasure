@@ -1,64 +1,70 @@
 @import "../../../utilities/variables";
 
 .mainContainer {
-  width: max(1000px, 1000px);
-  height: max(600px, 600px);
+  width: min(1000px, 100%);
+  height: max-content;
+  max-height: max-content;
   margin: 0px auto;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  grid-template-rows: 1fr 1fr;
   gap: 0px;
   background-color: $lightWhite;
   margin-bottom: 40px;
 }
 .reviewContainer {
-  display: grid;
+  display: flex;
   width: max(100%, 100%);
   height: max(300px, 300px);
-  grid-template-columns: 1fr 1fr;
+  gap: 0px;
+
   align-items: center;
   justify-content: center;
 }
 .reviewTextContainer {
-  display: grid;
-  align-content: center;
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
-  grid-template-rows: max-content max-content max-content;
+
   width: max(100%, 100%);
-  height: max(100%, 100%);
+  height: max(300px, 300px);
 }
 .reviewPhoto {
   width: max(100%, 100%);
-  height: max(100%, 100%);
+  height: max(300px, 300px);
+  display: inline-block;
+
   object-fit: cover;
 }
 .reviewText {
   padding: 0px;
   margin: 0px;
-  font-size: 1.2rem;
+  font-size: toRem(20);
   text-align: center;
   text-align: center;
-  width: max(40ch, 40ch);
+  width: max(25ch, 25ch);
   font-family: $fontFamily;
 }
 .reviewName {
   padding: 0px;
   margin: 0px;
-  font-size: 1.2rem;
+  font-size: toRem(20);
   text-align: center;
   text-align: center;
-  width: max(40ch, 40ch);
+  width: max-content;
+  max-width: max-content;
   font-family: $fontFamily;
 }
 .reviewDescripition {
   padding: 0px;
   margin: 0px;
-  font-size: 1rem;
+  font-size: toRem(16);
   text-align: center;
   text-align: center;
-  width: max(40ch, 40ch);
+  width: max(25ch, 25ch);
   font-family: $fontFamily;
 }
 .starsContainer {
@@ -77,4 +83,59 @@
   width: max(30px, 30px);
   height: max(30px, 30px);
   color: gold;
+}
+@media (max-width: 1050px) {
+  .reviewContainer {
+    flex-direction: column;
+    max-height: max-content;
+    height: max-content;
+  }
+  .reviewTextContainer {
+    height: max(300px, 300px);
+  }
+  .reviewContainer {
+    display: flex;
+    width: max(80%, 80%);
+    max-height: max-content;
+    align-items: center;
+    justify-content: center;
+  }
+  .reviewPhoto {
+    width: max(80%, 80%);
+    height: max(300px, 300px);
+    display: inline-block;
+    object-fit: cover;
+  }
+}
+@media (max-width: 650px) {
+  .reviewContainer {
+    width: max(90%, 90%);
+  }
+  .reviewPhoto {
+    width: max(90%, 90%);
+  }
+  .reviewText {
+    width: max(20ch, 20ch);
+  }
+  .reviewDescripition {
+    width: max(20ch, 20ch);
+  }
+}
+@media (max-width: 450px) {
+  .reviewTextContainer {
+    height: max(200px, 200px);
+  }
+  .reviewContainer {
+    display: flex;
+    width: max(85%, 85%);
+    max-height: max-content;
+    align-items: center;
+    justify-content: center;
+  }
+  .reviewPhoto {
+    width: max(85%, 85%);
+    height: max(200px, 200px);
+    display: inline-block;
+    object-fit: cover;
+  }
 }

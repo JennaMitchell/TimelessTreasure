@@ -35,7 +35,6 @@ const SubCategoryMenu = () => {
     const clickedId = clickedElement.id;
     const indexOfFirstDash = clickedId.indexOf("-");
     const categoryClicked = clickedId.slice(0, indexOfFirstDash);
-
     getTagDataHandler(dispatch, [categoryClicked]);
     navigate("/marketplace");
   };
