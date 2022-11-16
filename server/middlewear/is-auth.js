@@ -2,12 +2,11 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
   const authHeader = req.get("Authorization");
-  console.log(5);
 
   if (!authHeader) {
-    const error = new Error("Not authenticated.");
-    error.statusCode = 401;
-    throw error;
+    return res
+      .status(401)
+      .json({ error: err, message: "Auth Header Failure.", status: 401 });
   }
   const token = authHeader.split(" ")[1];
 
@@ -16,7 +15,6 @@ module.exports = (req, res, next) => {
     decodedToken = jwt.verify(token, process.env.JSW_PASS);
 
     if (!decodedToken) {
-      console.log("not-verified");
       return res
         .status(401)
         .json({ error: err, message: "Not authenticated.", status: 401 });
@@ -27,7 +25,6 @@ module.exports = (req, res, next) => {
   }
 
   req.userId = decodedToken.userId;
-  console.log("verified");
 
   next();
 };

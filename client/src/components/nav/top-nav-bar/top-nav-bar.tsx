@@ -1,6 +1,5 @@
 import classes from "./top-nav-bar.module.scss";
 import logo from "../../../images/logo/logo.png";
-import bagIcon from "../../../images/icons/bag-icon.png";
 import React, { useEffect, useRef, useState } from "react";
 import {
   MagnifyingGlassIcon,
@@ -221,7 +220,11 @@ const TopNavBar = () => {
             </button>
           )}
           {userLoggedIn && (
-            <button className={classes.userButton} onClick={userButtonHandler}>
+            <button
+              className={classes.userButton}
+              onClick={userButtonHandler}
+              id="nav-bar-user-button"
+            >
               <UserCircleIcon className={classes.userIcon} />
               <p className={classes.username}>{username}</p>
             </button>
@@ -270,7 +273,13 @@ const TopNavBar = () => {
           )}
           <NavLink className={classes.cartContainer} to="/cart">
             <ShoppingBagIcon className={classes.cartIcon} />
-            <div className={classes.cartItemsTrackers}>{cartData.length}</div>
+            <div
+              className={`${classes.cartItemsTrackers} ${
+                cartData.length >= 10 && classes.cartItemsOverTen
+              } ${cartData.length >= 100 && classes.cartItemsOverOneHundred}`}
+            >
+              {cartData.length}
+            </div>
           </NavLink>
         </div>
       </div>

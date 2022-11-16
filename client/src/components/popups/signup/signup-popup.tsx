@@ -2,7 +2,7 @@ import classes from "./signup-popup.module.scss";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import decor from "../../../images/homepage/decor/decor.png";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { mainStoreSliceActions } from "../../../store/store";
 // import {
 //   emailValidator,
@@ -37,6 +37,46 @@ const SignupPopup = () => {
     e.preventDefault();
     setIsSeller(false);
   };
+  const mainContainerRef = useRef(null);
+  const backdropRef = useRef(null);
+
+  useEffect(() => {
+    if (mainContainerRef.current != null && backdropRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+
+      if (popupHeight > windowHeight) {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+        currentbackDrop.style.height = `${popupHeight}`;
+        currentbackDrop.style.overflowY = `scroll`;
+      } else {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(0));
+      }
+    }
+  }, [dispatch]);
+
+  const resizeLockedHeightHandler = () => {
+    if (mainContainerRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+      if (backdropRef.current != null) {
+        const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+        if (popupHeight > windowHeight) {
+          dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+          currentbackDrop.style.height = `${popupHeight}`;
+          currentbackDrop.style.overflowY = `scroll`;
+        }
+      }
+    }
+  };
+  window.addEventListener("resize", resizeLockedHeightHandler);
 
   useEffect(() => {
     if (!initialRender && signupPopupActive) {
@@ -215,8 +255,9 @@ const SignupPopup = () => {
           className={classes.signupDialog}
           id="dialogContainer"
           onClick={dialogBackdropClickHandler}
+          ref={backdropRef}
         >
-          <form className={classes.signupForm}>
+          <form className={classes.signupForm} ref={mainContainerRef}>
             <div
               className={classes.closingContainer}
               onClick={closingIconHandler}

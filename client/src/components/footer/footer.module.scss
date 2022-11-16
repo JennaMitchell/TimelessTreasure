@@ -138,9 +138,10 @@
   .contentContainer {
     flex-direction: column;
     width: max(250px, 250px);
+    gap: 40px;
   }
   .sectionTitle {
-    font-size: toRem(16);
+    font-size: toRem(24);
   }
   .footerButton,
   .addressText {

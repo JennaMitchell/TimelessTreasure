@@ -7,6 +7,17 @@ const UserSchema = require("../models/user-schema");
 const isAuth = require("../middlewear/is-auth");
 // const loggedInAuth = require("../middlewear/loggedin-auth");
 
+router.get(
+  "/get-buyer-info/:userId",
+  isAuth,
+  userSettingsController.getBuyerInfo
+);
+router.get(
+  "/get-seller-info/:userId",
+  isAuth,
+  userSettingsController.getSellerInfo
+);
+
 router.patch(
   "/update-username",
   isAuth,

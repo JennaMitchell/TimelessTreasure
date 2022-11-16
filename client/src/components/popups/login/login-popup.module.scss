@@ -12,7 +12,7 @@
 }
 
 .loginForm {
-  width: max(400px, 400px);
+  width: max(350px, 350px);
   height: max-content;
   min-height: max-content;
   max-height: max-content;
@@ -33,7 +33,7 @@
   line-height: toRem(48);
   font-family: $fontFamily;
   color: $main600;
-  width: max(80%, 80%);
+  max-width: max-content;
   height: max-content;
   text-align: center;
 }
@@ -68,6 +68,7 @@
   height: max(40px, 40px);
   width: max(320px, 320px);
   padding-left: 10px;
+  padding-right: 10px;
   border-radius: 5px;
   border: 1px solid black;
   font-family: $fontFamily;
@@ -89,7 +90,7 @@
   left: 5px;
   padding: 0px 5px;
   background-color: $white;
-  font-size: 12px;
+  font-size: toRem(12);
 }
 
 .forgotPassword {
@@ -221,4 +222,13 @@
   font-family: $fontFamily;
   color: $main800;
   font-size: toRem(16);
+}
+@media (max-width: 450px) {
+  .loginForm {
+    width: max(280px, 280px);
+  }
+
+  .loginInput {
+    width: max(250px, 250px);
+  }
 }

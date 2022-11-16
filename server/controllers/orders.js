@@ -1,6 +1,7 @@
 const PlacedOrderSchema = require("../models/placed-order");
 const ProductSchema = require("../models/product-schema");
 const SellerPlacedOrderSchema = require("../models/seller-placed-order");
+const io = require("../socket/socket");
 exports.addOrderDataToSeller = async (req, res, next) => {
   const orderId = req.body.orderId;
   const itemIdsPlaced = req.body.itemIdsPlaced;
@@ -112,6 +113,13 @@ exports.addOrderDataToSeller = async (req, res, next) => {
       buyerId: userId,
     });
     await newPlacedOrderObject.save();
+
+    // sending socket emit to update all current users carts
+
+    io.getIo().emit("update-cart", {
+      action: "update-cart",
+      orderedData: foundProductArray,
+    });
 
     // below updates products if they are for sale or not
     for (

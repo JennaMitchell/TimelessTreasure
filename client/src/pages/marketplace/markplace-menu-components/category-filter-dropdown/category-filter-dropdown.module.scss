@@ -109,3 +109,19 @@
   height: max(20px, 20px);
   color: $main800;
 }
+@media (max-width: 800px) {
+  .dropdownSelectionContainer {
+    background-color: $main800;
+  }
+  .buttonTitle {
+    background-color: $main800;
+    color: $white;
+    border-bottom: 1px solid $white;
+  }
+  .checkBoxContainer {
+    color: $white;
+    font-family: $fontFamily;
+    border-bottom: 1px solid $white;
+    width: max(170px, 170px);
+  }
+}

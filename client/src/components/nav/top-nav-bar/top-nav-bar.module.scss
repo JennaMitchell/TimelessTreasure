@@ -223,6 +223,18 @@
   font-family: $fontFamily;
   font-size: toRem(12);
 }
+.cartItemsOverTen {
+  font-size: toRem(8);
+  padding: 2px;
+  top: 0px;
+  right: 0px;
+}
+.cartItemsOverOneHundred {
+  font-size: toRem(6);
+  padding: 4px 2px;
+  top: -2px;
+  right: -2px;
+}
 .searchInputLabel {
   font-family: $fontFamily;
   color: inherit;
@@ -250,10 +262,14 @@
     background-color: $navbarColor;
   }
   .topContainer {
-    grid-template-columns: 40px 150px;
+    grid-template-columns: 40px 165px;
   }
   .title {
     color: $white;
+  }
+  .actionBar {
+    justify-content: flex-end;
+    gap: 7.5px;
   }
   .loginButton {
     color: $white;
@@ -267,5 +283,22 @@
   }
   .cartContainer:hover {
     color: $black;
+  }
+  .cartItemsTrackers {
+    color: $main900;
+  }
+  .userButton {
+    color: $white;
+    border: 1px solid $white;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    overflow-x: hidden;
+  }
+  .userButton:hover {
+    border: 0px;
+  }
+  .username {
+    font-size: toRem(10);
   }
 }

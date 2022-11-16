@@ -12,7 +12,7 @@
 }
 
 .mainContainer {
-  width: max(400px, 400px);
+  width: max(350px, 350px);
   height: max-content;
   min-height: max-content;
   max-height: max-content;
@@ -70,7 +70,7 @@
 .textBody {
   font-size: toRem(16);
   font-family: $fontFamily;
-  width: max(40ch, 40ch);
+  width: max(20ch, 20ch);
   max-height: max-content;
   color: $main800;
   text-align: center;
@@ -101,4 +101,17 @@
   background-color: $main200;
 
   color: $main800;
+}
+@media (max-width: 450px) {
+  .mainContainer {
+    width: max(280px, 280px);
+  }
+  .popupTitle {
+    font-size: toRem(36);
+    line-height: toRem(36);
+  }
+  .textBody {
+    width: max(20ch, 20ch);
+    font-size: toRem(14);
+  }
 }

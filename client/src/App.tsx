@@ -24,8 +24,18 @@ function App() {
   const loadingPageActive = useAppSelector(
     (state) => state.mainStore.authenticationLoading
   );
+  const lockScreenHeight = useAppSelector(
+    (state) => state.mainStore.lockScreenHeight
+  );
   if (lockViewport) {
     document.body.classList.add("lockscreen");
+    if (lockScreenHeight !== 0) {
+      document.body.style.height = `${lockScreenHeight}px`;
+      document.body.style.overflowY = "scroll";
+    } else {
+      document.body.style.height = `100%`;
+      document.body.style.overflowY = "hidden";
+    }
   } else {
     if (document.body.classList.contains("lockscreen")) {
       document.body.classList.remove("lockscreen");

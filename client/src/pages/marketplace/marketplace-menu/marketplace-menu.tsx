@@ -1,5 +1,9 @@
 import classes from "./marketplace-menu.module.scss";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/24/solid";
 import { CheckIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -13,6 +17,8 @@ import { getSearchedProduct } from "../../../utilities/product-api-hooks/marketp
 import RecentlyViewedProduct from "../recently-viewed-product/recently-viewed-product";
 import { randomKeyGenerator } from "../../../utilities/generic-hooks/generic-hooks";
 import { getTagDataHandler } from "../../../utilities/product-react-hooks/product-react-hooks";
+import { returnTrueWhenBreakPointIsMatched } from "../../../utilities/media-queries/media-query-hooks";
+
 interface RecentlyViewedProductInterface {
   imageUrl: string;
   title: string;
@@ -23,15 +29,17 @@ interface RecentlyViewedProductInterface {
 }
 const MarketplaceMenu = () => {
   const dispatch = useAppDispatch();
-  const [searchContainerActive, setSearchContainerActive] = useState(false);
-  const [activeTagsActive, setActiveTagsActive] = useState(false);
-  const [productCategoriesActive, setProductCategoriesActive] = useState(false);
-  const [recentlyViewedActive, setRecentlyViewedActive] = useState(false);
-  const [priceRangeActive, setPriceRangeActive] = useState(false);
+
   const marketplaceMenuSearchRef = useRef(null);
+  const marketplaceMenuMoveOut = useAppSelector(
+    (state) => state.marketStore.marketplaceMenuMoveOut
+  );
   const recentlyViewedProduct = useAppSelector(
     (state) => state.marketStore.recentlyViewedProduct
   );
+  const [activeDropDownSection, setActiveDropdownSection] = useState("");
+  const [mobileCloseButtonActive, setMobileCloseButtonActive] = useState(false);
+
   const activeTags = useAppSelector((state) => state.marketStore.activeTags);
 
   const [searchLabelMoveout, setSearchLabelMoveout] = useState(false);
@@ -40,12 +48,43 @@ const MarketplaceMenu = () => {
 
   const [activeFilterDropdown, setActiveFilterDropdown] = useState("");
 
+  const mobileCloseButtonHandler = () => {
+    dispatch(marketplaceStoreActions.setMarketplaceMenuMoveOut(false));
+  };
+
+  const mobileCloseButtonEnabled = () => {
+    setMobileCloseButtonActive(
+      returnTrueWhenBreakPointIsMatched(350, mobileCloseButtonActive)
+    );
+  };
+  useEffect(() => {
+    const menuMoveButtonMatch = window.matchMedia(`(max-width:350px)`);
+    if (menuMoveButtonMatch.matches) {
+      setMobileCloseButtonActive(true);
+    }
+  }, []);
+  window.addEventListener("resize", mobileCloseButtonEnabled);
+
   const tagClickedHandler = (targetId: string) => {
     const copyOfActiveTags: string[] = activeTags.slice();
     const indexOfTagToRemove = copyOfActiveTags.indexOf(targetId);
     copyOfActiveTags.splice(indexOfTagToRemove, 1);
     getTagDataHandler(dispatch, copyOfActiveTags);
     dispatch(marketplaceStoreActions.setActiveTags(copyOfActiveTags));
+  };
+
+  const activeDropdownHandler = (e: React.MouseEvent) => {
+    const targetElement = e.target as HTMLButtonElement;
+    const targetId = targetElement.id;
+    const splitId = targetId.split("-");
+
+    const sectionName = splitId[0];
+
+    if (activeDropDownSection === sectionName) {
+      setActiveDropdownSection("");
+    } else {
+      setActiveDropdownSection(sectionName);
+    }
   };
 
   const searchBarApiCallHandler = () => {
@@ -232,22 +271,6 @@ const MarketplaceMenu = () => {
     );
   });
 
-  const searchContainerHandler = () => {
-    setSearchContainerActive(!searchContainerActive);
-  };
-  const activeTagsHandler = () => {
-    setActiveTagsActive(!activeTagsActive);
-  };
-  const productCategoryHandler = () => {
-    setProductCategoriesActive(!productCategoriesActive);
-  };
-  const recentlyViewedHandler = () => {
-    setRecentlyViewedActive(!recentlyViewedActive);
-  };
-  const priceRangeHandler = () => {
-    setPriceRangeActive(!priceRangeActive);
-  };
-
   const searchInputChangeHandler = (e: React.ChangeEvent) => {
     if (!searchLabelMoveout) {
       setSearchLabelMoveout(true);
@@ -297,20 +320,33 @@ const MarketplaceMenu = () => {
   };
 
   return (
-    <div className={classes.collectionMenu}>
+    <div
+      className={`${classes.collectionMenu} ${
+        marketplaceMenuMoveOut && classes.collectionMenuActive
+      }`}
+    >
+      {mobileCloseButtonActive && (
+        <button
+          className={classes.mobileMenuCloseButton}
+          onClick={mobileCloseButtonHandler}
+        >
+          <ChevronLeftIcon className={classes.mobileCloseIcon} />
+        </button>
+      )}
       <button
         className={classes.blockDropdownButton}
-        onClick={searchContainerHandler}
+        onClick={activeDropdownHandler}
+        id="search-marketplace-dropdown"
       >
         Search
-        {!searchContainerActive && (
+        {activeDropDownSection !== "search" && (
           <ChevronDownIcon className={classes.buttonDownIcon} />
         )}
-        {searchContainerActive && (
+        {activeDropDownSection === "search" && (
           <ChevronUpIcon className={classes.buttonDownIcon} />
         )}
       </button>
-      {searchContainerActive && (
+      {activeDropDownSection === "search" && (
         <div className={classes.contentBlock}>
           <div
             className={`${classes.searchBarContainer} ${
@@ -339,17 +375,18 @@ const MarketplaceMenu = () => {
 
       <button
         className={classes.blockDropdownButton}
-        onClick={activeTagsHandler}
+        onClick={activeDropdownHandler}
+        id="activeTags-marketplace-dropdown-button"
       >
         Active Tags
-        {!activeTagsActive && (
+        {activeDropDownSection !== "activeTags" && (
           <ChevronDownIcon className={classes.buttonDownIcon} />
         )}
-        {activeTagsActive && (
+        {activeDropDownSection === "activeTags" && (
           <ChevronUpIcon className={classes.buttonDownIcon} />
         )}
       </button>
-      {activeTagsActive && (
+      {activeDropDownSection === "activeTags" && (
         <div className={classes.tagBlock}>
           {activeTags.map((title: string, index: number) => {
             return (
@@ -364,18 +401,19 @@ const MarketplaceMenu = () => {
       )}
       <button
         className={classes.blockDropdownButton}
-        onClick={productCategoryHandler}
+        onClick={activeDropdownHandler}
+        id="productCategories-dropdown-section-button"
       >
         Product Categories
-        {!productCategoriesActive && (
+        {activeDropDownSection !== "productCategories" && (
           <ChevronDownIcon className={classes.buttonDownIcon} />
         )}
-        {productCategoriesActive && (
+        {activeDropDownSection === "productCategories" && (
           <ChevronUpIcon className={classes.buttonDownIcon} />
         )}
       </button>
 
-      {productCategoriesActive && (
+      {activeDropDownSection === "productCategories" && (
         <div className={classes.categoryBlock}>
           <div className={classes.filterButtonContainer}>
             <button
@@ -486,18 +524,19 @@ const MarketplaceMenu = () => {
       )}
       <button
         className={classes.blockDropdownButton}
-        onClick={recentlyViewedHandler}
+        onClick={activeDropdownHandler}
+        id="recentlyViewedProducts-dropdown-button"
       >
         Recently Viewed Products
-        {!recentlyViewedActive && (
+        {activeDropDownSection !== "recentlyViewedProducts" && (
           <ChevronDownIcon className={classes.buttonDownIcon} />
         )}
-        {recentlyViewedActive && (
+        {activeDropDownSection === "recentlyViewedProducts" && (
           <ChevronUpIcon className={classes.buttonDownIcon} />
         )}
       </button>
 
-      {recentlyViewedActive && (
+      {activeDropDownSection === "recentlyViewedProducts" && (
         <div className={classes.contentBlock}>
           {recentlyViewedProduct.map(
             (data: RecentlyViewedProductInterface, index: number) => {
@@ -519,18 +558,19 @@ const MarketplaceMenu = () => {
       )}
       <button
         className={classes.blockDropdownButton}
-        onClick={priceRangeHandler}
+        onClick={activeDropdownHandler}
+        id="priceRange-section-dropdown"
       >
         Price Range
-        {!priceRangeActive && (
+        {activeDropDownSection !== "priceRange" && (
           <ChevronDownIcon className={classes.buttonDownIcon} />
         )}
-        {priceRangeActive && (
+        {activeDropDownSection === "priceRange" && (
           <ChevronUpIcon className={classes.buttonDownIcon} />
         )}
       </button>
 
-      {priceRangeActive && (
+      {activeDropDownSection === "priceRange" && (
         <div className={classes.priceRangesSectionContainer}>
           {renderReadyPriceRanges}
         </div>

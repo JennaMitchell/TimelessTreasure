@@ -1,5 +1,38 @@
 import { mainStoreSliceActions } from "../../store/store";
 
+export const getBuyerUserData = async (
+  dispatch: any,
+  userId: string,
+  token: string
+) => {
+  try {
+    const fetchedResponse = await fetch(
+      `http://localhost:5000/user/get-buyer-info/${userId}`,
+      { method: "GET", headers: { Authorization: "Bearer " + token } }
+    );
+    return fetchedResponse;
+  } catch (error) {
+    dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
+    dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+  }
+};
+export const getSellerUserData = async (
+  dispatch: any,
+  userId: string,
+  token: string
+) => {
+  try {
+    const fetchedResponse = await fetch(
+      `http://localhost:5000/user/get-seller-info/${userId}`,
+      { method: "GET", headers: { Authorization: "Bearer " + token } }
+    );
+    return fetchedResponse;
+  } catch (error) {
+    dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
+    dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+  }
+};
+
 export const updateUsernameCall = async (
   dispatch: any,
   signupData: any,
@@ -7,7 +40,7 @@ export const updateUsernameCall = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      "http://localhost:5000/update/update-username",
+      "http://localhost:5000/user/update-username",
       {
         method: "PATCH",
         headers: {
@@ -31,7 +64,7 @@ export const updateEmailCall = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      "http://localhost:5000/update/update-email",
+      "http://localhost:5000/user/update-email",
       {
         method: "PATCH",
         headers: {
@@ -54,7 +87,7 @@ export const updatePasswordCall = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      "http://localhost:5000/update/update-password",
+      "http://localhost:5000/user/update-password",
       {
         method: "PATCH",
         headers: {
@@ -76,9 +109,10 @@ export const deleteAccountCall = async (
   signupData: any,
   token: string
 ) => {
+  console.log(token);
   try {
     const fetchedResponse = await fetch(
-      "http://localhost:5000/update/delete-account",
+      "http://localhost:5000/user/delete-account",
       {
         method: "DELETE",
         headers: {

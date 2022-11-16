@@ -42,12 +42,12 @@
   box-sizing: border-box;
 }
 .navButton:hover {
-  color: $main100;
-  background-color: $main600;
+  color: $white;
+  background-color: $main800;
 }
 .activeNavButton {
-  color: $main100;
-  background-color: $main600;
+  color: $white;
+  background-color: $main800;
 }
 .itemCollection {
   display: grid;
@@ -97,7 +97,7 @@
   height: max-content;
   min-height: max-content;
   max-height: max-content;
-  font-size: toRem(16);
+  font-size: toRem(20);
   color: $black;
   display: grid;
   align-items: center;

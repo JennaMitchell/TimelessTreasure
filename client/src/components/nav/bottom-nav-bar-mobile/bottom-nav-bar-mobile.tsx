@@ -1,22 +1,26 @@
 import classes from "./bottom-nav-bar-mobile.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
+import { returnTrueWhenBreakPointIsMatched } from "../../../utilities/media-queries/media-query-hooks";
 const BottomNavBarMobile = () => {
   const [bottomNavBarMobileEnabled, setBottomNavBarMobileEnabled] =
     useState(false);
   const [dropdownButtonActive, setDropdownButtonActive] = useState(false);
 
   const bottomNavhBarMobileEnablerHandler = () => {
-    const match = window.matchMedia(`(max-width:480px)`);
-    if (match.matches) {
-      setBottomNavBarMobileEnabled(false);
-    }
-    if (!bottomNavBarMobileEnabled && !match.matches) {
-      setBottomNavBarMobileEnabled(true);
-    }
+    setBottomNavBarMobileEnabled(
+      returnTrueWhenBreakPointIsMatched(480, bottomNavBarMobileEnabled)
+    );
   };
   window.addEventListener("resize", bottomNavhBarMobileEnablerHandler);
+
+  useEffect(() => {
+    const dropDownMatch = window.matchMedia(`(max-width:480px)`);
+    if (dropDownMatch.matches) {
+      setBottomNavBarMobileEnabled(true);
+    }
+  }, []);
 
   const dropdownButtonHandler = () => {
     setDropdownButtonActive(!dropdownButtonActive);
@@ -24,7 +28,7 @@ const BottomNavBarMobile = () => {
 
   return (
     <>
-      {!bottomNavBarMobileEnabled && (
+      {bottomNavBarMobileEnabled && (
         <>
           <button
             className={classes.dropdownButton}

@@ -3,7 +3,7 @@ import decor from "../../../images/homepage/decor/decor.png";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import { cartStoreActions } from "../../../store/cart";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface Props {
   imageUrl: string;
@@ -33,7 +33,48 @@ const ProductPopup = ({
   const productPopupActive = useAppSelector(
     (state) => state.mainStore.productPopupActive
   );
+
+  const mainContainerRef = useRef(null);
+  const backdropRef = useRef(null);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (mainContainerRef.current != null && backdropRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const currentbackDrop = backdropRef.current as HTMLDialogElement;
+
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+
+      if (popupHeight > windowHeight) {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+        currentbackDrop.style.height = `${popupHeight}`;
+        currentbackDrop.style.overflowY = `scroll`;
+      } else {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(0));
+      }
+    }
+  }, [dispatch]);
+
+  const resizeLockedHeightHandler = () => {
+    if (mainContainerRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+      if (backdropRef.current != null) {
+        const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+        if (popupHeight > windowHeight) {
+          dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+          currentbackDrop.style.height = `${popupHeight}`;
+          currentbackDrop.style.overflowY = `scroll`;
+        }
+      }
+    }
+  };
+  window.addEventListener("resize", resizeLockedHeightHandler);
 
   const dialogBackdropClickHandler = (e: React.MouseEvent) => {
     const targetElement = e.target as HTMLElement;
@@ -112,8 +153,9 @@ const ProductPopup = ({
           className={classes.popupBackground}
           id="product-backdrop"
           onClick={dialogBackdropClickHandler}
+          ref={backdropRef}
         >
-          <div className={classes.popupMainContainer}>
+          <div className={classes.popupMainContainer} ref={mainContainerRef}>
             <div className={classes.infoContainer}>
               <h6 className={classes.productTitle}>{title}</h6>
               <img src={decor} alt="textDecor" className={classes.decorImage} />

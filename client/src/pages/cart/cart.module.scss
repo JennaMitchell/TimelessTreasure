@@ -1,6 +1,6 @@
 @import "../../utilities/variables";
 .cartTopContainer {
-  width: max(1000px, 1000px);
+  width: min(1000px, 100%);
   min-height: calc(100vh - 585px);
   height: max-content;
   max-height: max-content;
@@ -40,4 +40,38 @@
   justify-content: center;
   align-items: center;
   display: grid;
+}
+@media (max-width: 1050px) {
+  .cartTopContainer {
+    grid-template-columns: 500px 300px;
+    justify-content: space-evenly;
+  }
+}
+@media (max-width: 860px) {
+  .cartTopContainer {
+    grid-template-columns: 400px 300px;
+    justify-content: space-evenly;
+  }
+}
+@media (max-width: 750px) {
+  .cartTopContainer {
+    grid-template-columns: 300px 220px;
+  }
+}
+
+@media (max-width: 575px) {
+  .cartTopContainer {
+    grid-template-columns: 65%;
+    align-content: space-between;
+  }
+}
+@media (max-width: 480px) {
+  .cartTopContainer {
+    grid-template-columns: 85%;
+  }
+}
+@media (max-width: 400px) {
+  .cartTopContainer {
+    grid-template-columns: 92.5%;
+  }
 }

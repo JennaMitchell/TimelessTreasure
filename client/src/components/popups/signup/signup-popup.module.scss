@@ -11,7 +11,7 @@
 }
 
 .signupForm {
-  width: max(400px, 400px);
+  width: max(350px, 350px);
   height: max-content;
   min-height: max-content;
   max-height: max-content;
@@ -225,4 +225,13 @@
   font-family: $fontFamily;
   color: $main800;
   font-size: toRem(16);
+}
+@media (max-width: 450px) {
+  .signupForm {
+    width: max(280px, 280px);
+  }
+
+  .signupInput {
+    width: max(250px, 250px);
+  }
 }

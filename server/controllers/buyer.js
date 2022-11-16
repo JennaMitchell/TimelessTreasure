@@ -8,7 +8,6 @@ exports.getPendingBuyerOrders = async (req, res, next) => {
       buyerId: buyerId,
       overallStatus: "Ship",
     });
-    console.log(foundProducts);
 
     return res.status(201).json({
       message: "Product Found!",

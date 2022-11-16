@@ -5,6 +5,7 @@ interface State {
   recentlyViewedProduct: any[];
   numberOfItemsPerPage: number;
   activePageNumber: number;
+  marketplaceMenuMoveOut: boolean;
 }
 const initialState: State = {
   activeTags: [],
@@ -12,6 +13,7 @@ const initialState: State = {
   recentlyViewedProduct: [],
   numberOfItemsPerPage: 9,
   activePageNumber: 1,
+  marketplaceMenuMoveOut: false,
 };
 
 export const marketplaceStoreSlice = createSlice({
@@ -32,6 +34,9 @@ export const marketplaceStoreSlice = createSlice({
     },
     setActivePageNumber(state, { payload }) {
       state.activePageNumber = payload;
+    },
+    setMarketplaceMenuMoveOut(state, { payload }) {
+      state.marketplaceMenuMoveOut = payload;
     },
   },
 });

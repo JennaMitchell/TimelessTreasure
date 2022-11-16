@@ -7,7 +7,11 @@ import ClocksDropDown from "../dropsdowns/clocks/clocks-dropdown";
 import TablewearDropDown from "../dropsdowns/tablewear/tablewear-dropdown";
 import PaintingsDropDown from "../dropsdowns/paintings/paintings-dropdown";
 import ElectronicsDropDown from "../dropsdowns/electronics/electronics-dropdown";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useNavigate } from "react-router-dom";
+import { marketplaceStoreActions } from "../../../store/marketplace";
+import { dropdownIdSpliter } from "../../../utilities/product-react-hooks/product-react-hooks";
+import { getTagDataHandler } from "../../../utilities/product-react-hooks/product-react-hooks";
 const BottomNavBar = () => {
   const [bottomNavBarEnabled, setBottomNavBarEnabled] = useState(true);
   const [dropdownsEnabled, setDropdownsEnabled] = useState(true);
@@ -152,6 +156,20 @@ const BottomNavBar = () => {
     }
   };
 
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const sectionClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    const targetElement = e.target as HTMLDivElement;
+
+    const activeTags = [dropdownIdSpliter(targetElement.id)[0]];
+
+    dispatch(marketplaceStoreActions.setActiveTags(activeTags));
+
+    getTagDataHandler(dispatch, activeTags);
+    navigate("/marketplace");
+  };
+
   return (
     <>
       {bottomNavBarEnabled && (
@@ -163,6 +181,7 @@ const BottomNavBar = () => {
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
                 id="ceramics-button"
+                onClick={sectionClickHandler}
               >
                 Ceramics
                 {buttonLogic["Ceramics"].buttonHover && (
@@ -179,6 +198,7 @@ const BottomNavBar = () => {
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
                 id="ceramics-button"
+                onClick={sectionClickHandler}
               >
                 Ceramics
               </div>
@@ -188,6 +208,7 @@ const BottomNavBar = () => {
                 className={classes.sectionButton}
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
+                onClick={sectionClickHandler}
                 id="clocks-button"
               >
                 Clocks
@@ -205,6 +226,7 @@ const BottomNavBar = () => {
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
                 id="clocks-button"
+                onClick={sectionClickHandler}
               >
                 Clocks
               </div>
@@ -214,6 +236,7 @@ const BottomNavBar = () => {
                 className={classes.sectionButton}
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
+                onClick={sectionClickHandler}
                 id="tablewear-button"
               >
                 Tablewear
@@ -231,6 +254,7 @@ const BottomNavBar = () => {
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
                 id="tablewear-button"
+                onClick={sectionClickHandler}
               >
                 Tablewear
               </div>
@@ -240,6 +264,7 @@ const BottomNavBar = () => {
                 className={classes.sectionButton}
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
+                onClick={sectionClickHandler}
                 id="paintings-button"
               >
                 Paintings
@@ -257,6 +282,7 @@ const BottomNavBar = () => {
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
                 id="paintings-button"
+                onClick={sectionClickHandler}
               >
                 Paintings
               </div>
@@ -266,6 +292,7 @@ const BottomNavBar = () => {
                 className={classes.sectionButton}
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
+                onClick={sectionClickHandler}
                 id="electronics-button"
               >
                 Electronics{" "}
@@ -283,6 +310,7 @@ const BottomNavBar = () => {
                 onMouseEnter={buttonMouseEnterHandler}
                 onMouseLeave={buttonMouseLeaveHandler}
                 id="electronics-button"
+                onClick={sectionClickHandler}
               >
                 Electronics
               </div>

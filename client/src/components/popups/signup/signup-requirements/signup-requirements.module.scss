@@ -64,3 +64,12 @@
   padding: 0px;
   margin: 0px;
 }
+@media (max-width: 450px) {
+  .mainContainer {
+    width: max(265px, 265px);
+    padding: 5px 10px 10px 10px;
+  }
+  .requirementsTitle {
+    font-size: toRem(20);
+  }
+}

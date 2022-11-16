@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use("/auth", authRoute);
 
-app.use("/update", updateUserSettingsRoute);
+app.use("/user", updateUserSettingsRoute);
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
 

@@ -50,28 +50,30 @@ const BestSellers = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const socket = openSocket("http://localhost:5000");
-  socket.on("update-product", (data) => {
-    if (data.action === "update-product") {
-      const updatedProductId = data.productCreated.productId;
-      let indexOfMatch = -1;
+  useEffect(() => {
+    const socket = openSocket("http://localhost:5000");
+    socket.on("update-product", (data) => {
+      if (data.action === "update-product") {
+        const updatedProductId = data.productCreated.productId;
+        let indexOfMatch = -1;
 
-      for (
-        let indexOfLatestItem = 0;
-        indexOfLatestItem < hotestData.length;
-        indexOfLatestItem++
-      ) {
-        if (updatedProductId === hotestData[indexOfLatestItem].productId) {
-          indexOfMatch = indexOfLatestItem;
+        for (
+          let indexOfLatestItem = 0;
+          indexOfLatestItem < hotestData.length;
+          indexOfLatestItem++
+        ) {
+          if (updatedProductId === hotestData[indexOfLatestItem].productId) {
+            indexOfMatch = indexOfLatestItem;
+          }
+        }
+        if (indexOfMatch !== -1) {
+          const copyOfLatestData = JSON.parse(JSON.stringify(hotestData));
+          copyOfLatestData[indexOfMatch] = data.productCreated;
+          setHotestData(copyOfLatestData);
         }
       }
-      if (indexOfMatch !== -1) {
-        const copyOfLatestData = JSON.parse(JSON.stringify(hotestData));
-        copyOfLatestData[indexOfMatch] = data.productCreated;
-        setHotestData(copyOfLatestData);
-      }
-    }
-  });
+    });
+  }, []);
 
   const navButtonTitles = [
     "All",
@@ -115,7 +117,6 @@ const BestSellers = () => {
             }
           } else {
             setHotestData(jsonData.foundProducts);
-            console.log(jsonData);
           }
         } else {
           dispatch(
@@ -144,7 +145,6 @@ const BestSellers = () => {
             }
           } else {
             setHotestData(jsonData.foundProducts);
-            console.log(jsonData);
           }
         } else {
           dispatch(
@@ -173,7 +173,6 @@ const BestSellers = () => {
             }
           } else {
             setHotestData(jsonData.foundProducts);
-            console.log(jsonData);
           }
         } else {
           dispatch(

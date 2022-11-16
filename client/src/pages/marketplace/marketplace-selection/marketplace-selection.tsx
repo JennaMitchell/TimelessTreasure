@@ -14,9 +14,8 @@ import { recentlyViewedHook } from "../../../utilities/recently-viewed-hook/rece
 import openSocket from "socket.io-client";
 import { randomKeyGenerator } from "../../../utilities/generic-hooks/generic-hooks";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
-
+import { useEffect } from "react";
 const MarketplaceSelection = () => {
-  const socket = openSocket("http://localhost:5000");
   const acceptedCategories = [
     "Ceramics",
     "Clocks",
@@ -24,6 +23,8 @@ const MarketplaceSelection = () => {
     "Paintings",
     "Electronics",
   ];
+
+  const [twoColumnsActive, setTwoColumnsActive] = useState(false);
 
   const retrievedData = useAppSelector(
     (state) => state.marketStore.retrievedData
@@ -50,104 +51,135 @@ const MarketplaceSelection = () => {
   const recentlyViewedProduct = useAppSelector(
     (state) => state.marketStore.recentlyViewedProduct
   );
-  socket.on("new-product", (data) => {
-    if (data.action === "create-new-product") {
-      // once data is recieved need to check if the users selected tags match with what is
-      // the user is looking at the product added section
-      //
-      const newProductTags = data.productCreated.productTags;
-      const copyOfActiveTags = JSON.parse(JSON.stringify(activeTags)).slice();
 
-      // Handeling Scenario where there are no active tags
-      if (copyOfActiveTags.length === 0) {
-        const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
-        copyOfRetrievedData.push(data.productCreated);
-        dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
-        return;
-      }
+  const twoColumnsEnabledHandler = () => {
+    const twoColumnMatch = window.matchMedia(`(max-width:1050px)`);
+    if (twoColumnMatch.matches) {
+      setTwoColumnsActive(true);
+      dispatch(marketplaceStoreActions.setNumberOfItemsPerPage(6));
+    }
+    if (!twoColumnsActive && !twoColumnMatch.matches) {
+      setTwoColumnsActive(false);
+      dispatch(marketplaceStoreActions.setNumberOfItemsPerPage(9));
+    }
+  };
 
-      // checking to see if the active tags only has category highlighted
+  useEffect(() => {
+    const twoColumnMatch = window.matchMedia("(max-width:1050px)").matches;
 
-      let indexOfActiveTagCategory = -1;
-      let indexOfNewProductTagCategory = -1;
-      let activeTagCategory = "";
-      let productIdTagCategory = "";
+    if (twoColumnMatch) {
+      setTwoColumnsActive(true);
+      dispatch(marketplaceStoreActions.setNumberOfItemsPerPage(6));
+    }
+  }, []);
+  window.addEventListener("resize", twoColumnsEnabledHandler);
+  useEffect(() => {
+    const socket = openSocket("http://localhost:5000");
+    socket.on("new-product", (data) => {
+      if (data.action === "create-new-product") {
+        // once data is recieved need to check if the users selected tags match with what is
+        // the user is looking at the product added section
+        //
+        const newProductTags = data.productCreated.productTags;
+        const copyOfActiveTags = JSON.parse(JSON.stringify(activeTags)).slice();
 
-      for (
-        let indexOfActiveTag = 0;
-        indexOfActiveTag < acceptedCategories.length;
-        indexOfActiveTag++
-      ) {
-        if (copyOfActiveTags.includes(acceptedCategories[indexOfActiveTag])) {
-          indexOfActiveTagCategory = copyOfActiveTags.indexOf(
-            acceptedCategories[indexOfActiveTag]
-          );
-          activeTagCategory = acceptedCategories[indexOfActiveTag];
-        }
-        if (newProductTags.includes(acceptedCategories[indexOfActiveTag])) {
-          indexOfNewProductTagCategory = newProductTags.indexOf(
-            acceptedCategories[indexOfActiveTag]
-          );
-          productIdTagCategory = acceptedCategories[indexOfActiveTag];
-        }
-      }
-      if (indexOfActiveTagCategory !== -1) {
-        copyOfActiveTags.splice(indexOfActiveTagCategory, 1);
-      }
-      if (indexOfNewProductTagCategory !== -1) {
-        newProductTags.splice(indexOfNewProductTagCategory, 1);
-      }
-
-      // Checking to see if the two removed categories are the same
-
-      if (indexOfActiveTagCategory !== -1) {
-        if (activeTagCategory !== productIdTagCategory) {
-          return;
-        }
-      }
-
-      for (
-        let indexOfNewProductIds = 0;
-        indexOfNewProductIds < newProductTags.length;
-        indexOfNewProductIds++
-      ) {
-        if (activeTags.includes(newProductTags[indexOfNewProductIds])) {
+        // Handeling Scenario where there are no active tags
+        if (copyOfActiveTags.length === 0) {
           const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
           copyOfRetrievedData.push(data.productCreated);
           dispatch(
             marketplaceStoreActions.setRetrievedData(copyOfRetrievedData)
           );
           return;
-        } else {
-          return;
         }
-      }
-    }
-  });
-  socket.on("update-product", (data) => {
-    if (data.action === "update-product") {
-      const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
-      const updatedProductId = data.productCreated.productId;
 
-      for (
-        let indexOfCopiedRetrievedData = 0;
-        indexOfCopiedRetrievedData < copyOfRetrievedData.length;
-        indexOfCopiedRetrievedData++
-      ) {
-        if (
-          copyOfRetrievedData[indexOfCopiedRetrievedData].productId ===
-          updatedProductId
+        // checking to see if the active tags only has category highlighted
+
+        let indexOfActiveTagCategory = -1;
+        let indexOfNewProductTagCategory = -1;
+        let activeTagCategory = "";
+        let productIdTagCategory = "";
+
+        for (
+          let indexOfActiveTag = 0;
+          indexOfActiveTag < acceptedCategories.length;
+          indexOfActiveTag++
         ) {
-          copyOfRetrievedData[indexOfCopiedRetrievedData] = data.productCreated;
+          if (copyOfActiveTags.includes(acceptedCategories[indexOfActiveTag])) {
+            indexOfActiveTagCategory = copyOfActiveTags.indexOf(
+              acceptedCategories[indexOfActiveTag]
+            );
+            activeTagCategory = acceptedCategories[indexOfActiveTag];
+          }
+          if (newProductTags.includes(acceptedCategories[indexOfActiveTag])) {
+            indexOfNewProductTagCategory = newProductTags.indexOf(
+              acceptedCategories[indexOfActiveTag]
+            );
+            productIdTagCategory = acceptedCategories[indexOfActiveTag];
+          }
+        }
+        if (indexOfActiveTagCategory !== -1) {
+          copyOfActiveTags.splice(indexOfActiveTagCategory, 1);
+        }
+        if (indexOfNewProductTagCategory !== -1) {
+          newProductTags.splice(indexOfNewProductTagCategory, 1);
+        }
+
+        // Checking to see if the two removed categories are the same
+
+        if (indexOfActiveTagCategory !== -1) {
+          if (activeTagCategory !== productIdTagCategory) {
+            return;
+          }
+        }
+
+        for (
+          let indexOfNewProductIds = 0;
+          indexOfNewProductIds < newProductTags.length;
+          indexOfNewProductIds++
+        ) {
+          if (activeTags.includes(newProductTags[indexOfNewProductIds])) {
+            const copyOfRetrievedData = JSON.parse(
+              JSON.stringify(retrievedData)
+            );
+            copyOfRetrievedData.push(data.productCreated);
+            dispatch(
+              marketplaceStoreActions.setRetrievedData(copyOfRetrievedData)
+            );
+            return;
+          } else {
+            return;
+          }
         }
       }
+    });
+    socket.on("update-product", (data) => {
+      if (data.action === "update-product") {
+        const copyOfRetrievedData = JSON.parse(JSON.stringify(retrievedData));
+        const updatedProductId = data.productCreated.productId;
 
-      dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
-    }
-  });
+        for (
+          let indexOfCopiedRetrievedData = 0;
+          indexOfCopiedRetrievedData < copyOfRetrievedData.length;
+          indexOfCopiedRetrievedData++
+        ) {
+          if (
+            copyOfRetrievedData[indexOfCopiedRetrievedData].productId ===
+            updatedProductId
+          ) {
+            copyOfRetrievedData[indexOfCopiedRetrievedData] =
+              data.productCreated;
+          }
+        }
+
+        dispatch(marketplaceStoreActions.setRetrievedData(copyOfRetrievedData));
+      }
+    });
+  }, []);
 
   if (retrievedData.length !== 0) {
     let indexOfRender = 0;
+
     for (
       let indexOfRenderReadyProductData =
         (activePageNumber - 1) * numberOfItemsPerPage;
@@ -155,6 +187,11 @@ const MarketplaceSelection = () => {
       indexOfRenderReadyProductData++
     ) {
       const itemData = retrievedData[indexOfRenderReadyProductData];
+
+      if (typeof itemData === "undefined") {
+        break;
+      }
+
       const productImageUrl = imageUrlCreator(itemData.imageUrl);
 
       const tempPrice = priceStringCreator(

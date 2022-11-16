@@ -1,13 +1,17 @@
 @import "../../utilities/variables";
 
 .collectionTopContainer {
-  width: max(1000px, 1000px);
+  width: min(1000px, 100%);
   min-height: calc(100vh - 350px);
   height: max-content;
   max-height: max-content;
   display: grid;
   position: relative;
   grid-template-columns: max-content max-content;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 
   margin: 60px auto;
   gap: 20px;
@@ -32,7 +36,7 @@
   margin: 0px;
   height: max(100%, 100%);
   width: max(100%, 100%);
-  font-size: 3.6rem;
+  font-size: toRem(72);
   font-family: $fontFamily;
   color: $white;
   background-color: rgba(0, 0, 0, 0.5);
@@ -40,4 +44,44 @@
   justify-content: center;
   align-items: center;
   display: grid;
+}
+.moveoutButton {
+  position: absolute;
+  left: 0px;
+
+  top: -40px;
+  width: max(40px, 40px);
+  height: max(40px, 40px);
+  color: $white;
+  background-color: $main800;
+  border: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 1s;
+  z-index: 20;
+  transition: all 1s;
+}
+.moveoutButton:hover {
+  color: $main800;
+  background-color: $main300;
+}
+.moveoutButtonActive {
+  left: 300px;
+}
+.moveoutIcon {
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  color: inherit;
+}
+
+@media (max-width: 800px) {
+  .collectionTopContainer {
+    grid-template-columns: max-content;
+  }
+}
+@media (max-width: 420px) {
+  .mainTitle {
+    font-size: toRem(52);
+  }
 }

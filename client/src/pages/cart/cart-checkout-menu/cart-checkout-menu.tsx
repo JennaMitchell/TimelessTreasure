@@ -38,7 +38,6 @@ const CartCheckoutMenu = () => {
       // priceType = "EUR";
     }
     cartDataPrice = cartDataPrice.join("");
-    console.log(cartData[indexOfCartData]);
     const totalOfItem = +cartDataPrice * cartData[indexOfCartData].quantity;
     calculatedSubTotal = calculatedSubTotal + totalOfItem;
   }
@@ -115,6 +114,8 @@ const CartCheckoutMenu = () => {
         });
     }
   };
+
+  // updating user cart data if a user bought something while they still ahve it in their cart
 
   return (
     <div className={classes.checkoutMenu}>

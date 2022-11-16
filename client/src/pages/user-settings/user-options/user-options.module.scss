@@ -7,7 +7,6 @@
   align-items: center;
   justify-content: space-between;
   grid-template-columns: 325px 325px;
-  margin-bottom: 20px;
   align-self: center;
   gap: 50px;
 }
@@ -19,7 +18,7 @@
   align-items: center;
   border-right: 2px solid $grey;
   justify-content: flex-start;
-  padding-right: 20px;
+  padding-right: 37.5px;
   border-radius: 1px;
 }
 .sectionTitle {
@@ -65,8 +64,48 @@
   flex-direction: column;
   align-items: center;
   justify-items: center;
+  justify-self: center;
 }
 .activeButton {
   border-bottom: 1px solid $main400;
   color: $main400;
+}
+@media (max-width: 800px) {
+  .optionsContainer {
+    width: max(350px, 350px);
+    max-height: max-content;
+    height: max-content;
+    grid-template-columns: 100%;
+    align-items: center;
+    justify-items: center;
+
+    gap: 50px;
+  }
+  .optionsMenu {
+    border-right: 0px;
+    padding-right: 0px;
+  }
+}
+@media (max-width: 450px) {
+  .optionsContainer {
+    width: max(300px, 300px);
+    max-height: max-content;
+    height: max-content;
+    grid-template-columns: 100%;
+    align-items: center;
+    justify-items: center;
+    padding-top: 20px;
+
+    gap: 20px;
+  }
+  .optionsMenu {
+    border-right: 0px;
+    padding-right: 0px;
+  }
+  .sectionTitle {
+    display: none;
+  }
+  .sectionImage {
+    display: none;
+  }
 }

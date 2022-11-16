@@ -1,17 +1,19 @@
 @import "../../utilities/variables";
 .topContainer {
-  width: max(1000px, 1000px);
+  width: min(1000px, 100%);
   min-height: calc(100vh - 410px);
   height: max-content;
   max-height: max-content;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   justify-items: center;
   align-items: center;
   margin: 0px auto;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   box-sizing: border-box;
   position: relative;
+  gap: 10px;
 }
 
 .sectionTitle {
@@ -30,8 +32,6 @@
   height: max(50px, 50px);
   object-fit: contain;
   padding-right: 2.5px;
-  margin-bottom: 20px;
-  margin-top: 10px;
 }
 .menuIconContainer {
   box-sizing: border-box;
@@ -65,7 +65,7 @@
 }
 .newProductButton {
   position: absolute;
-  top: 60px;
+  top: 17.5px;
   left: 0px;
   background-color: $main800;
   color: $white;
@@ -80,24 +80,6 @@
   background-color: $main100;
   color: $black;
 }
-.tempButton {
-  position: fixed;
-  width: max(100px, 100px);
-  height: max(60px, 60px);
-  background-color: brown;
-  z-index: 12;
-  top: 20%;
-  left: 10%;
-  font-size: toRem(16);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $white;
-  transition: all 1s;
-}
-.tempButton:hover {
-  background-color: $main100;
-}
 .noDataFoundText {
   font-size: toRem(22);
   font-family: $fontFamily;
@@ -108,4 +90,35 @@
   justify-self: center;
   align-self: center;
   grid-column: 1 / span 3;
+}
+
+@media (max-width: 1050px) {
+  .newProductButton {
+    left: 20px;
+    font-size: toRem(16);
+  }
+}
+
+@media (max-width: 810px) {
+  .ordersContainer {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+}
+@media (max-width: 550px) {
+  .ordersContainer {
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center;
+  }
+  .sectionTitle {
+    margin: 0px;
+    padding: 0px;
+    font-size: toRem(36);
+    line-height: toRem(36);
+    width: max(90%, 90%);
+  }
+  .textDecor {
+    width: max(260px, 260px);
+    height: max(50px, 50px);
+  }
 }

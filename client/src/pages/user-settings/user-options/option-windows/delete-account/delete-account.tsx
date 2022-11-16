@@ -16,7 +16,7 @@ interface LogicObject {
 const DeleteAccount = () => {
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
     deletePasswordInput: {
-      labelMoveout: false,
+      labelMoveout: true,
       inputData: "",
     },
   });
@@ -132,6 +132,7 @@ const DeleteAccount = () => {
         });
     }, 2000);
   };
+
   return (
     <>
       <h6 className={classes.sectionTitle}>Change Username</h6>

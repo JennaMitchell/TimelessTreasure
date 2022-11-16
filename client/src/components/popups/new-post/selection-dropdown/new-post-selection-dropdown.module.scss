@@ -93,3 +93,15 @@
   padding-top: 5px;
   color: $white;
 }
+@media (max-width: 450px) {
+  .dropDownHeaderButton {
+    width: max(260px, 260px);
+  }
+  .buttonTitle {
+    max-width: 260px;
+    width: 260px;
+  }
+  .checkBoxContainer {
+    font-size: toRem(12);
+  }
+}

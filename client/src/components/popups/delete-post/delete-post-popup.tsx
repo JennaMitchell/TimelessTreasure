@@ -4,6 +4,7 @@ import decor from "../../../images/homepage/decor/decor.png";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import { deleteItemForSaleCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
+import { useEffect, useRef } from "react";
 interface Props {
   productId: string;
 }
@@ -11,6 +12,46 @@ const DeletePostPopup = ({ productId }: Props) => {
   const dispatch = useAppDispatch();
   const userToken = useAppSelector((state) => state.userStore.userToken);
   const userId = useAppSelector((state) => state.userStore.userId);
+  const mainContainerRef = useRef(null);
+  const backdropRef = useRef(null);
+
+  useEffect(() => {
+    if (mainContainerRef.current != null && backdropRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+
+      if (popupHeight > windowHeight) {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+        currentbackDrop.style.height = `${popupHeight}`;
+        currentbackDrop.style.overflowY = `scroll`;
+      } else {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(0));
+      }
+    }
+  }, [dispatch]);
+
+  const resizeLockedHeightHandler = () => {
+    if (mainContainerRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+      if (backdropRef.current != null) {
+        const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+        if (popupHeight > windowHeight) {
+          dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+          currentbackDrop.style.height = `${popupHeight}`;
+          currentbackDrop.style.overflowY = `scroll`;
+        }
+      }
+    }
+  };
+  window.addEventListener("resize", resizeLockedHeightHandler);
 
   const closingHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(false));
@@ -51,8 +92,9 @@ const DeletePostPopup = ({ productId }: Props) => {
       className={classes.backdrop}
       onClick={dialogBackdropClickHandler}
       id="delete-post-backdrop"
+      ref={backdropRef}
     >
-      <div className={classes.popupContainer}>
+      <div className={classes.popupContainer} ref={mainContainerRef}>
         <div className={classes.closingContainer} onClick={closingHandler}>
           <XMarkIcon className={classes.closingIcon} />
         </div>

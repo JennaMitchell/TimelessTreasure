@@ -1,7 +1,7 @@
 @import "../../utilities/variables";
 .topContainer {
   margin: 0px auto;
-  width: max(1000px, 1000px);
+  width: min(1000px, 100%);
   min-height: calc(100vh - 420px);
   display: flex;
   flex-direction: column;
@@ -46,4 +46,28 @@
 .marketplaceButton:hover {
   background-color: $main200;
   color: $main800;
+}
+@media (max-width: 475px) {
+  .title {
+    font-size: toRem(48);
+  }
+  .orderPlacedText {
+    font-size: toRem(24);
+  }
+  .logoContainer {
+    width: max(80px, 80px);
+    height: max(80px, 80px);
+  }
+}
+@media (max-width: 380px) {
+  .title {
+    font-size: toRem(40);
+  }
+  .orderPlacedText {
+    font-size: toRem(20);
+  }
+  .logoContainer {
+    width: max(60px, 60px);
+    height: max(60px, 60px);
+  }
 }

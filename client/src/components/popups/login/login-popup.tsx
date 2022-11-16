@@ -28,7 +28,7 @@ import {
   randomKeyGenerator,
 } from "../../../utilities/generic-hooks/generic-hooks";
 import { deleteAccountCall } from "../../../utilities/user-settings-api-hooks/api-calls-user-setting-hooks";
-
+import { useRef } from "react";
 interface LogicObject {
   [key: string]: {
     labelMoveout: boolean;
@@ -43,10 +43,48 @@ const LoginPopup = () => {
   const [initialRender, setInitialRender] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const [tempEmail, setTempEmail] = useState<string>("");
-  const [tempPassword, setTempPassword] = useState<string>("");
+  const [tempPassword, setTempPassword] = useState("");
+  const loginPopupRef = useRef(null);
   const [tempUsername, setTempUsername] = useState("");
-  const userToken = useAppSelector((state) => state.userStore.userToken);
-  const userId = useAppSelector((state) => state.userStore.userId);
+
+  const backdropRef = useRef(null);
+  useEffect(() => {
+    if (loginPopupRef.current != null && backdropRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        loginPopupRef.current as HTMLFormElement;
+      const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+
+      if (popupHeight > windowHeight) {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+        currentbackDrop.style.height = `${popupHeight}`;
+        currentbackDrop.style.overflowY = `scroll`;
+      } else {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(0));
+      }
+    }
+  }, [dispatch]);
+
+  const resizeLockedHeightHandler = () => {
+    if (loginPopupRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        loginPopupRef.current as HTMLFormElement;
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+      if (backdropRef.current != null) {
+        const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+        if (popupHeight > windowHeight) {
+          dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+          currentbackDrop.style.height = `${popupHeight}`;
+          currentbackDrop.style.overflowY = `scroll`;
+        }
+      }
+    }
+  };
+  window.addEventListener("resize", resizeLockedHeightHandler);
 
   const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
     emailLoginInput: {
@@ -71,9 +109,10 @@ const LoginPopup = () => {
   const generateFakeUser = (isSellerBoolean: boolean) => {
     const randomEmail = tempEmailGenerator(isSellerBoolean);
     const randomPassword = randomKeyGenerator(20);
+    const randomUsername = randomKeyGenerator(10);
     setTempEmail(randomEmail);
     setTempPassword(randomPassword);
-    setTempUsername(randomEmail);
+    setTempUsername(randomUsername);
   };
 
   useEffect(() => {
@@ -190,8 +229,7 @@ const LoginPopup = () => {
     // const validPassword = !Object.values(validPasswordObject).includes(true);
 
     // if (!validEmail || !validPassword) {
-    //   console.log(validEmail);
-    //   console.log(validPassword)
+
     //   dispatch(
     //     mainStoreSliceActions.setAPICallMessage("Invalid Login or Password")
     //   );
@@ -249,16 +287,15 @@ const LoginPopup = () => {
             );
 
             setTimeout(() => {
-              clearUserStateData(dispatch);
-              clearActivePopups(dispatch);
-              logoutHandler(dispatch, navigate);
+              console.log(tempPassword);
+              console.log(jsonData.userId);
               deleteAccountCall(
                 dispatch,
                 {
                   password: tempPassword,
-                  userId: userId,
+                  userId: jsonData.userId,
                 },
-                userToken
+                jsonData.token
               )
                 .then((data) => {
                   return data?.json();
@@ -288,6 +325,9 @@ const LoginPopup = () => {
                     dispatch(userStoreSliceActions.setUserToken(""));
                     dispatch(userStoreSliceActions.setUserId(""));
                     dispatch(userStoreSliceActions.setSessionId(""));
+                    logoutHandler(dispatch, navigate);
+                    clearUserStateData(dispatch);
+                    clearActivePopups(dispatch);
 
                     navigate("/");
                   }
@@ -304,6 +344,7 @@ const LoginPopup = () => {
             dispatch(userStoreSliceActions.setUserToken(jsonData.token));
             dispatch(userStoreSliceActions.setUserId(jsonData.userId));
             dispatch(userStoreSliceActions.setSessionId(jsonData.sessionId));
+            dispatch(userStoreSliceActions.setTempPassword(tempPassword));
             dispatch(sellerStoreActions.setIsSeller(jsonData.isSeller));
             localStorage.setItem("token", jsonData.token);
             localStorage.setItem("userId", jsonData.userId);
@@ -338,8 +379,9 @@ const LoginPopup = () => {
           className={classes.loginDialog}
           id="dialogContainer"
           onClick={dialogBackdropClickHandler}
+          ref={backdropRef}
         >
-          <form className={classes.loginForm}>
+          <form className={classes.loginForm} ref={loginPopupRef}>
             <div
               className={classes.closingContainer}
               onClick={closingIconHandler}

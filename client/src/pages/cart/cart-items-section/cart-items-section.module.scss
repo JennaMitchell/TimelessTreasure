@@ -113,3 +113,25 @@
   color: $main100;
   background-color: $main800;
 }
+@media (max-width: 860px) {
+  .productDescriptionContainer {
+    width: max(300px, 300px);
+  }
+}
+@media (max-width: 750px) {
+  .productDescriptionContainer {
+    width: max(200px, 200px);
+  }
+  .productTitle {
+    width: max(150px, 150px);
+    font-size: toRem(18);
+  }
+  .productPrice {
+    width: max(150px, 150px);
+    font-size: toRem(12);
+  }
+  .trashIcon {
+    width: max(15px, 15px);
+    height: max(15px, 15px);
+  }
+}

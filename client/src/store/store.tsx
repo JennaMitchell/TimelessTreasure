@@ -24,6 +24,7 @@ interface State {
   productPopupActive: boolean;
   signupThankYouPopupActive: boolean;
   selectedPriceType: string;
+  lockScreenHeight: number;
 }
 
 const initialState: State = {
@@ -47,6 +48,7 @@ const initialState: State = {
   productPopupActive: false,
   signupThankYouPopupActive: false,
   selectedPriceType: "USD",
+  lockScreenHeight: 0,
 };
 
 const mainStoreSlice = createSlice({
@@ -112,6 +114,9 @@ const mainStoreSlice = createSlice({
     },
     setSelectedPriceType(state, { payload }) {
       state.selectedPriceType = payload;
+    },
+    setLockScreenHeight(state, { payload }) {
+      state.lockScreenHeight = payload;
     },
   },
 });

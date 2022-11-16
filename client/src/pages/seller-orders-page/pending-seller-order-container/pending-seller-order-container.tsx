@@ -32,7 +32,6 @@ const PendingSellerOrderContainer = ({
   const userToken = useAppSelector((state) => state.userStore.userToken);
 
   const shipButtonHandler = () => {
-    console.log(userId);
     const apiOrderData = {
       sellerId: userId,
       orderNumber: orderNumber,

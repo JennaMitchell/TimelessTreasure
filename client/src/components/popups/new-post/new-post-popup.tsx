@@ -37,6 +37,48 @@ const NewPostPopup = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(false));
     setProductQuantity(1);
   };
+
+  const mainContainerRef = useRef(null);
+  const backdropRef = useRef(null);
+  useEffect(() => {
+    if (mainContainerRef.current != null && backdropRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const currentbackDrop = backdropRef.current as HTMLDivElement;
+      console.log(currentbackDrop);
+
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+
+      if (popupHeight > windowHeight) {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+        currentbackDrop.style.height = `${popupHeight}`;
+        console.log(currentbackDrop.style.height);
+        currentbackDrop.style.overflowY = `scroll`;
+      } else {
+        dispatch(mainStoreSliceActions.setLockScreenHeight(0));
+      }
+    }
+  }, [dispatch]);
+
+  const resizeLockedHeightHandler = () => {
+    if (mainContainerRef.current != null) {
+      const windowHeight = window.innerHeight;
+      const mainContainerPopupCurrent =
+        mainContainerRef.current as HTMLFormElement;
+      const popupHeight = mainContainerPopupCurrent.clientHeight;
+      if (backdropRef.current != null) {
+        const currentbackDrop = backdropRef.current as HTMLDivElement;
+
+        if (popupHeight > windowHeight) {
+          dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+          currentbackDrop.style.height = `${popupHeight}`;
+          currentbackDrop.style.overflowY = `scroll`;
+        }
+      }
+    }
+  };
+  window.addEventListener("resize", resizeLockedHeightHandler);
   const newPostPopupActive = useAppSelector(
     (state) => state.mainStore.newPostPopupActive
   );
@@ -125,7 +167,6 @@ const NewPostPopup = () => {
   useEffect(() => {
     if (!initialRender && newPostPopupActive) {
       setInitialRender(true);
-      console.log(initialRender);
     }
   }, [newPostPopupActive, initialRender]);
 
@@ -359,12 +400,14 @@ const NewPostPopup = () => {
           className={classes.newPostBackdrop}
           onClick={dialogBackdropClickHandler}
           id="new-post-backdrop"
+          ref={backdropRef}
         >
           <form
             className={classes.newPostContentContainer}
             encType="multipart/form-data"
             onSubmit={submitHandler}
             method="POST"
+            ref={mainContainerRef}
           >
             <div
               className={classes.closingContainer}
@@ -469,7 +512,7 @@ const NewPostPopup = () => {
             <div className={classes.productContainer}>
               Quantity:
               <select
-                className={classes.productSelection}
+                className={classes.quantitySelection}
                 onChange={quantityHandler}
               >
                 {renderReadyQuantitySelects}

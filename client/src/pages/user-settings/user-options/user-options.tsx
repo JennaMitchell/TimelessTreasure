@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import ChangeEmail from "./option-windows/change-email/change-email";
 import ResetPassword from "./option-windows/reset-password/reset-password";
 import DeleteAccount from "./option-windows/delete-account/delete-account";
+
 const UserOptions = () => {
   const [activeButton, setActiveButton] = useState("Current Info");
 

@@ -6,12 +6,12 @@ const PlacedOrderSchema = require("../models/placed-order");
 const SellerPlacedOrder = require("../models/seller-placed-order");
 exports.getAllSellerDataItemsForSale = async (req, res, next) => {
   const sellerId = req.params.sellerId;
+
   try {
     const foundProducts = await ProductSchema.find({
       sellerId: sellerId,
       status: "For Sale",
     });
-    console.log(foundProducts);
 
     return res.status(201).json({
       message: "Product Found!",
@@ -30,7 +30,6 @@ exports.getAllPendingOrderSellerData = async (req, res, next) => {
   const sellerId = req.params.sellerId;
 
   try {
-    console.log(27);
     const foundOrders = await SellerPlacedOrderSchema.find({
       sellerId: sellerId,
       status: "Ship",
@@ -73,7 +72,6 @@ exports.shipItem = async (req, res, next) => {
     ) {
       if (uniqueSellersArray[indexToFind] === sellerId) {
         indexOfUniqueSeller = indexToFind;
-        console.log(71);
       }
     }
 

@@ -16,6 +16,7 @@ import {
 } from "../../utilities/product-api-hooks/buyer-product-hooks";
 import { userStoreSliceActions } from "../../store/user-store";
 import { deleteAccountCall } from "../../utilities/user-settings-api-hooks/api-calls-user-setting-hooks";
+import { useEffect, useRef } from "react";
 const LoggedInDropdown = () => {
   const isSeller = useAppSelector((state) => state.sellerStore.isSeller);
   const loggedInDropDownActive = useAppSelector(
@@ -292,11 +293,37 @@ const LoggedInDropdown = () => {
       });
   };
 
+  const dropdownMenuRef = useRef(null);
+
+  useEffect(() => {
+    const dropdownTarget = document.getElementById("logged-in-drop-down-menu");
+    const topNavBarUserButton = document.getElementById("nav-bar-user-button");
+    if (dropdownTarget != null && topNavBarUserButton != null) {
+      const navUserButtonOffsets = topNavBarUserButton.getBoundingClientRect();
+      const navUserButtonLeftOffset = navUserButtonOffsets.left;
+      dropdownTarget.style.left = `${navUserButtonLeftOffset + 2.5}px`;
+      console.log(dropdownTarget.style.left);
+    }
+  }, []);
+
+  const resizeLockedHeightHandler = () => {
+    const topNavBarUserButton = document.getElementById("nav-bar-user-button");
+    if (dropdownMenuRef.current != null && topNavBarUserButton != null) {
+      const dropdownMenuRefCurrent = dropdownMenuRef.current as HTMLDivElement;
+      const navUserButtonOffsets = topNavBarUserButton.getBoundingClientRect();
+      const navUserButtonLeftOffset = navUserButtonOffsets.left;
+      dropdownMenuRefCurrent.style.left = `${navUserButtonLeftOffset + 2.5}px`;
+    }
+  };
+  window.addEventListener("resize", resizeLockedHeightHandler);
+
   return (
     <div
       className={`${classes.loggedInDropDownMenu} ${
         loggedInDropDownActive && classes.dropdownMoveOut
       }`}
+      ref={dropdownMenuRef}
+      id="logged-in-drop-down-menu"
     >
       <NavLink
         className={classes.userOptionButton}

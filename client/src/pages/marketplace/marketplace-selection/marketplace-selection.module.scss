@@ -1,6 +1,6 @@
 @import "../../../utilities/variables";
 .marketplaceSelection {
-  width: max(800px, 800px);
+  width: max(660px, 660px);
   height: max(100%, 100%);
   display: grid;
   grid-template-columns: max-content max-content max-content;
@@ -10,6 +10,7 @@
   box-sizing: border-box;
   margin-bottom: 20px;
   position: relative;
+  justify-self: center;
 }
 .itemContainer {
   width: max(200px, 200px);
@@ -140,4 +141,35 @@
   padding: 0px;
   margin: 0px;
   margin-bottom: 2.5px;
+}
+@media (max-width: 1050px) {
+  .marketplaceSelection {
+    width: max(450px, 450px);
+    grid-template-columns: max-content max-content;
+  }
+}
+@media (max-width: 800px) {
+  .marketplaceSelection {
+    width: max(660px, 660px);
+    grid-template-columns: max-content max-content;
+  }
+}
+@media (max-width: 680px) {
+  .marketplaceSelection {
+    width: max(90%, 90%);
+    grid-template-columns: max-content max-content;
+    justify-content: center;
+    align-items: center;
+  }
+  .pageButtonContainer {
+    right: 0px;
+  }
+}
+@media (max-width: 380px) {
+  .marketplaceSelection {
+    grid-template-columns: max-content;
+  }
+  .pageButtonContainer {
+    right: -30px;
+  }
 }

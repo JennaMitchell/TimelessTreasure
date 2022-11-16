@@ -162,3 +162,13 @@ export const closeApiMessageDropDown = (dispatch: any) => {
   dispatch(mainStoreSliceActions.setApiCallDropdownActive(false));
   dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));
 };
+export const popupDocumentComparer = (dispatch: any, popupHeight: number) => {
+  const documentHeight = +document.body.style.height;
+  if (popupHeight > documentHeight) {
+    dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
+    dispatch(mainStoreSliceActions.setLockViewPort(true));
+  } else {
+    dispatch(mainStoreSliceActions.setLockScreenHeight(0));
+    dispatch(mainStoreSliceActions.setLockViewPort(true));
+  }
+};
