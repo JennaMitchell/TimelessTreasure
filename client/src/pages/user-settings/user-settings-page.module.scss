@@ -14,7 +14,8 @@
 .banner {
   width: max(100%, 100%);
   height: max(175px, 175px);
-  background-image: url("../../images/homepage/photo-carousel/antique-painting.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../../images/homepage/photo-carousel/antique-painting.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   color: $white;

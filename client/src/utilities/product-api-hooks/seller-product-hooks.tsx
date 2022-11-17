@@ -135,7 +135,6 @@ export const shipProductCall = async (
   orderData: any,
   token: string
 ) => {
-  console.log(orderData);
   try {
     const fetchedResponse = await fetch(
       "http://localhost:5000/order/ship-product",

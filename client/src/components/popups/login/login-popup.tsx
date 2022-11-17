@@ -287,8 +287,6 @@ const LoginPopup = () => {
             );
 
             setTimeout(() => {
-              console.log(tempPassword);
-              console.log(jsonData.userId);
               deleteAccountCall(
                 dispatch,
                 {

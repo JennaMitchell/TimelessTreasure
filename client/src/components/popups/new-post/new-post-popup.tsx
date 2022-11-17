@@ -46,14 +46,13 @@ const NewPostPopup = () => {
       const mainContainerPopupCurrent =
         mainContainerRef.current as HTMLFormElement;
       const currentbackDrop = backdropRef.current as HTMLDivElement;
-      console.log(currentbackDrop);
 
       const popupHeight = mainContainerPopupCurrent.clientHeight;
 
       if (popupHeight > windowHeight) {
         dispatch(mainStoreSliceActions.setLockScreenHeight(popupHeight));
         currentbackDrop.style.height = `${popupHeight}`;
-        console.log(currentbackDrop.style.height);
+
         currentbackDrop.style.overflowY = `scroll`;
       } else {
         dispatch(mainStoreSliceActions.setLockScreenHeight(0));

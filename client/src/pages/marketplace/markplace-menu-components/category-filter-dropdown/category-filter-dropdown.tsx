@@ -120,7 +120,6 @@ const CategoryFilterDropdown = ({ productType, dataRetriever }: Props) => {
 
     const copyOfLogicObject = activeDropdowns.slice();
     copyOfLogicObject[buttonIndex] = !copyOfLogicObject[buttonIndex];
-    console.log(copyOfLogicObject);
     setActiveDropdowns(copyOfLogicObject);
   };
 

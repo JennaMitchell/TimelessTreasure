@@ -298,11 +298,11 @@ const LoggedInDropdown = () => {
   useEffect(() => {
     const dropdownTarget = document.getElementById("logged-in-drop-down-menu");
     const topNavBarUserButton = document.getElementById("nav-bar-user-button");
+
     if (dropdownTarget != null && topNavBarUserButton != null) {
       const navUserButtonOffsets = topNavBarUserButton.getBoundingClientRect();
       const navUserButtonLeftOffset = navUserButtonOffsets.left;
       dropdownTarget.style.left = `${navUserButtonLeftOffset + 2.5}px`;
-      console.log(dropdownTarget.style.left);
     }
   }, []);
 

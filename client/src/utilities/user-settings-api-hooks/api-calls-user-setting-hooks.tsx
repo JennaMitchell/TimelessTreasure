@@ -109,7 +109,6 @@ export const deleteAccountCall = async (
   signupData: any,
   token: string
 ) => {
-  console.log(token);
   try {
     const fetchedResponse = await fetch(
       "http://localhost:5000/user/delete-account",

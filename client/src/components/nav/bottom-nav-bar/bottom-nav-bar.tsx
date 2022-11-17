@@ -8,7 +8,7 @@ import TablewearDropDown from "../dropsdowns/tablewear/tablewear-dropdown";
 import PaintingsDropDown from "../dropsdowns/paintings/paintings-dropdown";
 import ElectronicsDropDown from "../dropsdowns/electronics/electronics-dropdown";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { marketplaceStoreActions } from "../../../store/marketplace";
 import { dropdownIdSpliter } from "../../../utilities/product-react-hooks/product-react-hooks";
 import { getTagDataHandler } from "../../../utilities/product-react-hooks/product-react-hooks";
@@ -315,7 +315,9 @@ const BottomNavBar = () => {
                 Electronics
               </div>
             )}
-            <button className={classes.sectionButton}>Credits</button>
+            <NavLink to="/credits" className={classes.sectionButton}>
+              Credits
+            </NavLink>
           </div>
         </div>
       )}

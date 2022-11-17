@@ -199,6 +199,14 @@ const TopNavBar = () => {
       mainStoreSliceActions.setLoggedInDropDownActive(!loggedInDropdownActive)
     );
   };
+  const dropdownTarget = document.getElementById("logged-in-drop-down-menu");
+  const topNavBarUserButton = document.getElementById("nav-bar-user-button");
+
+  if (dropdownTarget != null && topNavBarUserButton != null) {
+    const navUserButtonOffsets = topNavBarUserButton.getBoundingClientRect();
+    const navUserButtonLeftOffset = navUserButtonOffsets.left;
+    dropdownTarget.style.left = `${navUserButtonLeftOffset + 2.5}px`;
+  }
 
   const priceTypeDropdownHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLOptionElement;

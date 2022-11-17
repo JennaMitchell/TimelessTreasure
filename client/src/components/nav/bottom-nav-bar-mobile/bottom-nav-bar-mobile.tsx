@@ -53,7 +53,7 @@ const BottomNavBarMobile = () => {
               <NavLink to="/marketplace" className={classes.marketplaceButton}>
                 Electronics
               </NavLink>
-              <NavLink to="/marketplace" className={classes.marketplaceButton}>
+              <NavLink to="/credits" className={classes.marketplaceButton}>
                 Credits
               </NavLink>
             </div>
