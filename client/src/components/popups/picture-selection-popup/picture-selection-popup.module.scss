@@ -1,0 +1,182 @@
+@import "../../../utilities//variables";
+.popupBackdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: $popupBackdropZIndex;
+  position: fixed;
+
+  width: max(100vw, 100vw);
+  height: max(100vh, 100vh);
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.popupMainContainer {
+  width: max(370px, 370px);
+  height: max-content;
+  min-height: max-content;
+  max-height: 100vh;
+  background-color: white;
+  position: relative;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: $popupZIndex;
+  gap: 10px;
+  padding: 20px;
+  position: relative;
+  box-sizing: border-box;
+  margin-right: 15px;
+}
+
+.closingIconContainer {
+  width: max(30px, 30px);
+  height: max(30px, 30px);
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: $main800;
+  color: $white;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+.closingIconContainer:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.closingIcon {
+  width: max(20px, 20px);
+  height: max(20px, 20px);
+}
+.loginTitle {
+  margin: 0px;
+  padding: 0px;
+  font-size: toRem(42);
+  line-height: toRem(42);
+  font-family: $fontFamily;
+  color: $main600;
+  max-width: max-content;
+  height: max-content;
+  text-align: center;
+}
+
+.textDecor {
+  width: max(200px, 200px);
+  height: max(30px, 30px);
+  object-fit: contain;
+  padding-right: 2.5px;
+}
+.pictureSelectionSection {
+  display: grid;
+  width: max(345px, 345px);
+  grid-template-columns: 145px 145px;
+  grid-template-rows: max-content;
+  max-height: max-content;
+  grid-auto-rows: max-content;
+  gap: 2.5px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 4px solid $main800;
+  border-radius: 7.5px;
+  overflow-y: scroll;
+}
+.imageContainer {
+  width: max(100%, 100%);
+  max-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  box-sizing: border-box;
+  transition: box-shadow 0.5s border 0.5s;
+  border: 4px solid transparent;
+}
+.imageContainer:hover {
+  box-shadow: 0px 0px 60px black;
+  border: 4px solid $main400;
+}
+.selectionImage {
+  width: max(100%, 100%);
+  height: max(150px, 150px);
+  object-fit: cover;
+  overflow: hidden;
+  transition: transform 0.5s;
+  box-sizing: border-box;
+}
+.selectionImage:hover {
+  transform: scale(1.25);
+}
+.selectionImageActive {
+  transform: scale(1.25);
+}
+.submitButton {
+  width: max(100px, 100px);
+  padding: 0px;
+  max-height: max-content;
+  padding: 10px 10px;
+  border-radius: 10px;
+
+  transition: all 0s;
+  font-size: toRem(20);
+  background-color: $main800;
+  color: $white;
+  font-family: $fontFamily;
+  border: 0px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+}
+.submitButton:hover {
+  color: $main800;
+  background-color: $main200;
+}
+.activeImageContainer {
+  border: 4px solid $main400;
+  box-shadow: 0px 0px 40px black;
+}
+@media (max-width: 400px) {
+  .popupMainContainer {
+    width: max(330px, 330px);
+  }
+  .loginTitle {
+    font-size: toRem(32);
+    line-height: toRem(32);
+  }
+  .pictureSelectionSection {
+    width: max(300px, 300px);
+    grid-template-columns: 125px 125px;
+  }
+  .selectionImage {
+    height: max(125px, 125px);
+  }
+}
+@media (max-width: 350px) {
+  .popupMainContainer {
+    width: max(300px, 300px);
+  }
+  .loginTitle {
+    font-size: toRem(32);
+    line-height: toRem(32);
+  }
+  .pictureSelectionSection {
+    width: max(260px, 260px);
+    grid-template-columns: 110px 110px;
+    overflow-x: hidden;
+  }
+  .selectionImage {
+    height: max(100px, 100px);
+  }
+  .closingIconContainer {
+    top: 5px;
+    right: 5px;
+  }
+}

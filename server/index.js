@@ -11,8 +11,8 @@ const orderRoute = require("./routes/order");
 const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const session = require("express-session");
-const MongoDBStore = require("connect-mongodb-session")(session);
+// const helmet = require("helmet");
+// const compression = require("compression");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -38,15 +38,12 @@ const fileFilter = (req, file, cb) => {
 };
 
 app.use(cors());
-const store = new MongoDBStore({
-  uri: process.env.MONGO_URL,
-  collection: "sessions",
-});
+// app.use(helmet());
+// app.use(compression());
+
 mongoose
   .connect(process.env.MONGO_URL)
-  .then(() => {
-    console.log("DB Connection Successfull!");
-  })
+  .then(() => {})
   .catch((err) => {
     res.status(401).json({
       message: `Server Error!`,
@@ -54,21 +51,10 @@ mongoose
     });
   });
 
-app.use(
-  session({
-    secret: process.env.SESSION_PASS,
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-    expires: 1000 * 60 * 60 * 24 * 30,
-  })
-);
-
 app.use(bodyParser.json());
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"),
   (req, res, next) => {
-    console.log("multer used");
     next();
   }
 );
@@ -92,9 +78,7 @@ app.use("/user", updateUserSettingsRoute);
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
 
-const server = app.listen(5000, () => {
-  console.log("Backend server is running!");
-});
+const server = app.listen(process.env.PORT, () => {});
 const io = require("./socket/socket").init(server);
 
 io.on("connection", (socket) => {});

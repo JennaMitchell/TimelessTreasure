@@ -19,6 +19,7 @@ import OrderPlacedPage from "./pages/order-placed/order-placed";
 import BuyerOrdersPage from "./pages/buyer-order-page/buyer-orders";
 import SignupThankYou from "./components/popups/signup-thank-you/signup-thank-you";
 import BottomNavBarMobile from "./components/nav/bottom-nav-bar-mobile/bottom-nav-bar-mobile";
+import PictureSelectionPopup from "./components/popups/picture-selection-popup/picture-selection-popup";
 import Credits from "./pages/credits/credits";
 function App() {
   const lockViewport = useAppSelector((state) => state.mainStore.lockViewport);
@@ -54,6 +55,7 @@ function App() {
       <NewPostPopup />
       <SignupThankYou />
       <BottomNavBarMobile />
+      <PictureSelectionPopup />
 
       <Routes>
         <Route path="/" element={<Navigate replace to="/home" />} />

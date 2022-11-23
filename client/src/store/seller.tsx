@@ -10,6 +10,7 @@ interface State {
   sellerNewPostProductCategory: string;
   sellerPendingOrderData: any[];
   sellerFulfilledOrderData: any[];
+  newPostSelectedPhotoLink: number;
 }
 const initialState: State = {
   isSeller: false,
@@ -19,6 +20,7 @@ const initialState: State = {
   sellerNewPostProductCategory: "Ceramics",
   sellerPendingOrderData: [],
   sellerFulfilledOrderData: [],
+  newPostSelectedPhotoLink: -1,
 };
 
 export const sellerStoreSlice = createSlice({
@@ -45,6 +47,9 @@ export const sellerStoreSlice = createSlice({
     },
     setSellerFulfilledOrderData(state, { payload }) {
       state.sellerFulfilledOrderData = payload;
+    },
+    setNewPostSelectedPhotoLink(state, { payload }) {
+      state.newPostSelectedPhotoLink = payload;
     },
   },
 });
