@@ -1,9 +1,9 @@
 import { mainStoreSliceActions } from "../../store/store";
-
+import { databaseURL } from "../constants/constants";
 export const latestItemsApiCall = async (dispatch: any) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/product/get-ten-latest`,
+      `${databaseURL}/product/get-ten-latest`,
       {
         method: "GET",
       }
@@ -20,7 +20,7 @@ export const latestItemsApiCallWithFilter = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/product/get-ten-latest-filtered/${sectionType}`,
+      `${databaseURL}/product/get-ten-latest-filtered/${sectionType}`,
       {
         method: "GET",
       }
@@ -35,7 +35,7 @@ export const latestItemsApiCallWithFilter = async (
 export const hotestItemsApiCall = async (dispatch: any) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/product/get-ten-hotest`,
+      `${databaseURL}/product/get-ten-hotest`,
       {
         method: "GET",
       }
@@ -52,7 +52,7 @@ export const hotestItemsApiCallWithFilter = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/product/get-ten-hotest-filtered/${sectionType}`,
+      `${databaseURL}/product/get-ten-hotest-filtered/${sectionType}`,
       {
         method: "GET",
       }

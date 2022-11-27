@@ -1,8 +1,7 @@
 import classes from "./fulfilled-seller-orders.module.scss";
 
 import { CheckIcon } from "@heroicons/react/24/outline";
-import { imageUrlCreator } from "../../../utilities/generic-hooks/generic-hooks";
-
+import { pictureSelectionTestData } from "../../../utilities/constants/picture-selection-data";
 import {
   priceStringCreator,
   priceInputCleaner,
@@ -32,7 +31,8 @@ const FulfilledSellerOrders = ({
       const priceWithoutCurrencySymbol = itemData.productInfo.price;
       totalBeforeTax =
         totalBeforeTax + +priceWithoutCurrencySymbol * +itemData.quantity;
-      const finalImageUrl = imageUrlCreator(itemData.productInfo.imageUrl);
+      const finalImageUrl =
+        pictureSelectionTestData[itemData.productInfo.imageKey].photo;
       return (
         <div
           className={classes.itemOrdered}

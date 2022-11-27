@@ -1,4 +1,5 @@
 import { mainStoreSliceActions } from "../../store/store";
+import { databaseURL } from "../constants/constants";
 export const getFilteredProduct = async (dispatch: any, tagData: any) => {
   let filterString = "";
   for (let indexOfTag = 0; indexOfTag < tagData.length; indexOfTag++) {
@@ -11,12 +12,9 @@ export const getFilteredProduct = async (dispatch: any, tagData: any) => {
 
   if (filterString.length === 0) {
     try {
-      const fetchedResponse = await fetch(
-        `http://localhost:5000/product/get-all`,
-        {
-          method: "GET",
-        }
-      );
+      const fetchedResponse = await fetch(`${databaseURL}/product/get-all`, {
+        method: "GET",
+      });
       return fetchedResponse;
     } catch (error) {
       dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
@@ -25,7 +23,7 @@ export const getFilteredProduct = async (dispatch: any, tagData: any) => {
   } else {
     try {
       const fetchedResponse = await fetch(
-        `http://localhost:5000/product/filter/${filterString}`,
+        `${databaseURL}/product/filter/${filterString}`,
         {
           method: "GET",
         }
@@ -41,12 +39,9 @@ export const getFilteredProduct = async (dispatch: any, tagData: any) => {
 export const getSearchedProduct = async (dispatch: any, filterString: any) => {
   if (filterString.trim().length === 0) {
     try {
-      const fetchedResponse = await fetch(
-        `http://localhost:5000/product/get-all`,
-        {
-          method: "GET",
-        }
-      );
+      const fetchedResponse = await fetch(`${databaseURL}/product/get-all`, {
+        method: "GET",
+      });
 
       return fetchedResponse;
     } catch (error) {
@@ -56,7 +51,7 @@ export const getSearchedProduct = async (dispatch: any, filterString: any) => {
   } else {
     try {
       const fetchedResponse = await fetch(
-        `http://localhost:5000/product/filter-search/${filterString}`,
+        `${databaseURL}/product/filter-search/${filterString}`,
         {
           method: "GET",
         }

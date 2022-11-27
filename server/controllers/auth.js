@@ -18,6 +18,7 @@ exports.signup = async (req, res, next) => {
   const password = req.body.password;
   const isSeller = req.body.isSeller;
   try {
+    console.log(21);
     const hashedPw = await bcrypt.hash(password, 12);
     const currentDate = new Date();
 
@@ -30,13 +31,14 @@ exports.signup = async (req, res, next) => {
     });
 
     const result = await newUser.save();
-
+    console.log(34);
     res.status(201).json({
       message: "User created!",
       userId: result._id,
       status: 201,
     });
   } catch (err) {
+    console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;
     }
@@ -45,8 +47,6 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  req.session.isLoggedIn = true;
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(401).json({
@@ -83,8 +83,6 @@ exports.login = async (req, res, next) => {
       { expiresIn: "1h" }
     );
 
-    req.session.save();
-
     return res.status(200).json({
       token: token,
       userId: loadedUser._id.toString(),
@@ -92,9 +90,9 @@ exports.login = async (req, res, next) => {
       isSeller: loadedUser.isSeller,
       message: "Logged In",
       username: loadedUser.username,
-      sessionId: req.session._id,
     });
   } catch (err) {
+    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],

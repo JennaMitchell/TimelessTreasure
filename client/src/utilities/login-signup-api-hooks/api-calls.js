@@ -1,9 +1,9 @@
 import { mainStoreSliceActions } from "../../store/store";
 import { clearUserStateData } from "../refresh-hooks/refresh-hooks";
-
+import { databaseURL } from "../constants/constants";
 export const signupCall = async (dispatch, signupData) => {
   try {
-    const fetchedResponse = await fetch("http://localhost:5000/auth/signup", {
+    const fetchedResponse = await fetch(`${databaseURL}/auth/signup`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export const signupCall = async (dispatch, signupData) => {
 
 export const loginCall = async (dispatch, loginData) => {
   try {
-    const fetchedResponse = await fetch("http://localhost:5000/auth/login", {
+    const fetchedResponse = await fetch(`${databaseURL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

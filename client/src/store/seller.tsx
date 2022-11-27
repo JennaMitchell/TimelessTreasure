@@ -2,6 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 interface SelectedItem {
   [key: string]: string;
 }
+interface NewPostInterface {
+  titlePostInput: {
+    labelMoveout: boolean;
+    inputData: string;
+  };
+  pricePostInput: {
+    labelMoveout: boolean;
+    inputData: string;
+  };
+  descriptionPostInput: {
+    labelMoveout: boolean;
+    inputData: string;
+  };
+}
 interface State {
   isSeller: boolean;
   sellerData: string[];
@@ -10,7 +24,9 @@ interface State {
   sellerNewPostProductCategory: string;
   sellerPendingOrderData: any[];
   sellerFulfilledOrderData: any[];
-  newPostSelectedPhotoLink: number;
+  newPostSelectedPhotoKey: string;
+  sellerNewProductQuantity: number;
+  sellerNewProductInputLogicObject: NewPostInterface;
 }
 const initialState: State = {
   isSeller: false,
@@ -20,7 +36,22 @@ const initialState: State = {
   sellerNewPostProductCategory: "Ceramics",
   sellerPendingOrderData: [],
   sellerFulfilledOrderData: [],
-  newPostSelectedPhotoLink: -1,
+  newPostSelectedPhotoKey: "",
+  sellerNewProductQuantity: 1,
+  sellerNewProductInputLogicObject: {
+    titlePostInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+    pricePostInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+    descriptionPostInput: {
+      labelMoveout: false,
+      inputData: "",
+    },
+  },
 };
 
 export const sellerStoreSlice = createSlice({
@@ -48,8 +79,14 @@ export const sellerStoreSlice = createSlice({
     setSellerFulfilledOrderData(state, { payload }) {
       state.sellerFulfilledOrderData = payload;
     },
-    setNewPostSelectedPhotoLink(state, { payload }) {
-      state.newPostSelectedPhotoLink = payload;
+    setNewPostSelectedPhotoKey(state, { payload }) {
+      state.newPostSelectedPhotoKey = payload;
+    },
+    setSellerNewProductQuantity(state, { payload }) {
+      state.sellerNewProductQuantity = payload;
+    },
+    setSellerNewProductInputLogicObject(state, { payload }) {
+      state.sellerNewProductInputLogicObject = payload;
     },
   },
 });

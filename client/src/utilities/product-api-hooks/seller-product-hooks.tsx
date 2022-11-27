@@ -1,20 +1,24 @@
 import { mainStoreSliceActions } from "../../store/store";
-
+import { databaseURL } from "../constants/constants";
 export const newProductCall = async (
   dispatch: any,
   formData: any,
   token: string
 ) => {
+  console.log(formData);
+  console.log("HOOKS");
   try {
-    const fetchedResponse = await fetch("http://localhost:5000/product/new", {
+    const fetchedResponse = await fetch(`${databaseURL}/product/new`, {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
       },
-      body: formData,
+      body: JSON.stringify(formData),
     });
     return fetchedResponse;
   } catch (error) {
+    console.log(error);
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
     dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
   }
@@ -26,7 +30,7 @@ export const getSellersItemsForSaleCall = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/product/seller-items-for-sale/${sellerId}`,
+      `${databaseURL}/product/seller-items-for-sale/${sellerId}`,
       {
         method: "GET",
         headers: {
@@ -48,7 +52,7 @@ export const getSellersPendingItemsCall = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/order/seller-pending-orders/${sellerId}`,
+      `${databaseURL}/order/seller-pending-orders/${sellerId}`,
       {
         method: "GET",
         headers: {
@@ -70,7 +74,7 @@ export const getSellersFulfilledItemsCall = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/order/seller-fulfilled-orders/${sellerId}`,
+      `${databaseURL}/order/seller-fulfilled-orders/${sellerId}`,
       {
         method: "GET",
         headers: {
@@ -91,17 +95,14 @@ export const deleteItemForSaleCall = async (
   token: string
 ) => {
   try {
-    const fetchedResponse = await fetch(
-      `http://localhost:5000/product/delete`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(deleteData),
-      }
-    );
+    const fetchedResponse = await fetch(`${databaseURL}/product/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(deleteData),
+    });
     return fetchedResponse;
   } catch (error) {
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
@@ -114,16 +115,13 @@ export const updateProductCall = async (
   token: string
 ) => {
   try {
-    const fetchedResponse = await fetch(
-      "http://localhost:5000/product/update",
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-        body: formData,
-      }
-    );
+    const fetchedResponse = await fetch(`${databaseURL}/product/update`, {
+      method: "PATCH",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    });
     return fetchedResponse;
   } catch (error) {
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
@@ -136,17 +134,14 @@ export const shipProductCall = async (
   token: string
 ) => {
   try {
-    const fetchedResponse = await fetch(
-      "http://localhost:5000/order/ship-product",
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(orderData),
-      }
-    );
+    const fetchedResponse = await fetch(`${databaseURL}/order/ship-product`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(orderData),
+    });
     return fetchedResponse;
   } catch (error) {
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));

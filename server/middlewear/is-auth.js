@@ -15,15 +15,19 @@ module.exports = (req, res, next) => {
     decodedToken = jwt.verify(token, process.env.JSW_PASS);
 
     if (!decodedToken) {
+      console.log("18 error");
       return res
         .status(401)
         .json({ error: err, message: "Not authenticated.", status: 401 });
     }
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ error: err, message: "Server Error" });
   }
 
   req.userId = decodedToken.userId;
+
+  console.log("verfied");
 
   next();
 };

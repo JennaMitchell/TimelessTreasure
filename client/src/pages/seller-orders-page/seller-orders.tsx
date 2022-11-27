@@ -16,6 +16,7 @@ const SellerOrdersPage = () => {
   const sellerData: any = useAppSelector(
     (state) => state.sellerStore.sellerData
   );
+  console.log(sellerData);
   const sellerPendingOrderData = useAppSelector(
     (state) => state.sellerStore.sellerPendingOrderData
   );
@@ -48,7 +49,7 @@ const SellerOrdersPage = () => {
       if (sellerData.foundProducts[dataIndex].status === "For Sale") {
         renderReadySellerDataItemsForSale.push(
           <ItemForSaleContainer
-            productImage={sellerData.foundProducts[dataIndex].imageUrl}
+            imageKey={sellerData.foundProducts[dataIndex].imageKey}
             productPrice={sellerData.foundProducts[dataIndex].price}
             productQty={sellerData.foundProducts[dataIndex].quantity}
             productTitle={sellerData.foundProducts[dataIndex].title}

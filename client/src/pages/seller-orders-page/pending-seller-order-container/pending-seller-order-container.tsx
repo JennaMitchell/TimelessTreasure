@@ -1,7 +1,7 @@
 import classes from "./pending-seller-order-container.module.scss";
 
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { imageUrlCreator } from "../../../utilities/generic-hooks/generic-hooks";
+import { pictureSelectionTestData } from "../../../utilities/constants/picture-selection-data";
 import { shipProductCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
@@ -68,7 +68,9 @@ const PendingSellerOrderContainer = ({
       const priceWithoutCurrencySymbol = itemData.productInfo.price;
       totalBeforeTax =
         totalBeforeTax + +priceWithoutCurrencySymbol * +itemData.quantity;
-      const finalImageUrl = imageUrlCreator(itemData.productInfo.imageUrl);
+      const finalImageUrl =
+        pictureSelectionTestData[itemData.productInfo.imageKey].photo;
+
       return (
         <div
           className={classes.itemOrdered}

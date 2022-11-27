@@ -12,20 +12,42 @@ import { priceValidator } from "../../../utilities/validation-hooks/validation-h
 import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
 import { sellerStoreActions } from "../../../store/seller";
 import { getSellersItemsForSaleCall } from "../../../utilities/product-api-hooks/seller-product-hooks";
-interface LogicObject {
-  [key: string]: {
-    labelMoveout: boolean;
-    inputData: "";
-  };
-}
+import { CheckIcon } from "@heroicons/react/24/solid";
+
 interface SelectedTypes {
   [key: string]: string;
 }
 const NewPostPopup = () => {
-  const imageInputRef = useRef(null);
+  const maxQuantity = 99;
   const dispatch = useAppDispatch();
   const sellerNewPostTags = useAppSelector(
     (state) => state.sellerStore.sellerNewPostTags
+  );
+  const newPostPopupActive = useAppSelector(
+    (state) => state.mainStore.newPostPopupActive
+  );
+  const sellerNewPostProductCategory = useAppSelector(
+    (state) => state.sellerStore.sellerNewPostProductCategory
+  );
+  const sellerNewPostPriceType = useAppSelector(
+    (state) => state.sellerStore.sellerNewPostPriceType
+  );
+
+  const userId = useAppSelector((state) => state.userStore.userId);
+  const userToken = useAppSelector((state) => state.userStore.userToken);
+
+  const acceptedProductTypes = [
+    "Ceramics",
+    "Clocks",
+    "Tablewear",
+    "Paintings",
+    "Electronics",
+  ];
+
+  const [initialRender, setInitialRender] = useState(false);
+
+  const sellerNewProductQuantity = useAppSelector(
+    (state) => state.sellerStore.sellerNewProductQuantity
   );
 
   const [priceInputFocused, setPriceInputFocused] = useState(false);
@@ -35,11 +57,40 @@ const NewPostPopup = () => {
     dispatch(sellerStoreActions.setSellerNewPostTags({}));
     dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
     dispatch(mainStoreSliceActions.setLockViewPort(false));
-    setProductQuantity(1);
+    dispatch(sellerStoreActions.setSellerNewProductQuantity(1));
   };
+  const newPostSelectedPhotoKey = useAppSelector(
+    (state) => state.sellerStore.newPostSelectedPhotoKey
+  );
 
   const mainContainerRef = useRef(null);
   const backdropRef = useRef(null);
+  const [dropDownSelectedTypes, setDropDownSelectedTypes] =
+    useState<SelectedTypes>({});
+
+  const dropDownSelectionHandler = (selectedTypes: SelectedTypes) => {
+    setDropDownSelectedTypes(selectedTypes);
+  };
+
+  const sellerNewProductInputLogicObject = useAppSelector(
+    (state) => state.sellerStore.sellerNewProductInputLogicObject
+  );
+
+  // const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
+  //   titlePostInput: {
+  //     labelMoveout: false,
+  //     inputData: "",
+  //   },
+  //   pricePostInput: {
+  //     labelMoveout: false,
+  //     inputData: "",
+  //   },
+  //   descriptionPostInput: {
+  //     labelMoveout: false,
+  //     inputData: "",
+  //   },
+  // });
+
   useEffect(() => {
     if (mainContainerRef.current != null && backdropRef.current != null) {
       const windowHeight = window.innerHeight;
@@ -78,31 +129,6 @@ const NewPostPopup = () => {
     }
   };
   window.addEventListener("resize", resizeLockedHeightHandler);
-  const newPostPopupActive = useAppSelector(
-    (state) => state.mainStore.newPostPopupActive
-  );
-  const sellerNewPostProductCategory = useAppSelector(
-    (state) => state.sellerStore.sellerNewPostProductCategory
-  );
-  const sellerNewPostPriceType = useAppSelector(
-    (state) => state.sellerStore.sellerNewPostPriceType
-  );
-
-  const userId = useAppSelector((state) => state.userStore.userId);
-  const userToken = useAppSelector((state) => state.userStore.userToken);
-  const acceptedImageFormats = ["png", "jpg", "jpeg"];
-  const acceptedProductTypes = [
-    "Ceramics",
-    "Clocks",
-    "Tablewear",
-    "Paintings",
-    "Electronics",
-  ];
-
-  const [initialRender, setInitialRender] = useState(false);
-
-  const [productQuantity, setProductQuantity] = useState(1);
-  const maxQuantity = 99;
 
   const renderReadyQuantitySelects = [];
   for (let quantity = 1; quantity < maxQuantity; quantity++) {
@@ -118,31 +144,10 @@ const NewPostPopup = () => {
 
   const quantityHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLOptionElement;
-
-    setProductQuantity(+targetElement.value);
+    dispatch(
+      sellerStoreActions.setSellerNewProductQuantity(+targetElement.value)
+    );
   };
-
-  const [dropDownSelectedTypes, setDropDownSelectedTypes] =
-    useState<SelectedTypes>({});
-
-  const dropDownSelectionHandler = (selectedTypes: SelectedTypes) => {
-    setDropDownSelectedTypes(selectedTypes);
-  };
-
-  const [inputLogicObject, setInputLogicObject] = useState<LogicObject>({
-    titlePostInput: {
-      labelMoveout: false,
-      inputData: "",
-    },
-    pricePostInput: {
-      labelMoveout: false,
-      inputData: "",
-    },
-    descriptionPostInput: {
-      labelMoveout: false,
-      inputData: "",
-    },
-  });
 
   const apiCallMessageType = useAppSelector(
     (state) => state.mainStore.apiCallMessageType
@@ -177,7 +182,7 @@ const NewPostPopup = () => {
     }
   };
   const inputCopyObjectHandler = () =>
-    JSON.parse(JSON.stringify(inputLogicObject));
+    JSON.parse(JSON.stringify(sellerNewProductInputLogicObject));
 
   const inputChangeHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLInputElement;
@@ -187,7 +192,9 @@ const NewPostPopup = () => {
       copyOfInputObject[targetElement.id].labelMoveout = true;
     }
     copyOfInputObject[targetElement.id].inputData = targetElement.value;
-    setInputLogicObject(copyOfInputObject);
+    dispatch(
+      sellerStoreActions.setSellerNewProductInputLogicObject(copyOfInputObject)
+    );
   };
   const inputFocusHandler = (e: React.ChangeEvent) => {
     const targetElement = e.target as HTMLInputElement;
@@ -195,7 +202,11 @@ const NewPostPopup = () => {
     if (copyOfInputObject[targetElement.id].inputData.length === 0) {
       copyOfInputObject[targetElement.id].labelMoveout =
         !copyOfInputObject[targetElement.id].labelMoveout;
-      setInputLogicObject(copyOfInputObject);
+      dispatch(
+        sellerStoreActions.setSellerNewProductInputLogicObject(
+          copyOfInputObject
+        )
+      );
     }
     if (targetElement.id === "pricePostInput") {
       setPriceInputFocused(true);
@@ -207,7 +218,11 @@ const NewPostPopup = () => {
     if (copyOfInputObject[targetElement.id].inputData.length === 0) {
       copyOfInputObject[targetElement.id].labelMoveout =
         !copyOfInputObject[targetElement.id].labelMoveout;
-      setInputLogicObject(copyOfInputObject);
+      dispatch(
+        sellerStoreActions.setSellerNewProductInputLogicObject(
+          copyOfInputObject
+        )
+      );
     }
     if (targetElement.id === "pricePostInput") {
       setPriceInputFocused(false);
@@ -220,27 +235,9 @@ const NewPostPopup = () => {
     document.getElementById(`${targetElement.htmlFor}`)?.focus();
     copyOfInputObject[targetElement.htmlFor].labelMoveout =
       !copyOfInputObject[targetElement.htmlFor].labelMoveout;
-    setInputLogicObject(copyOfInputObject);
-  };
-
-  const fileInputHandler = () => {
-    if (imageInputRef.current != null) {
-      const imageInput = imageInputRef.current as HTMLInputElement;
-
-      const tempString = imageInput.value.slice(-10);
-      const indexOfFileEnding = tempString.indexOf(".");
-      const fileEnding = tempString.slice(
-        indexOfFileEnding + 1,
-        tempString.length
-      );
-      if (!acceptedImageFormats.includes(fileEnding)) {
-        dispatch(
-          mainStoreSliceActions.setAPICallMessage("Please enter a valid image!")
-        );
-        dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-        imageInput.value = "";
-      }
-    }
+    dispatch(
+      sellerStoreActions.setSellerNewProductInputLogicObject(copyOfInputObject)
+    );
   };
 
   const submitHandler = (e: React.FormEvent) => {
@@ -258,7 +255,15 @@ const NewPostPopup = () => {
       }
     }
 
-    if (inputLogicObject.titlePostInput.inputData.length === 0) {
+    if (newPostSelectedPhotoKey.length === 0) {
+      dispatch(mainStoreSliceActions.setAPICallMessage("Select A Photo!"));
+      dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+      return;
+    }
+
+    if (
+      sellerNewProductInputLogicObject.titlePostInput.inputData.length === 0
+    ) {
       dispatch(
         mainStoreSliceActions.setAPICallMessage("Please enter a title!")
       );
@@ -266,21 +271,25 @@ const NewPostPopup = () => {
 
       return;
     }
-    if (inputLogicObject.pricePostInput.inputData.length === 0) {
+    if (
+      sellerNewProductInputLogicObject.pricePostInput.inputData.length === 0
+    ) {
       dispatch(
         mainStoreSliceActions.setAPICallMessage("Please enter a price!")
       );
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
     }
-    if (priceValidator(inputLogicObject.pricePostInput.inputData)) {
+    if (
+      priceValidator(sellerNewProductInputLogicObject.pricePostInput.inputData)
+    ) {
       dispatch(
         mainStoreSliceActions.setAPICallMessage("Please enter a valid price!")
       );
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
     }
-    if (productQuantity <= 0 || productQuantity >= 99) {
+    if (sellerNewProductQuantity <= 0 || sellerNewProductQuantity >= 99) {
       dispatch(mainStoreSliceActions.setAPICallMessage("Invalid Quantity!"));
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
@@ -292,62 +301,61 @@ const NewPostPopup = () => {
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
     }
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    if (imageInputRef.current !== null) {
-      const imageInput = imageInputRef.current as HTMLInputElement;
+    // if (imageInputRef.current !== null) {
+    //   const imageInput = imageInputRef.current as HTMLInputElement;
 
-      if (imageInput?.files !== null) {
-        formData.append("image", imageInput.files[0]);
-      }
-      if (imageInput.value.length === 0) {
-        dispatch(mainStoreSliceActions.setAPICallMessage("No image added!"));
-        dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
-        return;
-      }
-    }
-    if (inputLogicObject.descriptionPostInput.inputData.trim().length === 0) {
+    //   // if (imageInput?.files !== null) {
+    //   //   formData.append("image", imageInput.files[0]);
+    //   // }
+    //   if (imageInput.value.length === 0) {
+    //     dispatch(mainStoreSliceActions.setAPICallMessage("No image added!"));
+    //     dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
+    //     return;
+    //   }
+    // }
+    if (
+      sellerNewProductInputLogicObject.descriptionPostInput.inputData.trim()
+        .length === 0
+    ) {
       dispatch(
         mainStoreSliceActions.setAPICallMessage("Please add a description.")
       );
       dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
       return;
     }
-
-    formData.append("title", inputLogicObject.titlePostInput.inputData);
-    formData.append(
-      "price",
-      priceInputCleaner(inputLogicObject.pricePostInput.inputData)
-    );
-
-    formData.append("quantity", JSON.stringify(productQuantity));
-    formData.append("priceType", sellerNewPostPriceType);
-    formData.append("productType", sellerNewPostProductCategory);
-    formData.append(
-      "productTags",
-      JSON.stringify(Object.values(sellerNewPostTags))
-    );
-
     const productId = randomKeyGenerator(20);
-    formData.append("productId", productId);
-    formData.append("userId", userId);
-    formData.append("status", "For Sale");
-    formData.append(
-      "description",
-      inputLogicObject.descriptionPostInput.inputData
-    );
     const today = new Date();
     const utc = today.toUTCString();
     const indexOfUtcComma = utc.indexOf(",");
     const utcSliced = utc.slice(indexOfUtcComma + 1).trim();
 
-    formData.append("date", utcSliced);
+    const requestDataObject = {
+      title: sellerNewProductInputLogicObject.titlePostInput.inputData,
+      price: priceInputCleaner(
+        sellerNewProductInputLogicObject.pricePostInput.inputData
+      ),
+      quantity: JSON.stringify(sellerNewProductQuantity),
+      priceType: sellerNewPostPriceType,
+      productType: sellerNewPostProductCategory,
+      productTags: JSON.stringify(Object.values(sellerNewPostTags)),
+      productId: productId,
+      userId: userId,
+      status: "For Sale",
+      description:
+        sellerNewProductInputLogicObject.descriptionPostInput.inputData,
+      imageKey: newPostSelectedPhotoKey,
+      date: utcSliced,
+    };
 
-    newProductCall(dispatch, formData, userToken)
+    newProductCall(dispatch, requestDataObject, userToken)
       .then((data) => {
+        console.log(data);
         return data?.json();
       })
       .then((jsonData) => {
+        console.log(jsonData);
         if ("error" in jsonData) {
           if (jsonData.error.length !== 0) {
             dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
@@ -359,6 +367,24 @@ const NewPostPopup = () => {
           dispatch(sellerStoreActions.setSellerNewPostPriceType("USD"));
           dispatch(
             sellerStoreActions.setSellerNewPostProductCategory("Ceramics")
+          );
+
+          dispatch(sellerStoreActions.setNewPostSelectedPhotoKey(""));
+          dispatch(
+            sellerStoreActions.setSellerNewProductInputLogicObject({
+              titlePostInput: {
+                labelMoveout: false,
+                inputData: "",
+              },
+              pricePostInput: {
+                labelMoveout: false,
+                inputData: "",
+              },
+              descriptionPostInput: {
+                labelMoveout: false,
+                inputData: "",
+              },
+            })
           );
         }
       })
@@ -392,6 +418,14 @@ const NewPostPopup = () => {
       });
   };
 
+  const selectAnImageHandler = () => {
+    dispatch(mainStoreSliceActions.setNewPostPopupActive(false));
+    dispatch(mainStoreSliceActions.setPictureSelectionPopupActive(true));
+  };
+
+  // console.log(sellerNewPostTags);
+  // console.log(Object.values(sellerNewPostTags));
+  // console.log(JSON.stringify(Object.values(sellerNewPostTags)));
   return (
     <>
       {newPostPopupActive && (
@@ -419,8 +453,8 @@ const NewPostPopup = () => {
             <div className={classes.inputContainer}>
               <label
                 className={`${classes.inputLabel} ${
-                  inputLogicObject.titlePostInput.labelMoveout &&
-                  classes.activeInputLabel
+                  sellerNewProductInputLogicObject.titlePostInput
+                    .labelMoveout && classes.activeInputLabel
                 } ${apiCallMessageType === "ERROR" && classes.errorText}`}
                 onClick={inputLabelClickHandler}
                 htmlFor="titlePostInput"
@@ -436,6 +470,9 @@ const NewPostPopup = () => {
                 onBlur={inputBlurHandler}
                 onFocus={inputFocusHandler}
                 maxLength={30}
+                defaultValue={
+                  sellerNewProductInputLogicObject.titlePostInput.inputData
+                }
               />
             </div>
             <div
@@ -455,8 +492,8 @@ const NewPostPopup = () => {
               </select>
               <label
                 className={`${classes.priceInputLabel} ${
-                  inputLogicObject.pricePostInput.labelMoveout &&
-                  classes.activeInputLabel
+                  sellerNewProductInputLogicObject.pricePostInput
+                    .labelMoveout && classes.activeInputLabel
                 } ${apiCallMessageType === "ERROR" && classes.errorText}`}
                 onClick={inputLabelClickHandler}
                 htmlFor="pricePostInput"
@@ -472,6 +509,9 @@ const NewPostPopup = () => {
                 onBlur={inputBlurHandler}
                 onFocus={inputFocusHandler}
                 maxLength={6}
+                defaultValue={
+                  sellerNewProductInputLogicObject.pricePostInput.inputData
+                }
               />
             </div>
             <div className={classes.descriptionContainer}>
@@ -490,9 +530,17 @@ const NewPostPopup = () => {
                 rows={3}
                 cols={33}
                 className={classes.descriptionInput}
+                defaultValue={
+                  sellerNewProductInputLogicObject.descriptionPostInput
+                    .inputData
+                }
               />
               <p className={classes.characterRemainingText}>
-                {inputLogicObject.descriptionPostInput.inputData.length}/200
+                {
+                  sellerNewProductInputLogicObject.descriptionPostInput
+                    .inputData.length
+                }
+                /200
               </p>
             </div>
             <div className={classes.productContainer}>
@@ -513,6 +561,7 @@ const NewPostPopup = () => {
               <select
                 className={classes.quantitySelection}
                 onChange={quantityHandler}
+                defaultValue={sellerNewProductQuantity}
               >
                 {renderReadyQuantitySelects}
               </select>
@@ -524,15 +573,21 @@ const NewPostPopup = () => {
                 returnFunction={dropDownSelectionHandler}
               />
             )}
-
             <div className={classes.productContainer}>
-              Image Upload:
-              <input
-                className={classes.imageInput}
-                type="file"
-                ref={imageInputRef}
-                onChange={fileInputHandler}
-              />
+              <button
+                className={classes.imageSelectButton}
+                onClick={selectAnImageHandler}
+              >
+                Select an Image
+              </button>
+              <div className={classes.imageDescriptionContainer}>
+                {newPostSelectedPhotoKey.length !== 0 && (
+                  <CheckIcon className={classes.imageSelectionCheckmark} />
+                )}
+                {newPostSelectedPhotoKey.length === 0 && (
+                  <XMarkIcon className={classes.imageSelectionXmark} />
+                )}
+              </div>
             </div>
 
             <button className={classes.submitButton} type="submit">

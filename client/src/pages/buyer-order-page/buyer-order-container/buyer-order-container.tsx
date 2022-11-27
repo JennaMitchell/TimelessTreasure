@@ -1,9 +1,7 @@
 import classes from "./buyer-order-container.module.scss";
 
-import {
-  imageUrlCreator,
-  priceInputCleaner,
-} from "../../../utilities/generic-hooks/generic-hooks";
+import { priceInputCleaner } from "../../../utilities/generic-hooks/generic-hooks";
+import { pictureSelectionTestData } from "../../../utilities/constants/picture-selection-data";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { priceStringCreator } from "../../../utilities/generic-hooks/generic-hooks";
 interface ItemsPlaced {
@@ -33,7 +31,8 @@ const BuyerOrderContainer = ({
       const priceWithoutCurrencySymbol = itemData.price;
       totalBeforeTax =
         totalBeforeTax + +priceWithoutCurrencySymbol * +quantityArray[index];
-      const finalImageUrl = imageUrlCreator(itemData.imageUrl);
+      const finalImageUrl =
+        pictureSelectionTestData[itemData.productInfo.imageKey].photo;
       return (
         <div
           className={classes.itemOrdered}

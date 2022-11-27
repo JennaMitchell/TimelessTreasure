@@ -1,16 +1,23 @@
 import classes from "./picture-selection-popup.module.scss";
 import decor from "../../../images/homepage/decor/decor.png";
-import { pictureSelectionTestData } from "./picture-selection-data";
+import { pictureSelectionTestData } from "../../../utilities/constants/picture-selection-data";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRef, useEffect, useState } from "react";
 import { mainStoreSliceActions } from "../../../store/store";
 import { sellerStoreActions } from "../../../store/seller";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+
+interface PhotoDataInterface {
+  photo: string;
+  description: string;
+  photoUrl: string;
+}
+
 const PictureSelectionPopup = () => {
   const pictureSelectionPopupActive = useAppSelector(
     (state) => state.mainStore.pictureSelectionPopupActive
   );
-  const [activePhotoIndex, setActivePhotoIndex] = useState<number>();
+  const [activePhotoKey, setActivePhotoKey] = useState<string>("");
   const popupMainContainerRef = useRef(null);
 
   const backdropRef = useRef(null);
@@ -54,21 +61,30 @@ const PictureSelectionPopup = () => {
   };
   window.addEventListener("resize", resizeLockedHeightHandler);
 
-  const renderReadySelectionImages = pictureSelectionTestData.map(
+  const pictureSelectionTestDataKeys: string[] = Object.keys(
+    pictureSelectionTestData
+  );
+  const pictureSelectionTestDataValues: PhotoDataInterface[] = Object.values(
+    pictureSelectionTestData
+  );
+
+  const renderReadySelectionImages = pictureSelectionTestDataValues.map(
     (picData, index) => {
       const imageContainerClickHandler = () => {
-        setActivePhotoIndex(index);
+        setActivePhotoKey(pictureSelectionTestDataKeys[index]);
       };
       return (
         <div
           className={`${classes.imageContainer} ${
-            activePhotoIndex === index && classes.activeImageContainer
+            activePhotoKey === pictureSelectionTestDataKeys[index] &&
+            classes.activeImageContainer
           }`}
           key={`${picData.description}-${index}`}
         >
           <img
             className={`${classes.selectionImage} ${
-              activePhotoIndex === index && classes.selectionImageActive
+              activePhotoKey === pictureSelectionTestDataKeys[index] &&
+              classes.selectionImageActive
             }`}
             alt={picData.description}
             src={picData.photo}
@@ -81,18 +97,18 @@ const PictureSelectionPopup = () => {
 
   const closingIconHandler = () => {
     dispatch(mainStoreSliceActions.setPictureSelectionPopupActive(false));
+    dispatch(mainStoreSliceActions.setNewPostPopupActive(true));
   };
 
   const submitButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLockScreenHeight(""));
 
-    if (activePhotoIndex !== undefined) {
-      dispatch(
-        sellerStoreActions.setNewPostSelectedPhotoLink(activePhotoIndex)
-      );
+    if (activePhotoKey.length !== 0) {
+      dispatch(sellerStoreActions.setNewPostSelectedPhotoKey(activePhotoKey));
     } else {
-      dispatch(sellerStoreActions.setNewPostSelectedPhotoLink(-1));
+      dispatch(sellerStoreActions.setNewPostSelectedPhotoKey(""));
     }
+    closingIconHandler();
   };
   return (
     <>

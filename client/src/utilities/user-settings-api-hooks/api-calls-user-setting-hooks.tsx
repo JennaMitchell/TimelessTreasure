@@ -1,5 +1,5 @@
 import { mainStoreSliceActions } from "../../store/store";
-
+import { databaseURL } from "../constants/constants";
 export const getBuyerUserData = async (
   dispatch: any,
   userId: string,
@@ -7,7 +7,7 @@ export const getBuyerUserData = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/user/get-buyer-info/${userId}`,
+      `${databaseURL}/user/get-buyer-info/${userId}`,
       { method: "GET", headers: { Authorization: "Bearer " + token } }
     );
     return fetchedResponse;
@@ -23,7 +23,7 @@ export const getSellerUserData = async (
 ) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/user/get-seller-info/${userId}`,
+      `${databaseURL}/user/get-seller-info/${userId}`,
       { method: "GET", headers: { Authorization: "Bearer " + token } }
     );
     return fetchedResponse;
@@ -39,17 +39,14 @@ export const updateUsernameCall = async (
   token: string
 ) => {
   try {
-    const fetchedResponse = await fetch(
-      "http://localhost:5000/user/update-username",
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(signupData),
-      }
-    );
+    const fetchedResponse = await fetch(`${databaseURL}/user/update-username`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(signupData),
+    });
     return fetchedResponse;
   } catch (error) {
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
@@ -63,17 +60,14 @@ export const updateEmailCall = async (
   token: string
 ) => {
   try {
-    const fetchedResponse = await fetch(
-      "http://localhost:5000/user/update-email",
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(signupData),
-      }
-    );
+    const fetchedResponse = await fetch(`${databaseURL}/user/update-email`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(signupData),
+    });
     return fetchedResponse;
   } catch (error) {
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
@@ -86,17 +80,14 @@ export const updatePasswordCall = async (
   token: string
 ) => {
   try {
-    const fetchedResponse = await fetch(
-      "http://localhost:5000/user/update-password",
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(signupData),
-      }
-    );
+    const fetchedResponse = await fetch(`${databaseURL}/user/update-password`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(signupData),
+    });
     return fetchedResponse;
   } catch (error) {
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
@@ -110,17 +101,14 @@ export const deleteAccountCall = async (
   token: string
 ) => {
   try {
-    const fetchedResponse = await fetch(
-      "http://localhost:5000/user/delete-account",
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(signupData),
-      }
-    );
+    const fetchedResponse = await fetch(`${databaseURL}/user/delete-account`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(signupData),
+    });
     return fetchedResponse;
   } catch (error) {
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));

@@ -67,3 +67,4 @@ export const priceConversionObject: PriceConversionObjectInterface = {
   EURtoUSD: 1.02,
   EURtoCAD: 1.36,
 };
+export const databaseURL = "https://timeless-treasure.herokuapp.com";

@@ -116,6 +116,7 @@ exports.createNewProduct = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    console.log(errors);
     return res.status(401).send({
       error: errors.array(),
       message: `${errors["errors"][0].msg}`,
@@ -132,15 +133,15 @@ exports.createNewProduct = async (req, res, next) => {
   productTags[productTags.length] = req.body.productType;
   const sellerId = req.body.userId;
   const productId = req.body.productId;
-  const image = req.file;
-  const imageUrl = image.path;
+
+  const imageKey = req.body.imageKey;
   const status = req.body.status;
   const quantity = req.body.quantity;
   const productType = req.body.productType;
   const date = req.body.date;
   const description = req.body.description;
 
-  if (!image) {
+  if (imageKey === "") {
     return res.status(401).json({
       message: `No image Added!`,
       error: [{ error: "No image added" }],
@@ -152,7 +153,7 @@ exports.createNewProduct = async (req, res, next) => {
       title: title,
       price: price,
       priceType: priceType,
-      imageUrl: imageUrl,
+      imageKey: imageKey,
       sellerId: sellerId,
       productId: productId,
       status: status,
@@ -170,12 +171,13 @@ exports.createNewProduct = async (req, res, next) => {
       productCreated: newProduct,
     });
     // emit everyone broadcast only one
-
+    console.log("SUCCESS");
     return res.status(201).json({
       message: "Product Added!",
       status: 201,
     });
   } catch (err) {
+    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],

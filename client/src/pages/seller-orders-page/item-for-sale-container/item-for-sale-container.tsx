@@ -5,15 +5,14 @@ import DeletePostPopup from "../../../components/popups/delete-post/delete-post-
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { mainStoreSliceActions } from "../../../store/store";
 import EditPostPopup from "../../../components/popups/edit-post/edit-post-popup";
-
+import { pictureSelectionTestData } from "../../../utilities/constants/picture-selection-data";
 import {
-  imageUrlCreator,
   priceStringCreator,
   priceInputCleaner,
   closeApiMessageDropDown,
 } from "../../../utilities/generic-hooks/generic-hooks";
 interface Props {
-  productImage: string;
+  imageKey: string;
   productTitle: string;
   productPrice: string;
   productPriceType: string;
@@ -23,8 +22,9 @@ interface Props {
   productTags: string[];
   productDescription: string;
 }
+
 const ItemForSaleContainer = ({
-  productImage,
+  imageKey,
   productTitle,
   productPrice,
   productQty,
@@ -34,7 +34,7 @@ const ItemForSaleContainer = ({
   productDescription,
 }: Props) => {
   const keyId = randomKeyGenerator(20);
-  const productImageUrl = imageUrlCreator(productImage);
+  // const productImageUrl = imageUrlCreator(productImage);
 
   const dispatch = useAppDispatch();
   const deletePostPopup = useAppSelector(
@@ -60,6 +60,8 @@ const ItemForSaleContainer = ({
     );
   });
 
+  const productImageUrl = pictureSelectionTestData[imageKey].photo;
+  console.log(productImageUrl);
   const deleteButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(true));
     dispatch(mainStoreSliceActions.setDeletePostPopup(true));
@@ -98,7 +100,7 @@ const ItemForSaleContainer = ({
         {deletePostPopup && <DeletePostPopup productId={productId} />}
         {activeEditPostPopupId === productId && (
           <EditPostPopup
-            productImage={productImage}
+            productImage={productImageUrl}
             productTitle={productTitle}
             productPrice={productPrice}
             productQty={productQty}

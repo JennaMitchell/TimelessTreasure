@@ -240,12 +240,6 @@
   background-color: $main200;
   color: $main800;
 }
-.imageInput {
-  width: max(200px, 200px);
-  height: max-content;
-  max-height: max-content;
-  margin-top: 5px;
-}
 .closingContainer {
   width: max(30px, 30px);
   height: max(30px, 30px);
@@ -308,6 +302,63 @@
   bottom: 7.5px;
   right: 25px;
   font-size: toRem(12);
+}
+
+.imageSelectButton {
+  max-width: max-content;
+  max-height: max-content;
+  box-sizing: border-box;
+  padding: 7.5px 15px;
+  background-color: $main800;
+  color: $white;
+  transition: all 1s;
+  border: 0px;
+  font-size: toRem(16);
+  font-family: $fontFamily;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.imageSelectButton:hover {
+  background-color: $main200;
+  color: $main800;
+}
+.imageSelectionCheckmark {
+  width: max(25px, 25px);
+  height: max(25px, 25px);
+  color: green;
+  padding-top: 3px;
+}
+.imageSelectionXmark {
+  width: max(25px, 25px);
+  height: max(25px, 25px);
+  color: red;
+  padding-top: 3px;
+}
+
+.imageDescriptionContainer {
+  width: max(100px, 100px);
+  height: max-content;
+  max-height: max-content;
+  overflow-x: hidden;
+  align-items: flex-end;
+  justify-content: flex-end;
+  display: flex;
+}
+.imageDescription {
+  width: max-content;
+  max-width: max-content;
+  max-height: max-content;
+
+  color: black;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  font-size: toRem(16);
+  line-height: toRem(22);
+  font-family: $fontFamily;
+  line-break: unset;
 }
 @media (max-width: 450px) {
   .newPostContentContainer {

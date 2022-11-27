@@ -1,8 +1,9 @@
 import { mainStoreSliceActions } from "../../store/store";
+import { databaseURL } from "../constants/constants";
 export const updateSellersWithOrder = async (dispatch: any, orderData: any) => {
   try {
     const fetchedResponse = await fetch(
-      `http://localhost:5000/order/new-order-seller-data`,
+      `${databaseURL}/order/new-order-seller-data`,
       {
         method: "PUT",
         headers: {

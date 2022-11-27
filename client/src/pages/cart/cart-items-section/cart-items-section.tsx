@@ -7,6 +7,7 @@ import React from "react";
 import openSocket from "socket.io-client";
 import { useEffect, useState } from "react";
 import { mainStoreSliceActions } from "../../../store/store";
+import { databaseURL } from "../../../utilities/constants/constants";
 
 const CartItemSection = () => {
   const cartData = useAppSelector((state) => state.cartStore.cartData);
@@ -15,7 +16,7 @@ const CartItemSection = () => {
 
   useEffect(() => {
     if (!initialRender) {
-      const socket = openSocket("http://localhost:5000");
+      const socket = openSocket(`${databaseURL}`);
       const copyOfCartData = JSON.parse(JSON.stringify(cartData));
 
       socket.on("update-cart", (data) => {
