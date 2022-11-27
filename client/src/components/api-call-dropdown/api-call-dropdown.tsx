@@ -29,7 +29,7 @@ const ApiCallDropdown = () => {
       dispatch(mainStoreSliceActions.setApiCallDropdownActive(true));
       dispatch(mainStoreSliceActions.setApiCallDropDownMove(true));
     }
-  }, [apiCallMessage, apiCallMessageType, apiCallDropdownActive]);
+  }, [apiCallMessage, apiCallMessageType, apiCallDropdownActive, dispatch]);
 
   const closeIconHandler = () => {
     dispatch(mainStoreSliceActions.setApiCallDropDownMove(false));

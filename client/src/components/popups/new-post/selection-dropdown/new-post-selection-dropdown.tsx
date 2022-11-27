@@ -7,7 +7,6 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { userStoreSliceActions } from "../../../../store/user-store";
 import { sellerStoreActions } from "../../../../store/seller";
 
 interface SelectedItem {

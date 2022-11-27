@@ -7,7 +7,7 @@ const OrderPlacedPage = () => {
       <h6 className={classes.title}>Order Placed!</h6>
 
       <p className={classes.orderPlacedText}> Thank you for your order!</p>
-      <img className={classes.logoContainer} src={logo} />
+      <img className={classes.logoContainer} src={logo} alt="logo" />
     </div>
   );
 };
