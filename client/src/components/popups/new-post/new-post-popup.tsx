@@ -351,11 +351,9 @@ const NewPostPopup = () => {
 
     newProductCall(dispatch, requestDataObject, userToken)
       .then((data) => {
-        console.log(data);
         return data?.json();
       })
       .then((jsonData) => {
-        console.log(jsonData);
         if ("error" in jsonData) {
           if (jsonData.error.length !== 0) {
             dispatch(mainStoreSliceActions.setAPICallMessage(jsonData.message));
@@ -423,9 +421,6 @@ const NewPostPopup = () => {
     dispatch(mainStoreSliceActions.setPictureSelectionPopupActive(true));
   };
 
-  // console.log(sellerNewPostTags);
-  // console.log(Object.values(sellerNewPostTags));
-  // console.log(JSON.stringify(Object.values(sellerNewPostTags)));
   return (
     <>
       {newPostPopupActive && (

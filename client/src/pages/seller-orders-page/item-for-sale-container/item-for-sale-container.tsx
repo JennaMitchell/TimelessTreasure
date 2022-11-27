@@ -61,7 +61,7 @@ const ItemForSaleContainer = ({
   });
 
   const productImageUrl = pictureSelectionTestData[imageKey].photo;
-  console.log(productImageUrl);
+
   const deleteButtonHandler = () => {
     dispatch(mainStoreSliceActions.setLockViewPort(true));
     dispatch(mainStoreSliceActions.setDeletePostPopup(true));

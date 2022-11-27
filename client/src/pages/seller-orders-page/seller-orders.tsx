@@ -16,7 +16,7 @@ const SellerOrdersPage = () => {
   const sellerData: any = useAppSelector(
     (state) => state.sellerStore.sellerData
   );
-  console.log(sellerData);
+
   const sellerPendingOrderData = useAppSelector(
     (state) => state.sellerStore.sellerPendingOrderData
   );

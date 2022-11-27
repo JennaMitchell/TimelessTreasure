@@ -116,7 +116,6 @@ exports.createNewProduct = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors);
     return res.status(401).send({
       error: errors.array(),
       message: `${errors["errors"][0].msg}`,
@@ -171,13 +170,12 @@ exports.createNewProduct = async (req, res, next) => {
       productCreated: newProduct,
     });
     // emit everyone broadcast only one
-    console.log("SUCCESS");
+
     return res.status(201).json({
       message: "Product Added!",
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     return res.status(401).json({
       message: `Server Error!`,
       error: [{ error: "Server Error" }],

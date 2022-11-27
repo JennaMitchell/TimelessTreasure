@@ -285,8 +285,6 @@ const MarketplaceMenu = () => {
       currentElement.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
-          console.log("ENTER");
-
           searchBarApiCallHandler();
         }
       });

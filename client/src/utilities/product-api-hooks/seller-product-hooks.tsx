@@ -5,8 +5,6 @@ export const newProductCall = async (
   formData: any,
   token: string
 ) => {
-  console.log(formData);
-  console.log("HOOKS");
   try {
     const fetchedResponse = await fetch(`${databaseURL}/product/new`, {
       method: "POST",
@@ -18,7 +16,6 @@ export const newProductCall = async (
     });
     return fetchedResponse;
   } catch (error) {
-    console.log(error);
     dispatch(mainStoreSliceActions.setAPICallMessage("Local Error"));
     dispatch(mainStoreSliceActions.setAPICallMessageType("ERROR"));
   }
